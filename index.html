@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>دفترچه تلفن داخلی سازمان</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="دفترچه تلفن">
+  <meta name="theme-color" id="theme-color-meta" content="#2196F3">
+
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- کتابخانه کامل SheetJS برای خواندن فایل اکسل -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-muted: #718096;
+      --border-color: #dcdfe6;
+      --status-bg: #f0f4f8;
+      --selector-bg: #e2e8f0;
+      --btn-active-bg: #ffffff;
+      --btn-active-text: #1a202c;
+      --input-bg: #ffffff;
+      --shadow-color: rgba(0,0,0,0.05);
+      --card-border: #e2e8f0;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121824;
+      --card-bg: #1e293b;
+      --text-color: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --status-bg: #0f172a;
+      --selector-bg: #0f172a;
+      --btn-active-bg: #334155;
+      --btn-active-text: #ffffff;
+      --input-bg: #0f172a;
+      --shadow-color: rgba(0,0,0,0.3);
+      --card-border: #334155;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      padding: 15px;
+      direction: rtl;
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .app-header {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      margin-bottom: 15px;
+    }
+    
+    .header-top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .header-title {
+      font-size: 19px;
+      font-weight: bold;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--status-bg);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #2196F3;
+      flex-shrink: 0;
+    }
+
+    .top-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .source-selector {
+      display: inline-flex;
+      background: var(--selector-bg);
+      padding: 3px;
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+    .source-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 10px;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .source-btn.active {
+      background: var(--btn-active-bg);
+      color: var(--btn-active-text);
+      font-weight: bold;
+      box-shadow: 0 1px 3px var(--shadow-color);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn-icon-small {
+      padding: 7px 10px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-icon-small.primary-highlight {
+      background: #ebf8ff;
+      border-color: #90caf9;
+      color: #1976d2;
+      font-weight: bold;
+    }
+    [data-theme="dark"] .btn-icon-small.primary-highlight {
+      background: #1e3a8a;
+      border-color: #3b82f6;
+      color: #93c5fd;
+    }
+
+    .search-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-box {
+      width: 100%;
+      padding: 11px 45px 11px 14px;
+      font-size: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+    .search-box:focus {
+      border-color: #2196F3;
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+    }
+
+    /* دکمه پاک کردن متن جستجو با استایل شبیه ماشین حساب */
+    .clear-search-btn {
+      position: absolute;
+      left: 8px;
+      background: linear-gradient(135deg, #ff7043, #f4511e);
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(244, 81, 30, 0.3);
+      transition: all 0.2s ease;
+    }
+    .clear-search-btn:hover {
+      background: linear-gradient(135deg, #f4511e, #d84315);
+      transform: scale(1.05);
+    }
+    .clear-search-btn:active {
+      transform: scale(0.95);
+    }
+
+    input[type="file"] { display: none; }
+
+    .upload-card {
+      background: var(--card-bg);
+      border: 2px dashed #90caf9;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .upload-card h3 { margin: 0 0 10px 0; color: #1976d2; }
+    .upload-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; }
+
+    .contacts-container { margin-top: 15px; }
+    .unit-group {
+      margin-bottom: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      background-color: var(--card-bg);
+    }
+    .unit-header {
+      margin: 0;
+      padding: 12px;
+      color: #fff;
+      font-size: 19px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .unit-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--card-bg);
+    }
+    .unit-table th, .unit-table td {
+      padding: 12px 10px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+    .unit-table th { font-size: 15px; color: #fff; font-weight: bold; }
+    .unit-table td { font-size: 14px; color: var(--text-color); }
+    .no-results { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 10px; color: var(--text-muted); }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(3px);
+    }
+    .modal-content {
+      background: var(--card-bg);
+      color: var(--text-color);
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+    .btn-confirm {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      background: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .unit-table { border: 0; }
+      .unit-table thead { display: none; }
+      .unit-table tr {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        background-color: var(--card-bg);
+      }
+      .unit-table td {
+        display: block;
+        position: relative;
+        padding: 10px;
+        padding-right: 45%;
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+      }
+      .unit-table td:last-child { border-bottom: 0; }
+      .unit-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        right: 0; top: 0; bottom: 0;
+        display: flex; align-items: center; justify-content: center;
+        width: 42%;
+        font-weight: bold; color: #fff; font-size: 13px;
+        background-color: var(--mobile-header-bg-color, #2196F3);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-header">
+    <div class="header-top-line">
+      <h1 class="header-title">
+        <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
+        دفترچه تلفن سازمان
+      </h1>
+
+      <button id="themeToggleBtn" class="btn-icon-small" title="تغییر حالت شب/روز">🌙</button>
+    </div>
+    
+    <div class="status-bar">
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">آماده به کار</span>
+      </div>
+      <div id="fileInfo" style="font-size: 12px; color: var(--text-muted);"></div>
+    </div>
+
+    <div class="top-toolbar">
+      <div class="source-selector">
+        <button id="modeGoogleBtn" class="source-btn active" onclick="switchDataMode('google')">🌐 نسخه آنلاین</button>
+        <button id="modeLocalBtn" class="source-btn" onclick="switchDataMode('local')">📁 بارگذاری از فایل</button>
+      </div>
+
+      <div class="toolbar-actions">
+        <button id="refreshOnlineBtn" class="btn-icon-small" title="بروزرسانی آنلاین" onclick="fetchGoogleSheetData()">🔄</button>
+        <!-- دکمه پوشه بدون متن اضافی و بدون بیرون زدگی در موبایل -->
+        <button id="uploadTriggerBtn" class="btn-icon-small primary-highlight" style="display:none;" title="انتخاب فایل اکسل جدید" onclick="document.getElementById('excelFileInput').click();">📁</button>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-box" placeholder="جستجوی نام، واحد یا شماره داخلی...">
+      <button type="button" class="clear-search-btn" id="clearSearchBtn" title="پاک کردن جستجو" onclick="clearSearchInput()">✕</button>
+    </div>
+  </div>
+
+  <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv">
+
+  <div id="uploadPrompt" class="upload-card" style="display: none;">
+    <h3>هیچ فایل اکسلی بارگذاری نشده است</h3>
+    <p>لطفاً یک فایل اکسل (.xlsx) حاوی مشخصات مخاطبین انتخاب کنید.</p>
+    <button class="btn-icon-small primary-highlight" style="padding: 10px 16px; font-size: 14px; width: auto;" onclick="document.getElementById('excelFileInput').click();">
+      📁 انتخاب فایل اکسل از دستگاه
+    </button>
+  </div>
+
+  <div id="contactsContainer" class="contacts-container"></div>
+
+  <script>
+    const DEFAULT_GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1kcak7dDG6jaacYbdUhamlN7alh_UZKXY/export?format=xlsx';
+    
+    const DB_NAME = 'PhonebookAppDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'phonebookStore';
+
+    let currentMode = 'google';
+    let contacts = [];
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('phonebook_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.getElementById('themeToggleBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('phonebook_theme', next);
+      document.getElementById('themeToggleBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+      document.getElementById('theme-color-meta').setAttribute('content', next === 'dark' ? '#121824' : '#2196F3');
+    });
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'key' });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function saveData(key, contactsData, fileName) {
+      const db = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const record = {
+          key: key,
+          contacts: contactsData,
+          fileName: fileName,
+          updatedAt: new Date().toLocaleDateString('fa-IR') + ' - ' + new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'})
+        };
+        const req = store.put(record);
+        req.onsuccess = () => resolve(record);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function loadData(key) {
+      const db = await openDatabase();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function switchDataMode(mode) {
+      currentMode = mode;
+      localStorage.setItem('phonebook_selected_mode', mode);
+
+      document.getElementById('modeGoogleBtn').classList.toggle('active', mode === 'google');
+      document.getElementById('modeLocalBtn').classList.toggle('active', mode === 'local');
+
+      document.getElementById('refreshOnlineBtn').style.display = (mode === 'google') ? 'inline-flex' : 'none';
+      document.getElementById('uploadTriggerBtn').style.display = (mode === 'local') ? 'inline-flex' : 'none';
+
+      if (mode === 'google') {
+        document.getElementById('uploadPrompt').style.display = 'none';
+        
+        const cached = await loadData('google_data');
+        if (cached && cached.contacts) {
+          contacts = cached.contacts;
+          updateStatus('نسخه آنلاین (حافظه موقت)', '#2196F3', cached.updatedAt);
+          renderList(contacts);
+        }
+        
+        fetchGoogleSheetData();
+      } else {
+        await loadLocalFileData();
+      }
+    }
+
+    async function fetchGoogleSheetData() {
+      updateStatus('در حال دریافت آنلاین...', '#ff9800');
+      try {
+        const response = await fetch(DEFAULT_GOOGLE_SHEET_URL);
+        if (!response.ok) throw new Error('خطا در دریافت');
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+
+        contacts = raw.map(c => {
+          const clean = {};
+          for (let k in c) clean[k.trim()] = c[k];
+          return clean;
+        });
+
+        const saved = await saveData('google_data', contacts, 'گوگل شیت');
+        updateStatus('نسخه آنلاین فعال', '#4CAF50', saved.updatedAt);
+        renderList(contacts);
+      } catch (err) {
+        const cached = await loadData('google_data');
+        if (cached && cached.contacts) {
+          contacts = cached.contacts;
+          updateStatus('حالت آفلاین (داده‌های ذخیره‌شده)', '#ff9800', cached.updatedAt);
+          renderList(contacts);
+        } else {
+          updateStatus('خطا در دریافت اطلاعات آنلاین', '#f44336');
+        }
+      }
+    }
+
+    async function loadLocalFileData() {
+      const record = await loadData('local_data');
+      if (record && record.contacts && record.contacts.length > 0) {
+        contacts = record.contacts;
+        document.getElementById('uploadPrompt').style.display = 'none';
+        updateStatus(`فایل: ${record.fileName}`, '#4CAF50', record.updatedAt);
+        renderList(contacts);
+      } else {
+        contacts = [];
+        document.getElementById('contactsContainer').innerHTML = '';
+        document.getElementById('uploadPrompt').style.display = 'block';
+        updateStatus('لطفاً فایل اکسل انتخاب کنید', '#ff9800');
+      }
+    }
+
+    function handleLocalFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+
+          contacts = raw.map(c => {
+            const clean = {};
+            for (let k in c) clean[k.trim()] = c[k];
+            return clean;
+          });
+
+          if (contacts.length === 0) {
+            updateStatus('فایل اکسل خالی است یا فرمت آن نامعتبر است.', '#f44336');
+            return;
+          }
+
+          const saved = await saveData('local_data', contacts, file.name);
+          document.getElementById('uploadPrompt').style.display = 'none';
+          updateStatus(`فایل: ${saved.fileName}`, '#4CAF50', saved.updatedAt);
+          renderList(contacts);
+        } catch (err) {
+          updateStatus('خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.', '#f44336');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function updateStatus(text, color, time = '') {
+      document.getElementById('statusDot').style.backgroundColor = color;
+      document.getElementById('statusText').textContent = text;
+      document.getElementById('fileInfo').textContent = time ? `بروزرسانی: ${time}` : '';
+    }
+
+    function hexGradient(start, end, steps) {
+      const startRGB = parseInt(start.slice(1), 16);
+      const endRGB = parseInt(end.slice(1), 16);
+      const gradient = [];
+      for (let i = 0; i < steps; i++) {
+        const r = Math.round(((startRGB >> 16) & 0xFF) + i * (((endRGB >> 16) & 0xFF) - ((startRGB >> 16) & 0xFF)) / (steps - 1));
+        const g = Math.round(((startRGB >> 8) & 0xFF) + i * (((endRGB >> 8) & 0xFF) - ((startRGB >> 8) & 0xFF)) / (steps - 1));
+        const b = Math.round((startRGB & 0xFF) + i * ((endRGB & 0xFF) - (startRGB & 0xFF)) / (steps - 1));
+        gradient.push(`#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase()}`);
+      }
+      return gradient;
+    }
+
+    const customPalette = [
+      ...hexGradient('#0D47A1', '#64B5F6', 12),
+      ...hexGradient('#1B5E20', '#81C784', 7),
+      ...hexGradient('#E65100', '#FFB74D', 3),
+      ...hexGradient('#F9A825', '#FFF176', 2)
+    ];
+
+    function renderList(list) {
+      const container = document.getElementById('contactsContainer');
+      container.innerHTML = '';
+
+      if (!list || list.length === 0) {
+        container.innerHTML = '<div class="no-results">مخاطبی یافت نشد.</div>';
+        return;
+      }
+
+      const groups = {};
+      const ordered = [];
+      list.forEach(c => {
+        const u = c['واحد'] || c['بخش'] || 'نامشخص';
+        if (!groups[u]) { groups[u] = []; ordered.push(u); }
+        groups[u].push(c);
+      });
+
+      ordered.forEach((unit, index) => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'unit-group';
+        const color = customPalette[index % customPalette.length];
+
+        groupDiv.style.setProperty('--mobile-header-bg-color', color);
+
+        const header = document.createElement('h2');
+        header.className = 'unit-header';
+        header.textContent = unit;
+        header.style.backgroundColor = color;
+        groupDiv.appendChild(header);
+
+        const table = document.createElement('table');
+        table.className = 'unit-table';
+        table.innerHTML = `
+          <thead style="background-color:${color}">
+            <tr>
+              <th>نام و نام خانوادگی</th>
+              <th>تلفن داخلی</th>
+              <th>VoIP</th>
+              <th>تلفن مستقیم</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+        const tbody = table.querySelector('tbody');
+        groups[unit].forEach(contact => {
+          const row = document.createElement('tr');
+          const name = contact['نام و نام خانوادگی'] || `${contact['نام'] || ''} ${contact['نام خانوادگی'] || ''}`.trim();
+          row.innerHTML = `
+            <td data-label="نام و نام خانوادگی" style="font-weight:bold">${name || '—'}</td>
+            <td data-label="تلفن داخلی">${contact['تلفن داخلی'] || contact['داخلی'] || '—'}</td>
+            <td data-label="VoIP">${contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '—'}</td>
+            <td data-label="تلفن مستقیم">${contact['تلفن مستقیم'] || contact['مستقیم'] || '—'}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        groupDiv.appendChild(table);
+        container.appendChild(groupDiv);
+      });
+    }
+
+    function clearSearchInput() {
+      const searchInput = document.getElementById('searchInput');
+      searchInput.value = '';
+      renderList(contacts);
+      searchInput.focus();
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error:', err));
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) { renderList(contacts); return; }
+      renderList(contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q))));
+    });
+
+    document.getElementById('excelFileInput').addEventListener('change', (e) => {
+      if (e.target.files.length > 0) handleLocalFile(e.target.files[0]);
+    });
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      const savedMode = localStorage.getItem('phonebook_selected_mode') || 'google';
+      await switchDataMode(savedMode);
+    });
+  </script>
+</body>
+</html>

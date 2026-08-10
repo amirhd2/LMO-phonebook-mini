@@ -1,0 +1,8 @@
+{
+  "name": "دفترچه تلفن سازمان",
+  "description": "دفترچه تلفن داخلی سازمان - Organizational Internal Phonebook",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
