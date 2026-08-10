@@ -14,8 +14,8 @@
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- کتابخانه کامل SheetJS برای خواندن فایل اکسل -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- کتابخانه کامل SheetJS به صورت محلی برای کارکرد ۱۰۰٪ آفلاین -->
+  <script src="xlsx.full.min.js"></script>
 
   <style>
     :root {
@@ -476,10 +476,14 @@
         document.getElementById('uploadPrompt').style.display = 'none';
         
         const cached = await loadData('google_data');
-        if (cached && cached.contacts) {
+        if (cached && cached.contacts && cached.contacts.length > 0) {
           contacts = cached.contacts;
-          updateStatus('نسخه آنلاین (حافظه موقت)', '#2196F3', cached.updatedAt);
           renderList(contacts);
+          updateStatus(
+            navigator.onLine ? 'نسخه آنلاین (داده ذخیره‌شده)' : 'نسخه آنلاین (آفلاین - استفاده از کش)',
+            '#2196F3',
+            cached.updatedAt
+          );
         }
         
         fetchGoogleSheetData();
@@ -489,10 +493,27 @@
     }
 
     async function fetchGoogleSheetData() {
+      if (!navigator.onLine) {
+        const cached = await loadData('google_data');
+        if (cached && cached.contacts && cached.contacts.length > 0) {
+          contacts = cached.contacts;
+          renderList(contacts);
+          updateStatus('آفلاین (آخرین نسخه آنلاین ذخیره‌شده)', '#2196F3', cached.updatedAt);
+        } else {
+          updateStatus('بدون اتصال اینترنت (هیچ داده آنلاین ذخیره‌شده‌ای وجود ندارد)', '#ff9800');
+        }
+        return;
+      }
+
       updateStatus('در حال دریافت آنلاین...', '#ff9800');
       try {
-        const response = await fetch(DEFAULT_GOOGLE_SHEET_URL);
-        if (!response.ok) throw new Error('خطا در دریافت');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        const response = await fetch(DEFAULT_GOOGLE_SHEET_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error('خطا در دریافت فایل');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
         const sheetName = workbook.SheetNames[0];
@@ -508,11 +529,12 @@
         updateStatus('نسخه آنلاین فعال', '#4CAF50', saved.updatedAt);
         renderList(contacts);
       } catch (err) {
+        console.warn('Google Sheet fetch error or timeout, loading cached data:', err);
         const cached = await loadData('google_data');
-        if (cached && cached.contacts) {
+        if (cached && cached.contacts && cached.contacts.length > 0) {
           contacts = cached.contacts;
-          updateStatus('حالت آفلاین (داده‌های ذخیره‌شده)', '#ff9800', cached.updatedAt);
           renderList(contacts);
+          updateStatus('آفلاین (استفاده از آخرین داده ذخیره‌شده)', '#2196F3', cached.updatedAt);
         } else {
           updateStatus('خطا در دریافت اطلاعات آنلاین', '#f44336');
         }
@@ -524,13 +546,13 @@
       if (record && record.contacts && record.contacts.length > 0) {
         contacts = record.contacts;
         document.getElementById('uploadPrompt').style.display = 'none';
-        updateStatus(`فایل: ${record.fileName}`, '#4CAF50', record.updatedAt);
+        updateStatus(`فایل آفلاین: ${record.fileName}`, '#4CAF50', record.updatedAt);
         renderList(contacts);
       } else {
         contacts = [];
         document.getElementById('contactsContainer').innerHTML = '';
         document.getElementById('uploadPrompt').style.display = 'block';
-        updateStatus('لطفاً فایل اکسل انتخاب کنید', '#ff9800');
+        updateStatus('لطفاً فایل اکسل آفلاین انتخاب کنید', '#ff9800');
       }
     }
 
@@ -673,6 +695,22 @@
 
     document.getElementById('excelFileInput').addEventListener('change', (e) => {
       if (e.target.files.length > 0) handleLocalFile(e.target.files[0]);
+    });
+
+    window.addEventListener('online', () => {
+      if (currentMode === 'google') {
+        fetchGoogleSheetData();
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      if (currentMode === 'google') {
+        loadData('google_data').then(cached => {
+          if (cached && cached.contacts && cached.contacts.length > 0) {
+            updateStatus('آفلاین (استفاده از آخرین داده ذخیره‌شده)', '#2196F3', cached.updatedAt);
+          }
+        });
+      }
     });
 
     window.addEventListener('DOMContentLoaded', async () => {

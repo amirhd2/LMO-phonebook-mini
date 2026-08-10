@@ -1,10 +1,11 @@
-const CACHE_NAME = 'phonebook-pwa-v11';
+const CACHE_NAME = 'phonebook-pwa-v13';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icon.png',
-  './xlsx.full.min.js'
+  './xlsx.full.min.js',
+  './Version Info.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -14,7 +15,7 @@ self.addEventListener('install', (event) => {
         try {
           await cache.add(new Request(asset, { cache: 'reload' }));
         } catch (err) {
-          console.warn('Skipped asset:', asset);
+          console.warn('Skipped asset during install:', asset);
         }
       }
     }).then(() => self.skipWaiting())
@@ -34,6 +35,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Let Google Sheets external fetch be handled directly in index.html with IndexedDB fallback
   if (event.request.url.includes('docs.google.com')) {
     return;
   }
@@ -44,6 +46,12 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
       return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
         return networkResponse;
       }).catch(() => {
         if (event.request.mode === 'navigate') {
