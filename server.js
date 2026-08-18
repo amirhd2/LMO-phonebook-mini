@@ -8,13 +8,29 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3000;
 
+// Disable caching for development and preview so updates appear instantly
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  res.set('Surrogate-Control', 'no-store');
+  next();
+});
+
 // Alias sw.js to service_worker.js if requested
-app.get('/sw.js', (req, res) => {
+app.get(['/sw.js', '/service_worker.js'], (req, res) => {
+  res.set('Content-Type', 'application/javascript; charset=UTF-8');
   res.sendFile(path.join(__dirname, 'service_worker.js'));
 });
 
-// Serve static assets from root directory
-app.use(express.static(__dirname));
+// Serve static assets from root directory with no-cache headers
+app.use(express.static(__dirname, {
+  etag: false,
+  lastModified: false,
+  setHeaders: (res) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  }
+}));
 
 // Fallback to index.html
 app.get('*', (req, res) => {

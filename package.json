@@ -1,6 +1,6 @@
 {
   "name": "lmo-phonebook",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Organizational Phonebook Web Application",
   "type": "module",
   "main": "server.js",

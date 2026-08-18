@@ -111,6 +111,46 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .version-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--selector-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      display: inline-flex;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      direction: rtl;
+      text-align: center;
+      max-width: 90%;
+      border: 1px solid #334155;
+    }
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
     .btn-icon-small {
@@ -238,19 +278,20 @@
       z-index: 1000;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      backdrop-filter: blur(3px);
+      padding: 16px;
+      backdrop-filter: blur(4px);
     }
     .modal-content {
       background: var(--card-bg);
       color: var(--text-color);
-      padding: 24px;
+      padding: 20px;
       border-radius: 16px;
       max-width: 480px;
       width: 100%;
-      max-height: 85vh;
+      max-height: 88vh;
       overflow-y: auto;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
     }
     .modal-header {
       display: flex;
@@ -260,7 +301,8 @@
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 10px;
     }
-    .close-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+    .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; border-radius: 6px; }
+    .close-btn:hover { background: var(--status-bg); color: var(--text-color); }
     .btn-confirm {
       width: 100%;
       margin-top: 15px;
@@ -272,6 +314,569 @@
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
+    }
+    .btn-danger-confirm {
+      width: 100%;
+      padding: 12px;
+      background: #e53935;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-danger-confirm:hover {
+      background: #c62828;
+    }
+    .btn-danger-confirm:active {
+      transform: scale(0.98);
+    }
+    .btn-cancel {
+      width: 100%;
+      padding: 11px;
+      background: var(--selector-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-cancel:hover {
+      background: var(--border-color);
+    }
+
+    /* Accordion Styling */
+    .accordion-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .accordion-item {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+    .accordion-header {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--status-bg);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      color: var(--text-color);
+      font-weight: bold;
+      font-size: 14px;
+      text-align: right;
+      transition: background 0.2s;
+    }
+    .accordion-header:hover {
+      background: var(--selector-bg);
+    }
+    .acc-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .acc-arrow {
+      font-size: 13px;
+      transition: transform 0.25s ease;
+      color: var(--text-muted);
+    }
+    .accordion-item.active .acc-arrow {
+      transform: rotate(180deg);
+    }
+    .accordion-body {
+      display: none;
+      padding: 14px;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+    }
+    .accordion-item.active .accordion-body {
+      display: block;
+    }
+
+    /* Theme Option Buttons */
+    .theme-buttons-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .theme-option-btn {
+      padding: 10px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .theme-option-btn:hover {
+      border-color: #2196F3;
+    }
+    .theme-option-btn.active {
+      background: #ebf8ff;
+      border-color: #2196F3;
+      color: #1976d2;
+      font-weight: bold;
+    }
+    [data-theme="dark"] .theme-option-btn.active {
+      background: #1e3a8a;
+      border-color: #3b82f6;
+      color: #93c5fd;
+    }
+
+    /* Settings Actions List */
+    .settings-actions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .settings-action-btn {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.2s ease;
+    }
+    .settings-action-btn:hover {
+      border-color: #2196F3;
+      background: var(--status-bg);
+    }
+    .settings-action-btn.danger {
+      border-color: #ffcdd2;
+      background: #fffbfa;
+    }
+    [data-theme="dark"] .settings-action-btn.danger {
+      border-color: #7f1d1d;
+      background: #450a0a;
+    }
+    .settings-action-btn.danger:hover {
+      border-color: #e53935;
+    }
+    .btn-action-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .btn-action-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .btn-action-title {
+      font-size: 13.5px;
+      font-weight: bold;
+    }
+    .btn-action-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Changelog styling */
+    .changelog-entry {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .changelog-entry:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .changelog-ver-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .changelog-ver-badge {
+      background: #2196F3;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .changelog-ver-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .changelog-items {
+      margin: 0;
+      padding-right: 18px;
+      font-size: 13px;
+      color: var(--text-color);
+      line-height: 1.7;
+    }
+    .changelog-items li {
+      margin-bottom: 3px;
+    }
+
+    /* Admin & Form Styles */
+    .btn-auth-active {
+      background: #e8f5e9 !important;
+      color: #2e7d32 !important;
+      border-color: #a5d6a7 !important;
+    }
+    [data-theme="dark"] .btn-auth-active {
+      background: #1b3820 !important;
+      color: #81c784 !important;
+      border-color: #2e7d32 !important;
+    }
+    .auth-status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      background: var(--status-bg);
+      border: 1px solid var(--border-color);
+      font-size: 13px;
+    }
+    .auth-status-banner.is-admin {
+      background: #f1f8e9;
+      border-color: #c8e6c9;
+      color: #2e7d32;
+    }
+    [data-theme="dark"] .auth-status-banner.is-admin {
+      background: #1c3321;
+      border-color: #2e5936;
+      color: #a5d6a7;
+    }
+    .form-group {
+      margin-bottom: 13px;
+      text-align: right;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-color);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 13.5px;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: #2196F3;
+      outline: none;
+      background: var(--card-bg);
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+    }
+    .login-error-msg {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      margin-bottom: 12px;
+    }
+    [data-theme="dark"] .login-error-msg {
+      background: #450a0a;
+      color: #fca5a5;
+      border-color: #7f1d1d;
+    }
+    /* Focus & Blur effect for active editing card */
+    .card-focus-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 700;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.card-edit-focus-active .card-focus-backdrop {
+      display: block;
+      opacity: 1;
+    }
+
+    body.card-edit-focus-active .app-header {
+      filter: blur(4px) opacity(0.3);
+      pointer-events: none;
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Blur all other unit groups */
+    body.card-edit-focus-active .unit-group:not(.is-editing-active) {
+      filter: blur(6px) opacity(0.2);
+      pointer-events: none;
+      transform: scale(0.99);
+      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Blur table header in the active group */
+    body.card-edit-focus-active .unit-table thead {
+      filter: blur(4px) opacity(0.35);
+      pointer-events: none;
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    body.card-edit-focus-active .unit-group.is-editing-active .unit-header {
+      filter: blur(3px) opacity(0.4);
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Blur ALL other contact rows/cards above and below the active person */
+    body.card-edit-focus-active .unit-table tbody tr:not(.row-editing-active):not(.edit-actions-banner-row) {
+      filter: blur(6px) opacity(0.2) !important;
+      pointer-events: none !important;
+      user-select: none !important;
+      transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    .unit-group {
+      margin-bottom: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      background-color: var(--card-bg);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+      position: relative;
+    }
+
+    .unit-group.is-editing-active {
+      z-index: 750;
+      position: relative;
+      background-color: var(--card-bg);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28) !important;
+    }
+
+    /* Name Cell & Pencil Button */
+    .name-cell-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+    }
+    .name-text-wrapper {
+      font-weight: bold;
+      text-align: right;
+      flex-grow: 1;
+    }
+    .btn-pencil-edit {
+      background: rgba(33, 150, 243, 0.08);
+      border: 1px solid rgba(33, 150, 243, 0.3);
+      border-radius: 6px;
+      color: #1976d2;
+      font-size: 13.5px;
+      padding: 4px 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-right: auto;
+    }
+    [data-theme="dark"] .btn-pencil-edit {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+    }
+    .btn-pencil-edit:hover {
+      background: #2196F3;
+      color: #ffffff;
+      border-color: #2196F3;
+      transform: scale(1.08);
+    }
+    .btn-pencil-edit:active {
+      transform: scale(0.95);
+    }
+
+    /* Active Editing Row & Cell Styles */
+    tr.row-editing-active {
+      background: var(--card-bg) !important;
+      position: relative;
+      z-index: 800;
+      filter: none !important;
+      opacity: 1 !important;
+      box-shadow: 0 0 0 2.5px #2196F3, 0 -6px 20px rgba(33, 150, 243, 0.25) !important;
+      border-radius: 8px 8px 0 0;
+    }
+    [data-theme="dark"] tr.row-editing-active {
+      background: #1e293b !important;
+    }
+
+    .admin-editable-cell.is-editing {
+      background: var(--card-bg) !important;
+      border: 1.5px solid #2196F3 !important;
+      border-radius: 6px !important;
+      padding: 6px 8px !important;
+      cursor: text !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.25) !important;
+    }
+    .admin-editable-cell.is-editing:focus {
+      border-color: #1976d2 !important;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.4) !important;
+    }
+
+    /* Editing Actions Row */
+    .edit-actions-banner-row {
+      background: var(--status-bg) !important;
+      position: relative;
+      z-index: 800;
+      filter: none !important;
+      opacity: 1 !important;
+      border-top: 1px dashed var(--border-color);
+      box-shadow: 0 0 0 2.5px #2196F3, 0 10px 24px rgba(33, 150, 243, 0.3) !important;
+      border-radius: 0 0 8px 8px;
+      animation: fadeInRow 0.25s ease;
+    }
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .edit-actions-banner-cell {
+      padding: 10px 14px !important;
+      text-align: right !important;
+    }
+    .edit-actions-banner-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .edit-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #1976d2;
+    }
+    [data-theme="dark"] .edit-status-indicator {
+      color: #93c5fd;
+    }
+    .edit-pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2196F3;
+      display: inline-block;
+      animation: pulseDot 1.4s infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+      70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(33, 150, 243, 0); }
+      100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+    }
+    .edit-actions-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-save-row-prominent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #2e7d32;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-save-row-prominent:hover {
+      background: #1b5e20;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(46, 125, 50, 0.4);
+    }
+    .btn-save-row-prominent:active {
+      transform: scale(0.96);
+    }
+    .btn-cancel-row-prominent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      background: var(--selector-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-cancel-row-prominent:hover {
+      background: var(--border-color);
+    }
+    .btn-delete-row-prominent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      background: rgba(229, 57, 53, 0.1);
+      color: #e53935;
+      border: 1px solid rgba(229, 57, 53, 0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-delete-row-prominent:hover {
+      background: #e53935;
+      color: #ffffff;
+    }
+    .row-saved-flash {
+      animation: greenFlash 1s ease;
+    }
+    @keyframes greenFlash {
+      0% { background-color: rgba(76, 175, 80, 0.35); }
+      100% { background-color: transparent; }
     }
 
     @media (max-width: 768px) {
@@ -302,25 +907,51 @@
         font-weight: bold; color: #fff; font-size: 13px;
         background-color: var(--mobile-header-bg-color, #2196F3);
       }
+      .edit-actions-banner-row {
+        display: block !important;
+        margin-top: -12px;
+        margin-bottom: 14px;
+        border-radius: 0 0 8px 8px;
+        border-top: none;
+      }
+      .edit-actions-banner-cell {
+        display: block !important;
+        padding: 10px !important;
+        padding-right: 10px !important;
+      }
+      .edit-actions-banner-cell::before {
+        display: none !important;
+      }
+      .edit-actions-banner-flex {
+        justify-content: center;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Backdrop Overlay for Card Focus & Blur -->
+  <div id="cardFocusBackdrop" class="card-focus-backdrop" onclick="handleBackdropClick()" title="کلیک برای انصراف از ویرایش"></div>
+
   <!-- Splash Screen -->
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
-    <h2>دفترچه تلفن داخلی</h2>
+    <h2>دفترچه تلفن سازمان</h2>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 1.0.3 (آفلاین)</span>
   </div>
 
   <div class="app-header">
     <div class="header-top-line">
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
-        دفترچه تلفن سازمان
+        <span>دفترچه تلفن سازمان</span>
+        <span class="version-badge">1.0.3</span>
       </h1>
 
       <div style="display: flex; gap: 6px; align-items: center;">
-        <button id="themeToggleBtn" class="btn-icon-small" title="تغییر حالت شب/روز">🌙</button>
+        <button id="addContactBtn" class="btn-icon-small primary-highlight" style="display: none;" title="افزودن مخاطب جدید" onclick="openAddContactModal()">➕ مخاطب جدید</button>
+        <button id="authBtn" class="btn-icon-small" title="ورود به حساب مدیریت" onclick="handleAuthButtonClick()">🔐 ورود مدیر</button>
+        <button id="settingsBtn" class="btn-icon-small" title="تنظیمات برنامه" onclick="openSettingsModal()">⚙️ تنظیمات</button>
       </div>
     </div>
 
@@ -331,10 +962,284 @@
   </div>
 
   <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv">
+  <input type="file" id="restoreFileInput" accept=".json, .xlsx, .xls, .csv" style="display: none;">
+
+  <!-- Modal Settings -->
+  <div id="settingsModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 17px;">
+          <span>⚙️</span>
+          <span>تنظیمات برنامه</span>
+        </h3>
+        <button class="close-btn" onclick="closeSettingsModal()" title="بستن">✕</button>
+      </div>
+
+      <div id="settingsAuthBanner" class="auth-status-banner"></div>
+
+      <div class="accordion-container">
+        <!-- Accordion 1: ظاهر و تجربه کاربری -->
+        <div class="accordion-item active" id="acc-theme">
+          <button type="button" class="accordion-header" onclick="toggleAccordion('acc-theme')">
+            <div class="acc-title">
+              <span class="acc-icon">🎨</span>
+              <span>ظاهر و تجربه کاربری</span>
+            </div>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">انتخاب حالت تم نمایشی برنامه:</div>
+            <div class="theme-buttons-group">
+              <button type="button" id="themeLightBtn" class="theme-option-btn" onclick="setThemeMode('light')">
+                <span style="font-size: 20px;">☀️</span>
+                <span>روشن</span>
+              </button>
+              <button type="button" id="themeDarkBtn" class="theme-option-btn" onclick="setThemeMode('dark')">
+                <span style="font-size: 20px;">🌙</span>
+                <span>تاریک</span>
+              </button>
+              <button type="button" id="themeSystemBtn" class="theme-option-btn" onclick="setThemeMode('system')">
+                <span style="font-size: 20px;">💻</span>
+                <span>سیستم</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 2: داده‌ها و پشتیبان‌گیری (فقط پس از لاگین مدیر نمایش داده می‌شود) -->
+        <div class="accordion-item" id="acc-data" style="display: none;">
+          <button type="button" class="accordion-header" onclick="toggleAccordion('acc-data')">
+            <div class="acc-title">
+              <span class="acc-icon">💾</span>
+              <span>داده‌ها و پشتیبان‌گیری</span>
+            </div>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            <div class="settings-actions-list">
+              <button type="button" class="settings-action-btn" onclick="exportBackupData()">
+                <span class="btn-action-icon">📤</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">پشتیبان‌گیری از داده‌ها</div>
+                  <div class="btn-action-desc">دریافت و ذخیره فایل خروجی کامل از مخاطبین</div>
+                </div>
+              </button>
+
+              <button type="button" class="settings-action-btn" onclick="document.getElementById('restoreFileInput').click()">
+                <span class="btn-action-icon">📥</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">بازیابی داده‌ها</div>
+                  <div class="btn-action-desc">بارگذاری فایل پشتیبان قبلی یا فایل اکسل جدید</div>
+                </div>
+              </button>
+
+              <button type="button" class="settings-action-btn danger" onclick="openDeleteConfirmModal()">
+                <span class="btn-action-icon">🗑️</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title" style="color: #e53935;">حذف کامل داده‌ها</div>
+                  <div class="btn-action-desc">پاک‌سازی حافظه داخلی و حذف تمامی اطلاعات مخاطبین</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 3: درباره برنامه -->
+        <div class="accordion-item" id="acc-about">
+          <button type="button" class="accordion-header" onclick="toggleAccordion('acc-about')">
+            <div class="acc-title">
+              <span class="acc-icon">ℹ️</span>
+              <span>درباره برنامه</span>
+            </div>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="accordion-body">
+            <div class="settings-actions-list">
+              <button type="button" class="settings-action-btn" onclick="openChangelogModal()">
+                <span class="btn-action-icon">📋</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">تغییرات نسخه‌ها</div>
+                  <div class="btn-action-desc">مشاهده لیست امکانات و تغییرات نسخه‌های برنامه</div>
+                </div>
+              </button>
+
+              <button type="button" class="settings-action-btn" onclick="showInstalledVersionInfo()">
+                <span class="btn-action-icon">📱</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">نسخه نصب‌شده برنامه</div>
+                  <div class="btn-action-desc">نسخه 1.0.2 (کاملاً آفلاین و مستقل)</div>
+                </div>
+              </button>
+
+              <button type="button" class="settings-action-btn" onclick="forceUpdateApp()">
+                <span class="btn-action-icon">🔄</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">بروزرسانی و بارگذاری مجدد برنامه</div>
+                  <div class="btn-action-desc">دریافت آخرین تغییرات و پاکسازی کش موقت</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 400px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px;">
+          <span>🔐</span>
+          <span>ورود به حساب مدیریت</span>
+        </h3>
+        <button class="close-btn" onclick="closeLoginModal()" title="بستن">✕</button>
+      </div>
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)" style="margin-top: 10px;">
+        <div id="loginErrorMsg" class="login-error-msg" style="display: none;"></div>
+        <div class="form-group">
+          <label class="form-label" for="loginUsername">نام کاربری:</label>
+          <input type="text" id="loginUsername" class="form-input" placeholder="نام کاربری (amirhd2)" required dir="ltr" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">کلمه عبور:</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="کلمه عبور" required dir="ltr" autocomplete="current-password">
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 18px;">
+          <button type="submit" class="btn-confirm" style="margin-top: 0; background: #2196F3;">ورود به حساب</button>
+          <button type="button" class="btn-cancel" onclick="closeLoginModal()">انصراف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Contact Modal -->
+  <div id="addContactModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 460px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px;">
+          <span>👤➕</span>
+          <span>افزودن مخاطب جدید</span>
+        </h3>
+        <button class="close-btn" onclick="closeAddContactModal()" title="بستن">✕</button>
+      </div>
+      <form id="addContactForm" onsubmit="submitNewContact(event)" style="margin-top: 10px;">
+        <div class="form-group">
+          <label class="form-label" for="newContactName">نام و نام خانوادگی <span style="color: #e53935;">*</span>:</label>
+          <input type="text" id="newContactName" class="form-input" placeholder="مثال: علی رضایی" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newContactUnitSelect">واحد / بخش سازمانی <span style="color: #e53935;">*</span>:</label>
+          <select id="newContactUnitSelect" class="form-select" onchange="handleUnitSelectChange(this)" required>
+            <!-- Dynamically populated from units in data -->
+          </select>
+          <input type="text" id="newContactCustomUnit" class="form-input" placeholder="نام واحد جدید را وارد کنید..." style="display: none; margin-top: 6px;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="form-group">
+            <label class="form-label" for="newContactInternal">تلفن داخلی:</label>
+            <input type="text" id="newContactInternal" class="form-input" placeholder="مثال: 120">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="newContactVoip">VoIP:</label>
+            <input type="text" id="newContactVoip" class="form-input" placeholder="مثال: 205">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newContactDirect">تلفن مستقیم:</label>
+          <input type="text" id="newContactDirect" class="form-input" placeholder="مثال: 021-88888888">
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 18px;">
+          <button type="submit" class="btn-confirm" style="margin-top: 0; background: #2e7d32;">💾 ثبت و افزودن مخاطب</button>
+          <button type="button" class="btn-cancel" onclick="closeAddContactModal()">انصراف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Single Contact Modal -->
+  <div id="deleteSingleModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 420px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px; color: #e53935;">
+          <span>⚠️</span>
+          <span>تأیید حذف مخاطب</span>
+        </h3>
+        <button class="close-btn" onclick="closeDeleteSingleModal()" title="بستن">✕</button>
+      </div>
+      <p id="deleteSingleModalText" style="font-size: 14px; color: var(--text-color); margin: 12px 0 16px 0; line-height: 1.6;">
+        آیا از حذف این مخاطب اطمینان دارید؟
+      </p>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-danger-confirm" onclick="confirmDeleteSingleContact()">بله، حذف شود</button>
+        <button type="button" class="btn-cancel" onclick="closeDeleteSingleModal()">انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Changelog Modal -->
+  <div id="changelogModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16px;">
+          <span>📋</span>
+          <span>تاریخچه تغییرات نسخه‌ها</span>
+        </h3>
+        <button class="close-btn" onclick="closeChangelogModal()" title="بستن">✕</button>
+      </div>
+      <div id="changelogContent" style="margin-top: 10px;">
+        <!-- Filled dynamically -->
+      </div>
+      <button type="button" class="btn-confirm" onclick="closeChangelogModal()">بستن</button>
+    </div>
+  </div>
+
+  <!-- Version Info Modal -->
+  <div id="versionInfoModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16px;">
+          <span>📱</span>
+          <span>اطلاعات نسخه نصب‌شده</span>
+        </h3>
+        <button class="close-btn" onclick="closeVersionInfoModal()" title="بستن">✕</button>
+      </div>
+      <div id="versionInfoDetails" style="margin-top: 10px;">
+        <!-- Filled dynamically -->
+      </div>
+      <button type="button" class="btn-confirm" onclick="closeVersionInfoModal()">متوجه شدم</button>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteConfirmModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px; color: #e53935;">
+          <span>⚠️</span>
+          <span>تأیید حذف کامل داده‌ها</span>
+        </h3>
+        <button class="close-btn" onclick="closeDeleteConfirmModal()" title="بستن">✕</button>
+      </div>
+      <div style="font-size: 14px; line-height: 1.8; color: var(--text-color); margin: 12px 0 16px 0;">
+        <p style="margin: 0 0 10px 0; font-weight: 500;">آیا از حذف کامل تمامی مخاطبین و داده‌های ذخیره‌شده در حافظه داخلی دستگاه اطمینان دارید؟</p>
+        <div style="background: var(--status-bg); padding: 12px 14px; border-radius: 10px; border-right: 4px solid #e53935; font-size: 12.5px; color: var(--text-muted); line-height: 1.7;">
+          📌 <strong>توجه:</strong> تمامی اطلاعات مخاطبین از حافظه دائمی (IndexedDB و حافظه مرورگر) به طور کامل پاک شده و برنامه به حالت اولیه بازمی‌گردد. این عملیات غیرقابل بازگشت است.
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button type="button" class="btn-danger-confirm" onclick="executeClearAllData()">
+          <span>🗑️</span>
+          <span>بله، تمامی داده‌ها حذف شوند</span>
+        </button>
+        <button type="button" class="btn-cancel" onclick="closeDeleteConfirmModal()">انصراف</button>
+      </div>
+    </div>
+  </div>
 
   <div id="uploadPrompt" class="upload-card" style="display: none;">
-    <h3>هیچ فایل اکسلی بارگذاری نشده است</h3>
-    <p>لطفاً یک فایل اکسل (.xlsx) حاوی مشخصات مخاطبین انتخاب کنید.</p>
+    <h3>هیچ فایل مخاطبینی در حافظه داخلی وجود ندارد</h3>
+    <p>لطفاً یک فایل اکسل (.xlsx) حاوی مشخصات مخاطبین انتخاب کنید تا در حافظه برنامه ذخیره شود.</p>
     <button class="btn-icon-small primary-highlight" style="padding: 10px 16px; font-size: 14px; width: auto;" onclick="document.getElementById('excelFileInput').click();">
       📁 انتخاب فایل اکسل از دستگاه
     </button>
@@ -350,21 +1255,844 @@
     const STORE_NAME = 'phonebookStore';
 
     let contacts = [];
+    let currentFileName = localStorage.getItem('phonebook_cached_file_name') || 'LMO phonebook.xlsx';
+    let currentThemeMode = localStorage.getItem('phonebook_theme_mode') || 'system';
+    let isAdminLoggedIn = localStorage.getItem('phonebook_admin_auth') === 'true';
+    let targetDeleteContactIdx = -1;
 
-    function initTheme() {
-      const savedTheme = localStorage.getItem('phonebook_theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      document.getElementById('themeToggleBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    function showToast(message) {
+      let toast = document.getElementById('appToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'appToast';
+        toast.className = 'toast-msg';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
     }
 
-    document.getElementById('themeToggleBtn').addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('phonebook_theme', next);
-      document.getElementById('themeToggleBtn').textContent = next === 'dark' ? '☀️' : '🌙';
-      document.getElementById('theme-color-meta').setAttribute('content', next === 'dark' ? '#121824' : '#2196F3');
-    });
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function applyTheme(mode) {
+      currentThemeMode = mode;
+      localStorage.setItem('phonebook_theme_mode', mode);
+
+      let effectiveTheme = mode;
+      if (mode === 'system') {
+        effectiveTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      document.documentElement.setAttribute('data-theme', effectiveTheme);
+      const metaTheme = document.getElementById('theme-color-meta');
+      if (metaTheme) {
+        metaTheme.setAttribute('content', effectiveTheme === 'dark' ? '#121824' : '#2196F3');
+      }
+
+      // Update button active state
+      const lightBtn = document.getElementById('themeLightBtn');
+      const darkBtn = document.getElementById('themeDarkBtn');
+      const systemBtn = document.getElementById('themeSystemBtn');
+      if (lightBtn && darkBtn && systemBtn) {
+        lightBtn.classList.toggle('active', mode === 'light');
+        darkBtn.classList.toggle('active', mode === 'dark');
+        systemBtn.classList.toggle('active', mode === 'system');
+      }
+    }
+
+    function setThemeMode(mode) {
+      applyTheme(mode);
+      const modeLabel = mode === 'light' ? 'روشن' : mode === 'dark' ? 'تاریک' : 'سیستم (خودکار)';
+      showToast(`حالت تم نمایشی به «${modeLabel}» تغییر یافت`);
+    }
+
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (currentThemeMode === 'system') {
+          applyTheme('system');
+        }
+      });
+    }
+
+    function updateAuthUI() {
+      isAdminLoggedIn = localStorage.getItem('phonebook_admin_auth') === 'true';
+      const authBtn = document.getElementById('authBtn');
+      const addContactBtn = document.getElementById('addContactBtn');
+      const accData = document.getElementById('acc-data');
+      const banner = document.getElementById('settingsAuthBanner');
+
+      if (isAdminLoggedIn) {
+        if (authBtn) {
+          authBtn.innerHTML = '👤 amirhd2 <span style="font-size: 11px; opacity: 0.85;">(خروج)</span>';
+          authBtn.className = 'btn-icon-small btn-auth-active';
+          authBtn.title = 'خروج از حساب مدیریت';
+        }
+        if (addContactBtn) {
+          addContactBtn.style.display = 'inline-flex';
+        }
+        if (accData) {
+          accData.style.display = 'block';
+        }
+        if (banner) {
+          banner.className = 'auth-status-banner is-admin';
+          banner.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">🛡️</span>
+              <div>
+                <div style="font-weight: bold;">حساب مدیریت (amirhd2) فعال است</div>
+                <div style="font-size: 11.5px; opacity: 0.85;">دسترسی کامل به ویرایش مخاطبین و بخش پشتیبان‌گیری</div>
+              </div>
+            </div>
+            <button type="button" class="btn-icon-small" style="font-size: 11.5px; padding: 4px 8px; background: rgba(0,0,0,0.06);" onclick="logoutAdmin()">خروج</button>
+          `;
+        }
+      } else {
+        if (authBtn) {
+          authBtn.innerHTML = '🔐 ورود مدیر';
+          authBtn.className = 'btn-icon-small';
+          authBtn.title = 'ورود به حساب مدیریت';
+        }
+        if (addContactBtn) {
+          addContactBtn.style.display = 'none';
+        }
+        if (accData) {
+          accData.style.display = 'none';
+          accData.classList.remove('active');
+        }
+        if (banner) {
+          banner.className = 'auth-status-banner';
+          banner.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">👤</span>
+              <div>
+                <div style="font-weight: bold;">دسترسی: کاربر مهمان (مشاهده)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">برای دسترسی به پشتیبان‌گیری و ویرایش وارد شوید</div>
+              </div>
+            </div>
+            <button type="button" class="btn-icon-small primary-highlight" style="font-size: 11.5px; padding: 4px 10px;" onclick="closeSettingsModal(); openLoginModal();">ورود مدیر</button>
+          `;
+        }
+      }
+    }
+
+    function handleAuthButtonClick() {
+      if (isAdminLoggedIn) {
+        logoutAdmin();
+      } else {
+        openLoginModal();
+      }
+    }
+
+    function openLoginModal() {
+      const modal = document.getElementById('loginModal');
+      const errorDiv = document.getElementById('loginErrorMsg');
+      if (errorDiv) errorDiv.style.display = 'none';
+      if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          const userInput = document.getElementById('loginUsername');
+          if (userInput) userInput.focus();
+        }, 100);
+      }
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById('loginModal');
+      if (modal) modal.style.display = 'none';
+      const form = document.getElementById('loginForm');
+      if (form) form.reset();
+    }
+
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
+      const user = document.getElementById('loginUsername').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginErrorMsg');
+
+      if (user === 'amirhd2' && pass === 'Amir@120962') {
+        localStorage.setItem('phonebook_admin_auth', 'true');
+        isAdminLoggedIn = true;
+        if (errorDiv) errorDiv.style.display = 'none';
+        closeLoginModal();
+        updateAuthUI();
+        renderList(contacts);
+        showToast('🎉 خوش آمدید! با دسترسی مدیر (amirhd2) وارد شدید.');
+      } else {
+        if (errorDiv) {
+          errorDiv.textContent = '❌ نام کاربری یا کلمه عبور نادرست است.';
+          errorDiv.style.display = 'block';
+        }
+      }
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('phonebook_admin_auth');
+      isAdminLoggedIn = false;
+      updateAuthUI();
+      renderList(contacts);
+      showToast('👋 با موفقیت از حساب مدیریت خارج شدید.');
+    }
+
+    function openSettingsModal() {
+      const modal = document.getElementById('settingsModal');
+      if (modal) {
+        updateAuthUI();
+        applyTheme(currentThemeMode);
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('settingsModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function toggleAccordion(accId) {
+      const target = document.getElementById(accId);
+      if (!target) return;
+      const wasActive = target.classList.contains('active');
+      document.querySelectorAll('.accordion-item').forEach(el => el.classList.remove('active'));
+      if (!wasActive) {
+        target.classList.add('active');
+      }
+    }
+
+    function handleModalOverlayClick(event) {
+      if (event.target.classList.contains('modal-overlay')) {
+        event.target.style.display = 'none';
+      }
+    }
+
+    function getUniqueUnits() {
+      const units = new Set();
+      contacts.forEach(c => {
+        const u = (c['واحد'] || c['بخش'] || '').trim();
+        if (u && u !== 'نامشخص') units.add(u);
+      });
+      return Array.from(units);
+    }
+
+    function openAddContactModal() {
+      const modal = document.getElementById('addContactModal');
+      const select = document.getElementById('newContactUnitSelect');
+      const customUnit = document.getElementById('newContactCustomUnit');
+      const form = document.getElementById('addContactForm');
+
+      if (form) form.reset();
+      if (customUnit) customUnit.style.display = 'none';
+
+      if (select) {
+        const units = getUniqueUnits();
+        select.innerHTML = '<option value="">-- انتخاب واحد سازمانی از دیتای موجود --</option>' +
+          units.map(u => `<option value="${escapeHtml(u)}">${escapeHtml(u)}</option>`).join('') +
+          '<option value="__NEW__">➕ ایجاد واحد سازمانی جدید...</option>';
+      }
+
+      if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          const nameInput = document.getElementById('newContactName');
+          if (nameInput) nameInput.focus();
+        }, 100);
+      }
+    }
+
+    function closeAddContactModal() {
+      const modal = document.getElementById('addContactModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleUnitSelectChange(selectEl) {
+      const customInput = document.getElementById('newContactCustomUnit');
+      if (!customInput) return;
+      if (selectEl.value === '__NEW__') {
+        customInput.style.display = 'block';
+        customInput.required = true;
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        customInput.required = false;
+        customInput.value = '';
+      }
+    }
+
+    async function submitNewContact(e) {
+      if (e) e.preventDefault();
+      const name = document.getElementById('newContactName').value.trim();
+      const unitSelect = document.getElementById('newContactUnitSelect').value;
+      const customUnit = document.getElementById('newContactCustomUnit').value.trim();
+      const internal = document.getElementById('newContactInternal').value.trim();
+      const voip = document.getElementById('newContactVoip').value.trim();
+      const direct = document.getElementById('newContactDirect').value.trim();
+
+      if (!name) {
+        showToast('⚠️ لطفاً نام و نام خانوادگی را وارد کنید.');
+        return;
+      }
+
+      let finalUnit = '';
+      if (unitSelect === '__NEW__') {
+        if (!customUnit) {
+          showToast('⚠️ لطفاً نام واحد سازمانی جدید را وارد کنید.');
+          return;
+        }
+        finalUnit = customUnit;
+      } else if (unitSelect) {
+        finalUnit = unitSelect;
+      } else {
+        showToast('⚠️ لطفاً واحد سازمانی را انتخاب کنید.');
+        return;
+      }
+
+      const newContact = {
+        'نام و نام خانوادگی': name,
+        'واحد': finalUnit,
+        'تلفن داخلی': internal,
+        'VoIP': voip,
+        'تلفن مستقیم': direct
+      };
+
+      // Find the last index of this unit in contacts array so it is inserted neatly into its unit
+      let lastIndex = -1;
+      for (let i = 0; i < contacts.length; i++) {
+        const u = (contacts[i]['واحد'] || contacts[i]['بخش'] || '').trim();
+        if (u === finalUnit) {
+          lastIndex = i;
+        }
+      }
+
+      if (lastIndex !== -1) {
+        contacts.splice(lastIndex + 1, 0, newContact);
+      } else {
+        contacts.push(newContact);
+      }
+
+      localStorage.removeItem('phonebook_user_cleared');
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+
+      const uploadPrompt = document.getElementById('uploadPrompt');
+      if (uploadPrompt) uploadPrompt.style.display = 'none';
+
+      closeAddContactModal();
+      renderList(contacts);
+      showToast(`✅ مخاطب «${name}» در انتهای واحد «${finalUnit}» اضافه شد`);
+    }
+
+    let activeEditingIdx = -1;
+    let activeOriginalData = null;
+
+    function handleBackdropClick() {
+      if (activeEditingIdx !== -1) {
+        cancelEditRow(activeEditingIdx);
+      }
+    }
+
+    function startEditRow(origIdx) {
+      if (!isAdminLoggedIn) return;
+
+      if (activeEditingIdx !== -1 && activeEditingIdx !== origIdx) {
+        cancelEditRow(activeEditingIdx, true);
+      }
+
+      const row = document.getElementById(`contact-row-${origIdx}`);
+      if (!row || !contacts[origIdx]) return;
+
+      activeEditingIdx = origIdx;
+      activeOriginalData = { ...contacts[origIdx] };
+
+      const unitGroup = row.closest('.unit-group');
+      if (unitGroup) {
+        unitGroup.classList.add('is-editing-active');
+      }
+      document.body.classList.add('card-edit-focus-active');
+      row.classList.add('row-editing-active');
+
+      const cells = row.querySelectorAll('.admin-editable-cell');
+      cells.forEach(cell => {
+        cell.classList.add('is-editing');
+        cell.setAttribute('contenteditable', 'true');
+      });
+
+      const pencilBtn = row.querySelector('.btn-pencil-edit');
+      if (pencilBtn) pencilBtn.style.display = 'none';
+
+      const oldActionRow = document.getElementById(`edit-actions-row-${origIdx}`);
+      if (oldActionRow) oldActionRow.remove();
+
+      const actionRow = document.createElement('tr');
+      actionRow.id = `edit-actions-row-${origIdx}`;
+      actionRow.className = 'edit-actions-banner-row';
+      actionRow.innerHTML = `
+        <td colspan="4" class="edit-actions-banner-cell">
+          <div class="edit-actions-banner-flex">
+            <div class="edit-status-indicator">
+              <span class="edit-pulse-dot"></span>
+              <span>در حال ویرایش مخاطب... (Enter: ثبت | Esc: انصراف)</span>
+            </div>
+            <div class="edit-actions-buttons">
+              <button type="button" class="btn-save-row-prominent" onclick="saveContactRow(${origIdx})" title="ثبت نهایی تغییرات (تیک سبز)">
+                <span>✔️ ثبت تغییرات</span>
+              </button>
+              <button type="button" class="btn-cancel-row-prominent" onclick="cancelEditRow(${origIdx})" title="انصراف از ویرایش">
+                <span>✕ انصراف</span>
+              </button>
+              <button type="button" class="btn-delete-row-prominent" onclick="openDeleteSingleModal(${origIdx})" title="حذف این مخاطب">
+                <span>🗑️ حذف</span>
+              </button>
+            </div>
+          </div>
+        </td>
+      `;
+      row.after(actionRow);
+
+      const nameCell = row.querySelector('[data-field="نام و نام خانوادگی"]');
+      if (nameCell) {
+        nameCell.focus();
+        try {
+          const range = document.createRange();
+          range.selectNodeContents(nameCell);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } catch (e) {}
+      }
+
+      try {
+        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (e) {}
+    }
+
+    function cancelEditRow(origIdx, silent = false) {
+      const row = document.getElementById(`contact-row-${origIdx}`);
+      const actionRow = document.getElementById(`edit-actions-row-${origIdx}`);
+      if (actionRow) actionRow.remove();
+
+      if (row && activeOriginalData) {
+        row.classList.remove('row-editing-active');
+        const nameCell = row.querySelector('[data-field="نام و نام خانوادگی"]');
+        const internalCell = row.querySelector('[data-field="تلفن داخلی"]');
+        const voipCell = row.querySelector('[data-field="VoIP"]');
+        const directCell = row.querySelector('[data-field="تلفن مستقیم"]');
+
+        const origName = activeOriginalData['نام و نام خانوادگی'] || `${activeOriginalData['نام'] || ''} ${activeOriginalData['نام خانوادگی'] || ''}`.trim();
+        const origInternal = activeOriginalData['تلفن داخلی'] || activeOriginalData['داخلی'] || '';
+        const origVoip = activeOriginalData['VoIP'] || activeOriginalData['Voip'] || '';
+        const origDirect = activeOriginalData['تلفن مستقیم'] || activeOriginalData['مستقیم'] || '';
+
+        if (nameCell) nameCell.innerText = origName || '—';
+        if (internalCell) internalCell.innerText = origInternal;
+        if (voipCell) voipCell.innerText = origVoip;
+        if (directCell) directCell.innerText = origDirect;
+
+        const cells = row.querySelectorAll('.admin-editable-cell');
+        cells.forEach(cell => {
+          cell.classList.remove('is-editing');
+          cell.removeAttribute('contenteditable');
+        });
+
+        const pencilBtn = row.querySelector('.btn-pencil-edit');
+        if (pencilBtn) pencilBtn.style.display = 'inline-flex';
+      }
+
+      document.querySelectorAll('.unit-group').forEach(u => u.classList.remove('is-editing-active'));
+      document.body.classList.remove('card-edit-focus-active');
+
+      activeEditingIdx = -1;
+      activeOriginalData = null;
+
+      if (!silent) {
+        showToast('ویرایش مخاطب لغو شد.');
+      }
+    }
+
+    async function saveContactRow(origIdx) {
+      const row = document.getElementById(`contact-row-${origIdx}`);
+      if (!row || !contacts[origIdx]) return;
+
+      const nameCell = row.querySelector('[data-field="نام و نام خانوادگی"]');
+      const internalCell = row.querySelector('[data-field="تلفن داخلی"]');
+      const voipCell = row.querySelector('[data-field="VoIP"]');
+      const directCell = row.querySelector('[data-field="تلفن مستقیم"]');
+
+      const newName = nameCell ? nameCell.innerText.trim() : '';
+      const newInternal = internalCell ? internalCell.innerText.trim() : '';
+      const newVoip = voipCell ? voipCell.innerText.trim() : '';
+      const newDirect = directCell ? directCell.innerText.trim() : '';
+
+      if (!newName || newName === '—') {
+        showToast('⚠️ نام و نام خانوادگی نمی‌تواند خالی باشد.');
+        if (nameCell) nameCell.focus();
+        return;
+      }
+
+      contacts[origIdx]['نام و نام خانوادگی'] = newName;
+      contacts[origIdx]['نام'] = '';
+      contacts[origIdx]['نام خانوادگی'] = '';
+      contacts[origIdx]['تلفن داخلی'] = newInternal;
+      contacts[origIdx]['داخلی'] = newInternal;
+      contacts[origIdx]['VoIP'] = newVoip;
+      contacts[origIdx]['Voip'] = newVoip;
+      contacts[origIdx]['تلفن مستقیم'] = newDirect;
+      contacts[origIdx]['مستقیم'] = newDirect;
+
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+
+      const actionRow = document.getElementById(`edit-actions-row-${origIdx}`);
+      if (actionRow) actionRow.remove();
+
+      row.classList.remove('row-editing-active');
+      const cells = row.querySelectorAll('.admin-editable-cell');
+      cells.forEach(cell => {
+        cell.classList.remove('is-editing');
+        cell.removeAttribute('contenteditable');
+      });
+
+      const pencilBtn = row.querySelector('.btn-pencil-edit');
+      if (pencilBtn) pencilBtn.style.display = 'inline-flex';
+
+      document.querySelectorAll('.unit-group').forEach(u => u.classList.remove('is-editing-active'));
+      document.body.classList.remove('card-edit-focus-active');
+
+      activeEditingIdx = -1;
+      activeOriginalData = null;
+
+      row.classList.add('row-saved-flash');
+      setTimeout(() => row.classList.remove('row-saved-flash'), 1000);
+
+      showToast(`✅ تغییرات مخاطب «${newName}» با موفقیت ذخیره شد`);
+    }
+
+    function handleCellKeyDown(e, origIdx) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        saveContactRow(origIdx);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelEditRow(origIdx);
+      }
+    }
+
+    function openDeleteSingleModal(origIdx) {
+      if (!contacts[origIdx]) return;
+      targetDeleteContactIdx = origIdx;
+      const name = contacts[origIdx]['نام و نام خانوادگی'] || `${contacts[origIdx]['نام'] || ''} ${contacts[origIdx]['نام خانوادگی'] || ''}`.trim() || 'مخاطب';
+      const textEl = document.getElementById('deleteSingleModalText');
+      if (textEl) {
+        textEl.innerHTML = `آیا از حذف مخاطب <strong>«${escapeHtml(name)}»</strong> از دفترچه تلفن اطمینان دارید؟`;
+      }
+      const modal = document.getElementById('deleteSingleModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDeleteSingleModal() {
+      targetDeleteContactIdx = -1;
+      const modal = document.getElementById('deleteSingleModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function confirmDeleteSingleContact() {
+      if (targetDeleteContactIdx === -1 || !contacts[targetDeleteContactIdx]) return;
+      const name = contacts[targetDeleteContactIdx]['نام و نام خانوادگی'] || 'مخاطب';
+      
+      if (activeEditingIdx === targetDeleteContactIdx) {
+        cancelEditRow(activeEditingIdx, true);
+      }
+
+      contacts.splice(targetDeleteContactIdx, 1);
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+      closeDeleteSingleModal();
+      renderList(contacts);
+      showToast(`🗑️ مخاطب «${name}» با موفقیت حذف شد`);
+    }
+
+    function exportBackupData() {
+      if (!contacts || contacts.length === 0) {
+        showToast('⚠️ مخاطبی برای پشتیبان‌گیری در حافظه برنامه یافت نشد.');
+        return;
+      }
+      const backupData = {
+        appName: 'دفترچه تلفن سازمان',
+        version: '1.0.2',
+        exportDate: new Date().toISOString(),
+        exportDateFa: new Date().toLocaleDateString('fa-IR'),
+        contactsCount: contacts.length,
+        contacts: contacts
+      };
+      const jsonStr = JSON.stringify(backupData, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      a.href = url;
+      a.download = `phonebook-backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+      showToast(`فایل پشتیبان با موفقیت دانلود شد (${contacts.length} مخاطب)`);
+    }
+
+    async function handleRestoreFile(file) {
+      if (!file) return;
+
+      const restoreInput = document.getElementById('restoreFileInput');
+      if (restoreInput) restoreInput.value = '';
+
+      if (file.name.toLowerCase().endsWith('.json')) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          try {
+            const parsed = JSON.parse(e.target.result);
+            let listToRestore = [];
+            if (Array.isArray(parsed)) {
+              listToRestore = parsed;
+            } else if (parsed && Array.isArray(parsed.contacts)) {
+              listToRestore = parsed.contacts;
+            }
+
+            if (listToRestore.length === 0) {
+              showToast('⚠️ فایل پشتیبان انتخاب‌شده فاقد اطلاعات مخاطبین است.');
+              return;
+            }
+
+            contacts = listToRestore;
+            currentFileName = file.name;
+            localStorage.removeItem('phonebook_user_cleared');
+            await saveData('contacts_data', contacts, file.name);
+            const uploadPrompt = document.getElementById('uploadPrompt');
+            if (uploadPrompt) uploadPrompt.style.display = 'none';
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = '';
+            renderList(contacts);
+            closeSettingsModal();
+            showToast(`داده‌ها با موفقیت بازیابی شدند (${contacts.length} مخاطب)`);
+          } catch (err) {
+            console.error('Error parsing JSON backup:', err);
+            showToast('❌ خطا در خواندن فایل پشتیبان JSON. لطفاً فایل معتبری انتخاب کنید.');
+          }
+        };
+        reader.readAsText(file);
+        return;
+      }
+
+      // If excel file (.xlsx, .xls, .csv)
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        try {
+          const parsed = await parseWorkbook(e.target.result);
+          if (!parsed || parsed.length === 0) {
+            showToast('⚠️ فایل اکسل انتخاب‌شده خالی است.');
+            return;
+          }
+          contacts = parsed;
+          currentFileName = file.name;
+          localStorage.removeItem('phonebook_user_cleared');
+          await saveData('contacts_data', contacts, file.name);
+          const uploadPrompt = document.getElementById('uploadPrompt');
+          if (uploadPrompt) uploadPrompt.style.display = 'none';
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput) searchInput.value = '';
+          renderList(contacts);
+          closeSettingsModal();
+          showToast(`اطلاعات اکسل با موفقیت بازیابی و ذخیره شد (${contacts.length} مخاطب)`);
+        } catch (err) {
+          console.error('Error parsing excel restore file:', err);
+          showToast('❌ خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function openDeleteConfirmModal() {
+      const modal = document.getElementById('deleteConfirmModal');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeDeleteConfirmModal() {
+      const modal = document.getElementById('deleteConfirmModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    async function executeClearAllData() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.clear();
+      } catch (e) {
+        console.warn('IndexedDB clear warning:', e);
+      }
+
+      try {
+        localStorage.removeItem('phonebook_cached_contacts');
+        localStorage.removeItem('phonebook_cached_file_name');
+        localStorage.removeItem('phonebook_cached_time');
+        localStorage.setItem('phonebook_user_cleared', 'true');
+      } catch (e) {
+        console.warn('localStorage clear warning:', e);
+      }
+
+      contacts = [];
+      const contactsContainer = document.getElementById('contactsContainer');
+      if (contactsContainer) contactsContainer.innerHTML = '';
+      const uploadPrompt = document.getElementById('uploadPrompt');
+      if (uploadPrompt) uploadPrompt.style.display = 'block';
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+
+      closeDeleteConfirmModal();
+      closeSettingsModal();
+      showToast('تمامی داده‌ها از حافظه داخلی برنامه حذف شدند');
+    }
+
+    async function openChangelogModal() {
+      const modal = document.getElementById('changelogModal');
+      const container = document.getElementById('changelogContent');
+      if (!modal || !container) return;
+
+      try {
+        const resp = await fetch('./Version%20Info.json');
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.history && data.history.length > 0) {
+            container.innerHTML = data.history.map(item => `
+              <div class="changelog-entry">
+                <div class="changelog-ver-header">
+                  <span class="changelog-ver-badge">نسخه ${item.version}</span>
+                  <span class="changelog-ver-date">${item.date}</span>
+                </div>
+                <ul class="changelog-items">
+                  ${item.changes.map(c => `<li>${c}</li>`).join('')}
+                </ul>
+              </div>
+            `).join('');
+          } else if (data.changelog) {
+            container.innerHTML = `
+              <div class="changelog-entry">
+                <div class="changelog-ver-header">
+                  <span class="changelog-ver-badge">نسخه ${data.version}</span>
+                  <span class="changelog-ver-date">${data.releaseDate}</span>
+                </div>
+                <ul class="changelog-items">
+                  ${data.changelog.map(c => `<li>${c}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+          }
+        } else {
+          showStaticChangelog(container);
+        }
+      } catch (e) {
+        console.warn('Changelog fetch notice:', e);
+        showStaticChangelog(container);
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function showStaticChangelog(container) {
+      container.innerHTML = `
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.3</span>
+            <span class="changelog-ver-date">1405/05/27</span>
+          </div>
+          <ul class="changelog-items">
+            <li>حذف ستون عملیات از حالت عادی برای تمیزی و یکدستی جدول</li>
+            <li>افزودن آیکون مداد (✏️) در سمت چپ نام برای شروع ویرایش هر ردیف</li>
+            <li>افکت بلور و تمرکز نوری روی کارت در حال ویرایش و مات‌شدن پس‌زمینه</li>
+            <li>نوار ابزار هوشمند ثبت، انصراف و حذف با کلیدهای میانبر Enter و Esc</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.2</span>
+            <span class="changelog-ver-date">1405/05/27</span>
+          </div>
+          <ul class="changelog-items">
+            <li>افزودن سیستم احراز هویت و ورود مدیر (amirhd2)</li>
+            <li>ویرایش درون‌خطی سلول‌های مخاطبین با کلیک و دکمه ثبت سبز (✔️)</li>
+            <li>دکمه اختصاصی افزودن مخاطب جدید با قابلیت انتخاب واحد سازمانی</li>
+            <li>محدودسازی بخش داده‌ها و پشتیبان‌گیری به مدیر لاگین‌شده</li>
+            <li>حذف دکمه بارگذاری فایل از داشبورد صفحه اصلی</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.1</span>
+            <span class="changelog-ver-date">1405/05/27</span>
+          </div>
+          <ul class="changelog-items">
+            <li>اضافه شدن بخش جامع تنظیمات با ۳ آکاردیون اختصاصی</li>
+            <li>مدیریت تم ۳ حالته (روشن، تاریک، هماهنگ با سیستم)</li>
+            <li>پشتیبان‌گیری (Export) و بازیابی (Restore) فایل داده‌ها</li>
+            <li>امکان حذف کامل پایگاه داده داخلی</li>
+            <li>انتقال تنظیمات تم از صفحه اصلی به بخش تنظیمات</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.0</span>
+            <span class="changelog-ver-date">1405/05/27</span>
+          </div>
+          <ul class="changelog-items">
+            <li>انتشار رسمی نسخه کاملاً مستقل و ۱۰۰٪ آفلاین</li>
+            <li>پایگاه داده داخلی پایدار (IndexedDB & LocalStorage)</li>
+            <li>حذف کامل وابستگی به گوگل شیت و اتصال اینترنت</li>
+          </ul>
+        </div>
+      `;
+    }
+
+    function closeChangelogModal() {
+      const modal = document.getElementById('changelogModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function showInstalledVersionInfo() {
+      const modal = document.getElementById('versionInfoModal');
+      const details = document.getElementById('versionInfoDetails');
+      if (!modal || !details) return;
+
+      details.innerHTML = `
+        <div style="text-align: center; margin-bottom: 14px;">
+          <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
+          <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 1.0.3</div>
+        </div>
+        <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
+          <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
+          <div>💾 <strong>پایگاه داده:</strong> حافظه داخلی (IndexedDB)</div>
+          <div>👥 <strong>تعداد مخاطبین ذخیره شده:</strong> ${contacts.length} نفر</div>
+          <div>🛡️ <strong>وضعیت احراز هویت:</strong> ${isAdminLoggedIn ? 'مدیر سیستم (amirhd2)' : 'کاربر مهمان'}</div>
+          <div>⚡ <strong>سرویس ورکر:</strong> فعال و آماده کار بدون اینترنت</div>
+        </div>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeVersionInfoModal() {
+      const modal = document.getElementById('versionInfoModal');
+      if (modal) modal.style.display = 'none';
+    }
 
     function openDatabase() {
       return new Promise((resolve, reject) => {
@@ -381,31 +2109,73 @@
     }
 
     async function saveData(key, contactsData, fileName) {
-      const db = await openDatabase();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
-        const record = {
-          key: key,
-          contacts: contactsData,
-          fileName: fileName,
-          updatedAt: new Date().toLocaleDateString('fa-IR') + ' - ' + new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'})
-        };
-        const req = store.put(record);
-        req.onsuccess = () => resolve(record);
-        req.onerror = (e) => reject(e.target.error);
-      });
+      const timestamp = new Date().toLocaleDateString('fa-IR') + ' - ' + new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'});
+      const record = {
+        key: key,
+        contacts: contactsData,
+        fileName: fileName,
+        updatedAt: timestamp
+      };
+
+      try {
+        const db = await openDatabase();
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.put(record);
+          req.onsuccess = () => resolve(record);
+          req.onerror = (e) => reject(e.target.error);
+        });
+      } catch (err) {
+        console.warn('IndexedDB save failed, saving to localStorage:', err);
+      }
+
+      try {
+        localStorage.setItem('phonebook_cached_contacts', JSON.stringify(contactsData));
+        localStorage.setItem('phonebook_cached_file_name', fileName);
+        localStorage.setItem('phonebook_cached_time', timestamp);
+      } catch (err) {
+        console.warn('localStorage save warning:', err);
+      }
+
+      return record;
     }
 
     async function loadData(key) {
-      const db = await openDatabase();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readonly');
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.get(key);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => resolve(null);
-      });
+      try {
+        const db = await openDatabase();
+        const result = await new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.get(key);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+        if (result && result.contacts && result.contacts.length > 0) {
+          return result;
+        }
+      } catch (err) {
+        console.warn('IndexedDB load notice:', err);
+      }
+
+      try {
+        const localContacts = localStorage.getItem('phonebook_cached_contacts');
+        if (localContacts) {
+          const parsed = JSON.parse(localContacts);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return {
+              key: key,
+              contacts: parsed,
+              fileName: localStorage.getItem('phonebook_cached_file_name') || 'فایل اکسل',
+              updatedAt: localStorage.getItem('phonebook_cached_time') || ''
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('localStorage load notice:', err);
+      }
+
+      return null;
     }
 
     async function parseWorkbook(arrayBuffer) {
@@ -420,49 +2190,82 @@
     }
 
     async function loadBundledOrSavedData() {
-      // 1. Check if we already have cached data in IndexedDB
+      // 0. Check if user explicitly cleared their database
+      if (localStorage.getItem('phonebook_user_cleared') === 'true') {
+        contacts = [];
+        const contactsContainer = document.getElementById('contactsContainer');
+        if (contactsContainer) contactsContainer.innerHTML = '';
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        if (uploadPrompt) uploadPrompt.style.display = 'block';
+        return;
+      }
+
+      // 1. Check if we already have saved data in internal database
       const cached = (await loadData('contacts_data')) || (await loadData('google_data')) || (await loadData('local_data'));
       if (cached && cached.contacts && cached.contacts.length > 0) {
         contacts = cached.contacts;
+        currentFileName = cached.fileName || 'LMO phonebook.xlsx';
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        if (uploadPrompt) uploadPrompt.style.display = 'none';
         renderList(contacts);
         return;
       }
 
-      // 2. First-time launch: fetch the bundled LMO phonebook.xlsx file and cache it in IndexedDB
+      // 2. First-time launch: fetch the bundled LMO phonebook.xlsx file and cache it in the internal database
       try {
         const resp = await fetch(BUNDLED_EXCEL_PATH);
         if (resp.ok) {
           const buf = await resp.arrayBuffer();
           const parsed = await parseWorkbook(buf);
-          if (parsed.length > 0) {
+          if (parsed && parsed.length > 0) {
             contacts = parsed;
+            currentFileName = 'LMO phonebook.xlsx';
             await saveData('contacts_data', contacts, 'LMO phonebook.xlsx');
+            const uploadPrompt = document.getElementById('uploadPrompt');
+            if (uploadPrompt) uploadPrompt.style.display = 'none';
             renderList(contacts);
+            return;
           }
         }
       } catch (e) {
         console.warn('Bundled Excel fetch error:', e);
       }
+
+      // 3. If no data exists, display the upload prompt
+      contacts = [];
+      const contactsContainer = document.getElementById('contactsContainer');
+      if (contactsContainer) contactsContainer.innerHTML = '';
+      const uploadPrompt = document.getElementById('uploadPrompt');
+      if (uploadPrompt) uploadPrompt.style.display = 'block';
     }
 
     function handleLocalFile(file) {
       if (!file) return;
+
+      const fileInput = document.getElementById('excelFileInput');
+      if (fileInput) fileInput.value = '';
+
       const reader = new FileReader();
       reader.onload = async function(e) {
         try {
           const parsed = await parseWorkbook(e.target.result);
-          if (parsed.length === 0) {
-            alert('فایل اکسل انتخاب‌شده خالی است.');
+          if (!parsed || parsed.length === 0) {
+            showToast('⚠️ فایل اکسل انتخاب‌شده خالی است.');
             return;
           }
           contacts = parsed;
+          currentFileName = file.name;
+          localStorage.removeItem('phonebook_user_cleared');
           await saveData('contacts_data', contacts, file.name);
           const uploadPrompt = document.getElementById('uploadPrompt');
           if (uploadPrompt) uploadPrompt.style.display = 'none';
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput) searchInput.value = '';
           renderList(contacts);
+          showToast(`اطلاعات با موفقیت در حافظه داخلی برنامه ذخیره شد (${contacts.length} مخاطب)`);
         } catch (err) {
           console.error('Error parsing excel file:', err);
-          alert('خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.');
+          showToast('❌ خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.');
         }
       };
       reader.readAsArrayBuffer(file);
@@ -533,15 +2336,65 @@
         `;
         const tbody = table.querySelector('tbody');
         groups[unit].forEach(contact => {
+          const origIdx = contacts.indexOf(contact);
+          const isRowEditing = (activeEditingIdx === origIdx);
+
+          if (isRowEditing) {
+            groupDiv.classList.add('is-editing-active');
+          }
+
           const row = document.createElement('tr');
+          row.id = `contact-row-${origIdx}`;
+          if (isRowEditing) {
+            row.classList.add('row-editing-active');
+          }
+
           const name = contact['نام و نام خانوادگی'] || `${contact['نام'] || ''} ${contact['نام خانوادگی'] || ''}`.trim();
+          const internal = contact['تلفن داخلی'] || contact['داخلی'] || '—';
+          const voip = contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '—';
+          const direct = contact['تلفن مستقیم'] || contact['مستقیم'] || '—';
+
           row.innerHTML = `
-            <td data-label="نام و نام خانوادگی" style="font-weight:bold">${name || '—'}</td>
-            <td data-label="تلفن داخلی">${contact['تلفن داخلی'] || contact['داخلی'] || '—'}</td>
-            <td data-label="VoIP">${contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '—'}</td>
-            <td data-label="تلفن مستقیم">${contact['تلفن مستقیم'] || contact['مستقیم'] || '—'}</td>
+            <td data-label="نام و نام خانوادگی">
+              <div class="name-cell-content">
+                <span class="name-text-wrapper admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" data-field="نام و نام خانوادگی" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${escapeHtml(name) || '—'}</span>
+                ${isAdminLoggedIn ? `<button type="button" class="btn-pencil-edit" style="${isRowEditing ? 'display: none;' : ''}" onclick="event.stopPropagation(); startEditRow(${origIdx})" title="ویرایش این مخاطب">✏️</button>` : ''}
+              </div>
+            </td>
+            <td data-label="تلفن داخلی" data-field="تلفن داخلی" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${internal === '—' ? '' : escapeHtml(internal)}</td>
+            <td data-label="VoIP" data-field="VoIP" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${voip === '—' ? '' : escapeHtml(voip)}</td>
+            <td data-label="تلفن مستقیم" data-field="تلفن مستقیم" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${direct === '—' ? '' : escapeHtml(direct)}</td>
           `;
+
           tbody.appendChild(row);
+
+          if (isRowEditing) {
+            const actionRow = document.createElement('tr');
+            actionRow.id = `edit-actions-row-${origIdx}`;
+            actionRow.className = 'edit-actions-banner-row';
+            actionRow.innerHTML = `
+              <td colspan="4" class="edit-actions-banner-cell">
+                <div class="edit-actions-banner-flex">
+                  <div class="edit-status-indicator">
+                    <span class="edit-pulse-dot"></span>
+                    <span>در حال ویرایش مخاطب... (Enter: ثبت | Esc: انصراف)</span>
+                  </div>
+                  <div class="edit-actions-buttons">
+                    <button type="button" class="btn-save-row-prominent" onclick="saveContactRow(${origIdx})" title="ثبت نهایی تغییرات (تیک سبز)">
+                      <span>✔️ ثبت تغییرات</span>
+                    </button>
+                    <button type="button" class="btn-cancel-row-prominent" onclick="cancelEditRow(${origIdx})" title="انصراف از ویرایش">
+                      <span>✕ انصراف</span>
+                    </button>
+                    <button type="button" class="btn-delete-row-prominent" onclick="openDeleteSingleModal(${origIdx})" title="حذف این مخاطب">
+                      <span>🗑️ حذف</span>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            `;
+            tbody.appendChild(actionRow);
+          }
         });
         groupDiv.appendChild(table);
         container.appendChild(groupDiv);
@@ -549,19 +2402,70 @@
     }
 
     function clearSearchInput() {
+      if (activeEditingIdx !== -1) {
+        cancelEditRow(activeEditingIdx, true);
+      }
       const searchInput = document.getElementById('searchInput');
       searchInput.value = '';
       renderList(contacts);
       searchInput.focus();
     }
 
+    async function forceUpdateApp() {
+      showToast('در حال پاکسازی کش و بررسی بروزرسانی...');
+      try {
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const reg of registrations) {
+            await reg.update();
+          }
+        }
+      } catch (e) {
+        console.warn('Cache clearing error:', e);
+      }
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 500);
+    }
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW error:', err));
+        navigator.serviceWorker.register('./service_worker.js')
+          .then((reg) => {
+            // Check for updates on every page load
+            reg.update();
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                  }
+                });
+              }
+            });
+          })
+          .catch(() => navigator.serviceWorker.register('./sw.js'))
+          .catch(err => console.log('SW error:', err));
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
       });
     }
 
     document.getElementById('searchInput').addEventListener('input', (e) => {
+      if (activeEditingIdx !== -1) {
+        cancelEditRow(activeEditingIdx, true);
+      }
       const q = e.target.value.trim().toLowerCase();
       if (!q) { renderList(contacts); return; }
       renderList(contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q))));
@@ -571,17 +2475,21 @@
       if (e.target.files.length > 0) handleLocalFile(e.target.files[0]);
     });
 
+    document.getElementById('restoreFileInput').addEventListener('change', (e) => {
+      if (e.target.files.length > 0) handleRestoreFile(e.target.files[0]);
+    });
+
     window.addEventListener('DOMContentLoaded', async () => {
-      // Remove splash screen after a short delay
       setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         if (splash) {
           splash.style.opacity = '0';
           setTimeout(() => splash.remove(), 500);
         }
-      }, 1500);
+      }, 1200);
 
-      initTheme();
+      updateAuthUI();
+      applyTheme(currentThemeMode);
       await loadBundledOrSavedData();
     });
   </script>
