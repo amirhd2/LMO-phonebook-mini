@@ -1,11 +1,13 @@
-const CACHE_NAME = 'phonebook-pwa-v14';
+const CACHE_NAME = 'phonebook-pwa-v16';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icon.png',
   './xlsx.full.min.js',
-  './Version Info.json'
+  './Version Info.json',
+  './LMO phonebook.xlsx',
+  './LMO%20phonebook.xlsx'
 ];
 
 self.addEventListener('install', (event) => {

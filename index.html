@@ -101,7 +101,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .header-title {
@@ -111,75 +111,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: var(--status-bg);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: bold;
-    }
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: #2196F3;
-      flex-shrink: 0;
-    }
-
-    .top-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .source-selector {
-      display: inline-flex;
-      background: var(--selector-bg);
-      padding: 3px;
-      border-radius: 8px;
-      flex-grow: 1;
-    }
-    .source-btn {
-      border: none;
-      background: transparent;
-      padding: 7px 10px;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      color: var(--text-muted);
-      transition: all 0.2s;
-      flex: 1;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .source-btn.active {
-      background: var(--btn-active-bg);
-      color: var(--btn-active-text);
-      font-weight: bold;
-      box-shadow: 0 1px 3px var(--shadow-color);
-    }
-
-    .toolbar-actions {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-shrink: 0;
     }
 
     .btn-icon-small {
@@ -388,27 +319,8 @@
         دفترچه تلفن سازمان
       </h1>
 
-      <button id="themeToggleBtn" class="btn-icon-small" title="تغییر حالت شب/روز">🌙</button>
-    </div>
-    
-    <div class="status-bar">
-      <div class="status-badge">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">آماده به کار</span>
-      </div>
-      <div id="fileInfo" style="font-size: 12px; color: var(--text-muted);"></div>
-    </div>
-
-    <div class="top-toolbar">
-      <div class="source-selector">
-        <button id="modeGoogleBtn" class="source-btn active" onclick="switchDataMode('google')">🌐 نسخه آنلاین</button>
-        <button id="modeLocalBtn" class="source-btn" onclick="switchDataMode('local')">📁 بارگذاری از فایل</button>
-      </div>
-
-      <div class="toolbar-actions">
-        <button id="refreshOnlineBtn" class="btn-icon-small" title="بروزرسانی آنلاین" onclick="fetchGoogleSheetData()">🔄</button>
-        <!-- دکمه پوشه بدون متن اضافی و بدون بیرون زدگی در موبایل -->
-        <button id="uploadTriggerBtn" class="btn-icon-small primary-highlight" style="display:none;" title="انتخاب فایل اکسل جدید" onclick="document.getElementById('excelFileInput').click();">📁</button>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <button id="themeToggleBtn" class="btn-icon-small" title="تغییر حالت شب/روز">🌙</button>
       </div>
     </div>
 
@@ -431,13 +343,12 @@
   <div id="contactsContainer" class="contacts-container"></div>
 
   <script>
-    const DEFAULT_GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1kcak7dDG6jaacYbdUhamlN7alh_UZKXY/export?format=xlsx';
+    const BUNDLED_EXCEL_PATH = './LMO%20phonebook.xlsx';
     
     const DB_NAME = 'PhonebookAppDB';
     const DB_VERSION = 1;
     const STORE_NAME = 'phonebookStore';
 
-    let currentMode = 'google';
     let contacts = [];
 
     function initTheme() {
@@ -493,101 +404,44 @@
         const store = tx.objectStore(STORE_NAME);
         const req = store.get(key);
         req.onsuccess = () => resolve(req.result);
-        req.onerror = (e) => reject(e.target.error);
+        req.onerror = () => resolve(null);
       });
     }
 
-    async function switchDataMode(mode) {
-      currentMode = mode;
-      localStorage.setItem('phonebook_selected_mode', mode);
-
-      document.getElementById('modeGoogleBtn').classList.toggle('active', mode === 'google');
-      document.getElementById('modeLocalBtn').classList.toggle('active', mode === 'local');
-
-      document.getElementById('refreshOnlineBtn').style.display = (mode === 'google') ? 'inline-flex' : 'none';
-      document.getElementById('uploadTriggerBtn').style.display = (mode === 'local') ? 'inline-flex' : 'none';
-
-      if (mode === 'google') {
-        document.getElementById('uploadPrompt').style.display = 'none';
-        
-        const cached = await loadData('google_data');
-        if (cached && cached.contacts && cached.contacts.length > 0) {
-          contacts = cached.contacts;
-          renderList(contacts);
-          updateStatus(
-            navigator.onLine ? 'نسخه آنلاین (داده ذخیره‌شده)' : 'نسخه آنلاین (آفلاین - استفاده از کش)',
-            '#2196F3',
-            cached.updatedAt
-          );
-        }
-        
-        fetchGoogleSheetData();
-      } else {
-        await loadLocalFileData();
-      }
+    async function parseWorkbook(arrayBuffer) {
+      const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+      return raw.map(c => {
+        const clean = {};
+        for (let k in c) clean[k.trim()] = c[k];
+        return clean;
+      });
     }
 
-    async function fetchGoogleSheetData() {
-      if (!navigator.onLine) {
-        const cached = await loadData('google_data');
-        if (cached && cached.contacts && cached.contacts.length > 0) {
-          contacts = cached.contacts;
-          renderList(contacts);
-          updateStatus('آفلاین (آخرین نسخه آنلاین ذخیره‌شده)', '#2196F3', cached.updatedAt);
-        } else {
-          updateStatus('بدون اتصال اینترنت (هیچ داده آنلاین ذخیره‌شده‌ای وجود ندارد)', '#ff9800');
-        }
+    async function loadBundledOrSavedData() {
+      // 1. Check if we already have cached data in IndexedDB
+      const cached = (await loadData('contacts_data')) || (await loadData('google_data')) || (await loadData('local_data'));
+      if (cached && cached.contacts && cached.contacts.length > 0) {
+        contacts = cached.contacts;
+        renderList(contacts);
         return;
       }
 
-      updateStatus('در حال دریافت آنلاین...', '#ff9800');
+      // 2. First-time launch: fetch the bundled LMO phonebook.xlsx file and cache it in IndexedDB
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-        const response = await fetch(DEFAULT_GOOGLE_SHEET_URL, { signal: controller.signal });
-        clearTimeout(timeoutId);
-
-        if (!response.ok) throw new Error('خطا در دریافت فایل');
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
-
-        contacts = raw.map(c => {
-          const clean = {};
-          for (let k in c) clean[k.trim()] = c[k];
-          return clean;
-        });
-
-        const saved = await saveData('google_data', contacts, 'گوگل شیت');
-        updateStatus('نسخه آنلاین فعال', '#4CAF50', saved.updatedAt);
-        renderList(contacts);
-      } catch (err) {
-        console.warn('Google Sheet fetch error or timeout, loading cached data:', err);
-        const cached = await loadData('google_data');
-        if (cached && cached.contacts && cached.contacts.length > 0) {
-          contacts = cached.contacts;
-          renderList(contacts);
-          updateStatus('آفلاین (استفاده از آخرین داده ذخیره‌شده)', '#2196F3', cached.updatedAt);
-        } else {
-          updateStatus('خطا در دریافت اطلاعات آنلاین', '#f44336');
+        const resp = await fetch(BUNDLED_EXCEL_PATH);
+        if (resp.ok) {
+          const buf = await resp.arrayBuffer();
+          const parsed = await parseWorkbook(buf);
+          if (parsed.length > 0) {
+            contacts = parsed;
+            await saveData('contacts_data', contacts, 'LMO phonebook.xlsx');
+            renderList(contacts);
+          }
         }
-      }
-    }
-
-    async function loadLocalFileData() {
-      const record = await loadData('local_data');
-      if (record && record.contacts && record.contacts.length > 0) {
-        contacts = record.contacts;
-        document.getElementById('uploadPrompt').style.display = 'none';
-        updateStatus(`فایل آفلاین: ${record.fileName}`, '#4CAF50', record.updatedAt);
-        renderList(contacts);
-      } else {
-        contacts = [];
-        document.getElementById('contactsContainer').innerHTML = '';
-        document.getElementById('uploadPrompt').style.display = 'block';
-        updateStatus('لطفاً فایل اکسل آفلاین انتخاب کنید', '#ff9800');
+      } catch (e) {
+        console.warn('Bundled Excel fetch error:', e);
       }
     }
 
@@ -596,37 +450,22 @@
       const reader = new FileReader();
       reader.onload = async function(e) {
         try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const sheetName = workbook.SheetNames[0];
-          const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
-
-          contacts = raw.map(c => {
-            const clean = {};
-            for (let k in c) clean[k.trim()] = c[k];
-            return clean;
-          });
-
-          if (contacts.length === 0) {
-            updateStatus('فایل اکسل خالی است یا فرمت آن نامعتبر است.', '#f44336');
+          const parsed = await parseWorkbook(e.target.result);
+          if (parsed.length === 0) {
+            alert('فایل اکسل انتخاب‌شده خالی است.');
             return;
           }
-
-          const saved = await saveData('local_data', contacts, file.name);
-          document.getElementById('uploadPrompt').style.display = 'none';
-          updateStatus(`فایل: ${saved.fileName}`, '#4CAF50', saved.updatedAt);
+          contacts = parsed;
+          await saveData('contacts_data', contacts, file.name);
+          const uploadPrompt = document.getElementById('uploadPrompt');
+          if (uploadPrompt) uploadPrompt.style.display = 'none';
           renderList(contacts);
         } catch (err) {
-          updateStatus('خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.', '#f44336');
+          console.error('Error parsing excel file:', err);
+          alert('خطا در خواندن فایل اکسل. لطفاً فایل معتبری انتخاب کنید.');
         }
       };
       reader.readAsArrayBuffer(file);
-    }
-
-    function updateStatus(text, color, time = '') {
-      document.getElementById('statusDot').style.backgroundColor = color;
-      document.getElementById('statusText').textContent = text;
-      document.getElementById('fileInfo').textContent = time ? `بروزرسانی: ${time}` : '';
     }
 
     function hexGradient(start, end, steps) {
@@ -732,22 +571,6 @@
       if (e.target.files.length > 0) handleLocalFile(e.target.files[0]);
     });
 
-    window.addEventListener('online', () => {
-      if (currentMode === 'google') {
-        fetchGoogleSheetData();
-      }
-    });
-
-    window.addEventListener('offline', () => {
-      if (currentMode === 'google') {
-        loadData('google_data').then(cached => {
-          if (cached && cached.contacts && cached.contacts.length > 0) {
-            updateStatus('آفلاین (استفاده از آخرین داده ذخیره‌شده)', '#2196F3', cached.updatedAt);
-          }
-        });
-      }
-    });
-
     window.addEventListener('DOMContentLoaded', async () => {
       // Remove splash screen after a short delay
       setTimeout(() => {
@@ -759,8 +582,7 @@
       }, 1500);
 
       initTheme();
-      const savedMode = localStorage.getItem('phonebook_selected_mode') || 'google';
-      await switchDataMode(savedMode);
+      await loadBundledOrSavedData();
     });
   </script>
 </body>
