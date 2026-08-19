@@ -397,6 +397,110 @@
       transform: scale(0.95);
     }
 
+    /* Org Chart View Mode Checkbox Row (نمای چارت سازمانی فشرده و کم‌جا) */
+    .org-chart-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 8px;
+      padding: 0 2px;
+    }
+    .org-chart-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      padding: 4px 10px 4px 8px;
+      border-radius: 8px;
+      background: var(--selector-bg);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .org-chart-checkbox-label:hover {
+      background: rgba(0, 0, 0, 0.05);
+      border-color: #2196F3;
+    }
+    [data-theme="dark"] .org-chart-checkbox-label:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #60a5fa;
+    }
+    .org-chart-checkbox-label.is-active {
+      background: rgba(33, 150, 243, 0.09);
+      border-color: rgba(33, 150, 243, 0.45);
+      box-shadow: 0 1px 4px rgba(33, 150, 243, 0.15);
+    }
+    [data-theme="dark"] .org-chart-checkbox-label.is-active {
+      background: rgba(96, 165, 250, 0.14);
+      border-color: rgba(96, 165, 250, 0.45);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    }
+    .custom-checkbox-wrapper {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-checkbox-wrapper input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      margin: 0;
+      z-index: 2;
+    }
+    .custom-checkbox-indicator {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.8px solid var(--text-muted);
+      background: var(--card-bg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-sizing: border-box;
+    }
+    .custom-checkbox-indicator svg {
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .custom-checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox-indicator {
+      background: #2196F3;
+      border-color: #2196F3;
+    }
+    [data-theme="dark"] .custom-checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox-indicator {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    .custom-checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox-indicator svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .org-chart-title-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-color);
+      font-size: 12.5px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .org-chart-icon {
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .org-chart-checkbox-label.is-active .org-chart-icon {
+      color: #2196F3;
+    }
+    [data-theme="dark"] .org-chart-checkbox-label.is-active .org-chart-icon {
+      color: #60a5fa;
+    }
+
     input[type="file"] { display: none; }
 
     .upload-card {
@@ -413,16 +517,25 @@
     .contacts-container { margin-top: 18px; }
 
     /* Unit Container & Theming */
-    /* Unit Container & Theming */
     .unit-group {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 4px 18px var(--shadow-color);
       background-color: var(--unit-container-bg, var(--card-bg));
       border: 2px solid var(--unit-container-border, var(--border-color));
-      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
       position: relative;
+    }
+
+    .unit-group.is-collapsed {
+      border-bottom-left-radius: 14px !important;
+      border-bottom-right-radius: 14px !important;
+      margin-bottom: 14px;
+    }
+
+    .unit-group.is-collapsed .unit-container-body {
+      display: none !important;
     }
 
     .unit-group.is-editing-active {
@@ -431,20 +544,46 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28) !important;
     }
 
-    /* Unit Header Container */
+    /* Unit Header Container - Clickable Accordion */
     .unit-header-container {
-      padding: 10px 16px;
+      padding: 11px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       background-color: var(--unit-theme-color, #1976d2);
       color: #ffffff;
-      transition: background-color 0.25s ease;
+      transition: background-color 0.25s ease, filter 0.15s ease;
       user-select: none;
       box-sizing: border-box;
       width: 100%;
       overflow: hidden;
+      cursor: pointer;
+    }
+    .unit-header-container:hover {
+      filter: brightness(1.05);
+    }
+    .unit-header-container:active {
+      filter: brightness(0.95);
+    }
+
+    .unit-accordion-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: bold;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      margin-left: 2px;
+    }
+    .unit-group.is-collapsed .unit-accordion-arrow {
+      transform: rotate(90deg);
     }
 
     .unit-header-right {
@@ -1620,7 +1759,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 1.1.0 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.0 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -1628,7 +1767,7 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">1.1.0</span>
+        <span class="version-badge">2.0.0</span>
       </h1>
 
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -1656,6 +1795,28 @@
     <div class="search-container">
       <input type="text" id="searchInput" class="search-box" placeholder="جستجوی نام، واحد یا شماره داخلی...">
       <button type="button" class="clear-search-btn" id="clearSearchBtn" title="پاک کردن جستجو" onclick="clearSearchInput()">✕</button>
+    </div>
+
+    <!-- Org Chart View Checkbox Item (فشرده، متنی و زیبا با قابلیت تیک زدن) -->
+    <div class="org-chart-toggle-row">
+      <label class="org-chart-checkbox-label" id="orgChartCheckboxLabel" for="orgChartModeCheckbox" title="فعال/غیرفعال‌سازی نمای چارت سازمانی (جمع‌شدن واحدها)">
+        <span class="custom-checkbox-wrapper">
+          <input type="checkbox" id="orgChartModeCheckbox" onchange="handleOrgChartCheckboxChange(this.checked)">
+          <span class="custom-checkbox-indicator">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </span>
+        </span>
+        <span class="org-chart-title-group">
+          <svg class="org-chart-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="4" rx="1.5"></rect>
+            <rect x="3" y="10" width="18" height="4" rx="1.5"></rect>
+            <rect x="3" y="16" width="18" height="4" rx="1.5"></rect>
+          </svg>
+          <span class="org-chart-text">نمای چارت سازمانی</span>
+        </span>
+      </label>
     </div>
   </div>
 
@@ -1763,7 +1924,7 @@
                 <span class="btn-action-icon">📱</span>
                 <div class="btn-action-info">
                   <div class="btn-action-title">نسخه نصب‌شده برنامه</div>
-                  <div class="btn-action-desc">نسخه 1.1.0 (کاملاً آفلاین و مستقل)</div>
+                  <div class="btn-action-desc">نسخه 2.0.0 (کاملاً آفلاین و مستقل)</div>
                 </div>
               </button>
 
@@ -2073,8 +2234,77 @@
     let contacts = [];
     let currentFileName = localStorage.getItem('phonebook_cached_file_name') || 'LMO phonebook.xlsx';
     let currentThemeMode = localStorage.getItem('phonebook_theme_mode') || 'system';
+    let currentViewMode = localStorage.getItem('phonebook_view_mode') || 'expanded';
+    let collapsedUnits = new Set();
     let isAdminLoggedIn = localStorage.getItem('phonebook_admin_auth') === 'true';
     let targetDeleteContactIdx = -1;
+
+    function initViewModeUnits() {
+      if (currentViewMode === 'chart') {
+        const allUnits = [...new Set(contacts.map(c => (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر'))];
+        collapsedUnits = new Set(allUnits);
+      } else {
+        collapsedUnits.clear();
+      }
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      localStorage.setItem('phonebook_view_mode', mode);
+      updateViewModeUI();
+
+      if (mode === 'chart') {
+        const allUnits = [...new Set(contacts.map(c => (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر'))];
+        collapsedUnits = new Set(allUnits);
+        showToast('📊 حالت نمایش: نمای چارت سازمانی (واحدها جمع‌شده)');
+      } else {
+        collapsedUnits.clear();
+        showToast('📋 حالت نمایش: نمای گسترده (واحدها باز)');
+      }
+
+      const searchInput = document.getElementById('searchInput');
+      const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+      if (q) {
+        renderList(contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q))));
+      } else {
+        renderList(contacts);
+      }
+    }
+
+    function handleOrgChartCheckboxChange(isChecked) {
+      setViewMode(isChecked ? 'chart' : 'expanded');
+    }
+
+    function updateViewModeUI() {
+      const checkbox = document.getElementById('orgChartModeCheckbox');
+      const label = document.getElementById('orgChartCheckboxLabel');
+      const isChart = (currentViewMode === 'chart');
+      if (checkbox) {
+        checkbox.checked = isChart;
+      }
+      if (label) {
+        label.classList.toggle('is-active', isChart);
+      }
+    }
+
+    function toggleUnitAccordion(unitName, e) {
+      if (editingUnitOriginalName) return; // Ignore toggle while editing unit title
+      
+      if (collapsedUnits.has(unitName)) {
+        collapsedUnits.delete(unitName);
+      } else {
+        collapsedUnits.add(unitName);
+      }
+
+      const groupDiv = document.getElementById(`unit-group-${unitName}`);
+      if (groupDiv) {
+        if (collapsedUnits.has(unitName)) {
+          groupDiv.classList.add('is-collapsed');
+        } else {
+          groupDiv.classList.remove('is-collapsed');
+        }
+      }
+    }
 
     function showToast(message) {
       let toast = document.getElementById('appToast');
@@ -2677,17 +2907,27 @@
         cancelEditRow(activeEditingIdx, true);
       }
 
+      const contact = contacts[origIdx];
+      if (!contact) return;
+
+      // Expand unit accordion if it is currently collapsed
+      const unitName = (contact['واحد'] || contact['بخش'] || 'سایر').trim() || 'سایر';
+      if (collapsedUnits.has(unitName)) {
+        collapsedUnits.delete(unitName);
+        const groupEl = document.getElementById(`unit-group-${unitName}`);
+        if (groupEl) groupEl.classList.remove('is-collapsed');
+      }
+
       const row = document.getElementById(`contact-row-${origIdx}`);
-      if (!row || !contacts[origIdx]) return;
+      if (!row) return;
 
-      // 1. Calculate precise document scroll target for this specific row
-      const headerEl = document.querySelector('.app-header');
-      const headerOffset = headerEl ? headerEl.offsetHeight + 16 : 80;
-      const rowRect = row.getBoundingClientRect();
+      // 1. Calculate precise document scroll target to bring the card directly to the top
       const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-      const targetScrollY = Math.max(0, currentScroll + rowRect.top - headerOffset);
+      const rowRect = row.getBoundingClientRect();
+      const topOffset = window.innerWidth <= 768 ? 10 : 18;
+      const targetScrollY = Math.max(0, currentScroll + rowRect.top - topOffset);
 
-      // Perform smooth scroll to target card
+      // Perform smooth scroll to target card directly at top of screen
       window.scrollTo({
         top: targetScrollY,
         behavior: 'smooth'
@@ -3108,6 +3348,20 @@
       container.innerHTML = `
         <div class="changelog-entry">
           <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 2.0.0</span>
+            <span class="changelog-ver-date">1405/05/28</span>
+          </div>
+          <ul class="changelog-items">
+            <li>طراحی ماژولار و کانتینری واحدهای سازمانی با قابلیت سفارشی‌سازی رنگ و عنوان هر واحد</li>
+            <li>تمرکز و جداسازی کامل کارت در حال ویرایش و تار (Blur) شدن هوشمند تمام عناصر پس‌زمینه و کارت‌های دیگر</li>
+            <li>اسکرول نرم و هوشمند صفحه دقیقاً به موقعیت کارت انتخاب‌شده و غیرفعال شدن اسکرول صفحه در طول ویرایش</li>
+            <li>دکمه شناور دایره‌ای بازگشت به بالای صفحه (Scroll to Top) هنگام اسکرول به سمت بالا و پنهان شدن در اسکرول به پایین</li>
+            <li>طراحی دکمه‌های دایره‌ای استاندارد و یکپارچه در سراسر برنامه (تیک سبز، ضربدر قرمز، سطل زباله قرمز، ورود با اسپارک)</li>
+            <li>بهینه‌سازی کامل کارایی و انیمیشن‌ها بدون لگ و پرش در دستگاه‌های موبایل</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 1.1.0</span>
             <span class="changelog-ver-date">1405/05/28</span>
           </div>
@@ -3208,7 +3462,7 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 1.1.0</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.0</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
@@ -3341,6 +3595,7 @@
         currentFileName = cached.fileName || 'LMO phonebook.xlsx';
         const uploadPrompt = document.getElementById('uploadPrompt');
         if (uploadPrompt) uploadPrompt.style.display = 'none';
+        initViewModeUnits();
         renderList(contacts);
         return;
       }
@@ -3357,6 +3612,7 @@
             await saveData('contacts_data', contacts, 'LMO phonebook.xlsx');
             const uploadPrompt = document.getElementById('uploadPrompt');
             if (uploadPrompt) uploadPrompt.style.display = 'none';
+            initViewModeUnits();
             renderList(contacts);
             return;
           }
@@ -3672,6 +3928,11 @@
         const groupDiv = document.createElement('div');
         groupDiv.className = 'unit-group';
         groupDiv.id = `unit-group-${unitName}`;
+        groupDiv.setAttribute('data-unit-name', unitName);
+
+        if (collapsedUnits.has(unitName)) {
+          groupDiv.classList.add('is-collapsed');
+        }
 
         const unitColor = (editingUnitOriginalName === unitName && editingUnitCurrentColor)
           ? editingUnitCurrentColor
@@ -3690,11 +3951,12 @@
         // Header Section
         const headerDiv = document.createElement('div');
         headerDiv.className = 'unit-header-container';
+        headerDiv.onclick = (e) => toggleUnitAccordion(unitName, e);
 
         if (editingUnitOriginalName === unitName && isAdminLoggedIn) {
           // Unit Title in Edit Mode
           headerDiv.innerHTML = `
-            <div class="unit-header-edit-form">
+            <div class="unit-header-edit-form" onclick="event.stopPropagation()">
               <input type="text" 
                      id="unitEditTitleInput" 
                      class="unit-header-edit-input" 
@@ -3738,7 +4000,7 @@
               <button type="button" 
                       class="btn-unit-pencil-circle" 
                       title="ویرایش عنوان و رنگ واحد" 
-                      onclick="startEditUnit('${escapeHtml(unitName)}', '${unitColor}')">
+                      onclick="event.stopPropagation(); startEditUnit('${escapeHtml(unitName)}', '${unitColor}')">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 20h9"></path>
                   <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -3749,10 +4011,11 @@
 
           headerDiv.innerHTML = `
             <div class="unit-header-right">
+              <span class="unit-accordion-arrow">▾</span>
               <span class="unit-title-text">${escapeHtml(unitName)}</span>
               <span class="unit-contacts-count">${groups[unitName].length} نفر</span>
             </div>
-            <div class="unit-header-actions">
+            <div class="unit-header-actions" onclick="event.stopPropagation()">
               ${pencilHtml}
             </div>
           `;
@@ -3857,6 +4120,7 @@
       }
       const searchInput = document.getElementById('searchInput');
       searchInput.value = '';
+      initViewModeUnits();
       renderList(contacts);
       searchInput.focus();
     }
@@ -3917,8 +4181,20 @@
         cancelEditRow(activeEditingIdx, true);
       }
       const q = e.target.value.trim().toLowerCase();
-      if (!q) { renderList(contacts); return; }
-      renderList(contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q))));
+      if (!q) {
+        initViewModeUnits();
+        renderList(contacts);
+        return;
+      }
+
+      const filtered = contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q)));
+      // Auto-expand units with matching contacts so they are instantly visible
+      filtered.forEach(c => {
+        const u = (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر';
+        collapsedUnits.delete(u);
+      });
+
+      renderList(filtered);
     });
 
     document.getElementById('excelFileInput').addEventListener('change', (e) => {
@@ -3986,6 +4262,7 @@
 
       updateAuthUI();
       applyTheme(currentThemeMode);
+      updateViewModeUI();
       await loadBundledOrSavedData();
     });
   </script>
