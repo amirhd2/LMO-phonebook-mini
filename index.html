@@ -89,6 +89,57 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
+    body.modal-scroll-locked {
+      overflow: hidden !important;
+    }
+
+    /* Floating Scroll to Top Action Button */
+    .fab-scroll-top {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2196F3, #1976d2);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(33, 150, 243, 0.45);
+      z-index: 600;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.8);
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s;
+      pointer-events: none;
+      padding: 0;
+    }
+    .fab-scroll-top.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .fab-scroll-top:hover {
+      background: linear-gradient(135deg, #1e88e5, #1565c0);
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.55);
+    }
+    .fab-scroll-top:active {
+      transform: scale(0.92);
+    }
+    @media (max-width: 768px) {
+      .fab-scroll-top {
+        bottom: 18px;
+        left: 18px;
+        width: 42px;
+        height: 42px;
+      }
+    }
+
     .app-header {
       background: var(--card-bg);
       padding: 15px;
@@ -180,6 +231,125 @@
       color: #93c5fd;
     }
 
+    /* Circular Action Buttons in Header */
+    .btn-add-contact-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(13, 71, 161, 0.4);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .btn-add-contact-circle:hover {
+      background: #1565c0;
+      transform: scale(1.08);
+      box-shadow: 0 5px 14px rgba(13, 71, 161, 0.55);
+    }
+    .btn-add-contact-circle:active {
+      transform: scale(0.94);
+    }
+
+    .btn-settings-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .btn-settings-circle:hover {
+      background: var(--status-bg);
+      border-color: #2196F3;
+      color: #1976d2;
+      transform: scale(1.08);
+    }
+    [data-theme="dark"] .btn-settings-circle:hover {
+      color: #60a5fa;
+    }
+    .btn-settings-circle:active {
+      transform: scale(0.94);
+    }
+
+    /* User / Auth Circle Button with Spark Animation */
+    .btn-auth-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1.5px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-color);
+      padding: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .btn-auth-circle:hover {
+      background: var(--status-bg);
+      border-color: #2196F3;
+      color: #1976d2;
+      transform: scale(1.06);
+    }
+    .btn-auth-circle:active {
+      transform: scale(0.94);
+    }
+
+    /* Logged In State: Dark Blue Border + Rotating Clockwise Spark Dot */
+    .btn-auth-circle.is-logged-in {
+      border: 2.5px solid #0d47a1;
+      background: #f0f7ff;
+      color: #0d47a1;
+      box-shadow: 0 0 12px rgba(13, 71, 161, 0.35);
+    }
+    [data-theme="dark"] .btn-auth-circle.is-logged-in {
+      background: #1e293b;
+      color: #60a5fa;
+      border-color: #2563eb;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.45);
+    }
+    .btn-auth-circle.is-logged-in::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: calc(50% - 3px);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00e5ff;
+      box-shadow: 0 0 8px 2px #00e5ff, 0 0 14px 4px rgba(0, 229, 255, 0.6);
+      pointer-events: none;
+      transform-origin: 3px 25px;
+      animation: rotateSparkCW 2s linear infinite;
+    }
+    @keyframes rotateSparkCW {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .search-container {
       position: relative;
       display: flex;
@@ -240,35 +410,380 @@
     .upload-card h3 { margin: 0 0 10px 0; color: #1976d2; }
     .upload-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; }
 
-    .contacts-container { margin-top: 15px; }
+    .contacts-container { margin-top: 18px; }
+
+    /* Unit Container & Theming */
+    /* Unit Container & Theming */
     .unit-group {
-      margin-bottom: 20px;
-      border-radius: 10px;
+      margin-bottom: 24px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 2px 8px var(--shadow-color);
-      background-color: var(--card-bg);
+      box-shadow: 0 4px 18px var(--shadow-color);
+      background-color: var(--unit-container-bg, var(--card-bg));
+      border: 2px solid var(--unit-container-border, var(--border-color));
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+      position: relative;
     }
-    .unit-header {
-      margin: 0;
-      padding: 12px;
-      color: #fff;
-      font-size: 19px;
-      text-align: center;
+
+    .unit-group.is-editing-active {
+      z-index: 750;
+      position: relative;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28) !important;
+    }
+
+    /* Unit Header Container */
+    .unit-header-container {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background-color: var(--unit-theme-color, #1976d2);
+      color: #ffffff;
+      transition: background-color 0.25s ease;
+      user-select: none;
+      box-sizing: border-box;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .unit-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-grow: 1;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .unit-title-text {
+      font-size: 18px;
       font-weight: bold;
+      letter-spacing: 0.2px;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+
+    .unit-contacts-count {
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 2px 10px;
+      border-radius: 12px;
+      color: #ffffff;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .unit-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* White Pencil inside White-Bordered Circle Button on Left */
+    .btn-unit-pencil-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .btn-unit-pencil-circle:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+    .btn-unit-pencil-circle:hover svg {
+      stroke: var(--unit-theme-color, #0d47a1);
+    }
+    .btn-unit-pencil-circle:active {
+      transform: scale(0.95);
+    }
+
+    /* Unit Header Edit Form - Responsive & Compact */
+    .unit-header-edit-form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .unit-header-edit-input {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 6px 10px;
+      font-size: 14.5px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 2px solid #ffffff;
+      background: #ffffff;
+      color: #0f172a;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+    }
+    .unit-header-edit-input:focus {
+      border-color: #ffeb3b;
+      box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.4);
+    }
+
+    /* Round Color Picker Button in Edit Mode */
+    .btn-unit-color-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14.5px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      color: #ffffff;
+      padding: 0;
+      line-height: 1;
+    }
+    .btn-unit-color-circle:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+    .btn-unit-color-circle:active {
+      transform: scale(0.94);
+    }
+
+    /* Universal Circular Action Buttons (Green Save / Red Cancel / Delete) */
+    .btn-circle-action-save {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #2e7d32;
+      color: #ffffff;
+      border: 1.5px solid #a5d6a7;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(46, 125, 50, 0.35);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    .btn-circle-action-save:hover {
+      background: #1b5e20;
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(46, 125, 50, 0.5);
+    }
+    .btn-circle-action-save:active {
+      transform: scale(0.94);
+    }
+
+    .btn-circle-action-cancel {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e53935;
+      color: #ffffff;
+      border: 1.5px solid #ef9a9a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(229, 57, 53, 0.35);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    .btn-circle-action-cancel:hover {
+      background: #c62828;
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(229, 57, 53, 0.5);
+    }
+    .btn-circle-action-cancel:active {
+      transform: scale(0.94);
+    }
+
+    .btn-circle-action-delete {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #d32f2f;
+      color: #ffffff;
+      border: 1.5px solid #ef5350;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(211, 47, 47, 0.35);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    .btn-circle-action-delete:hover {
+      background: #b71c1c;
+      color: #ffffff;
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(211, 47, 47, 0.5);
+    }
+    .btn-circle-action-delete:active {
+      transform: scale(0.94);
+    }
+
+    /* Unit Container Body - Cards Nested Inside */
+    .unit-container-body {
+      padding: 14px;
+    }
+
     .unit-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
       background-color: var(--card-bg);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
-    .unit-table th, .unit-table td {
-      padding: 12px 10px;
+    .unit-table thead {
+      background-color: var(--unit-lighter-accent, #2196F3);
+    }
+    .unit-table th {
+      padding: 11px 10px;
+      color: #ffffff;
+      font-size: 14.5px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .unit-table th:last-child {
+      border-left: none;
+    }
+    .unit-table td {
+      padding: 11px 10px;
       border: 1px solid var(--border-color);
       text-align: center;
+      font-size: 14px;
+      color: var(--text-color);
+      background-color: var(--card-bg);
     }
-    .unit-table th { font-size: 15px; color: #fff; font-weight: bold; }
-    .unit-table td { font-size: 14px; color: var(--text-color); }
     .no-results { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 10px; color: var(--text-muted); }
+
+    /* Color Palette Modal Styles */
+    .unit-color-preview-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1.5px solid var(--border-color);
+      margin-bottom: 14px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s ease;
+    }
+    .unit-color-preview-header {
+      padding: 8px 12px;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13.5px;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
+    .unit-color-preview-body {
+      padding: 10px;
+      transition: background-color 0.2s ease;
+    }
+    .unit-color-preview-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+      font-size: 12.5px;
+      padding: 0;
+    }
+    .unit-color-preview-label {
+      padding: 6px 12px;
+      color: #ffffff;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .color-palette-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 6px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--input-bg);
+    }
+    .color-swatch-btn {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .color-swatch-btn:hover {
+      transform: scale(1.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+    .color-swatch-btn.is-active {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px #2196F3, 0 4px 8px rgba(0, 0, 0, 0.35);
+      transform: scale(1.15);
+      z-index: 3;
+    }
+    .custom-color-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--status-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin-top: 8px;
+    }
+    .custom-color-input {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+      padding: 0;
+    }
 
     .modal-overlay {
       display: none;
@@ -301,8 +816,48 @@
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 10px;
     }
-    .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; border-radius: 6px; }
-    .close-btn:hover { background: var(--status-bg); color: var(--text-color); }
+    .close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #e53935;
+      color: #ffffff;
+      border: 1.5px solid #ef9a9a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      line-height: 1;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(229, 57, 53, 0.3);
+      flex-shrink: 0;
+    }
+    .close-btn:hover {
+      background: #c62828;
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(229, 57, 53, 0.45);
+    }
+    .close-btn:active {
+      transform: scale(0.94);
+    }
+
+    .modal-form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    body.modal-scroll-locked {
+      overflow: hidden !important;
+      touch-action: none;
+    }
+
     .btn-confirm {
       width: 100%;
       margin-top: 15px;
@@ -365,7 +920,11 @@
       border-radius: 10px;
       overflow: hidden;
       background: var(--card-bg);
-      transition: all 0.2s ease;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .accordion-item.active {
+      border-color: #2196F3;
+      box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
     }
     .accordion-header {
       width: 100%;
@@ -380,10 +939,16 @@
       font-weight: bold;
       font-size: 14px;
       text-align: right;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
     .accordion-header:hover {
       background: var(--selector-bg);
+    }
+    .accordion-item.active .accordion-header {
+      color: #1976d2;
+    }
+    [data-theme="dark"] .accordion-item.active .accordion-header {
+      color: #93c5fd;
     }
     .acc-title {
       display: flex;
@@ -392,20 +957,32 @@
     }
     .acc-arrow {
       font-size: 13px;
-      transition: transform 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s;
       color: var(--text-muted);
+      display: inline-block;
     }
     .accordion-item.active .acc-arrow {
       transform: rotate(180deg);
+      color: #2196F3;
     }
     .accordion-body {
-      display: none;
-      padding: 14px;
+      display: block !important;
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 14px;
       background: var(--card-bg);
-      border-top: 1px solid var(--border-color);
+      border-top: 0px solid transparent;
+      opacity: 0;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                  padding 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                  opacity 0.25s ease,
+                  border-top 0.3s ease;
     }
     .accordion-item.active .accordion-body {
-      display: block;
+      max-height: 600px;
+      padding: 14px;
+      opacity: 1;
+      border-top: 1px solid var(--border-color);
     }
 
     /* Theme Option Buttons */
@@ -613,17 +1190,154 @@
       color: #fca5a5;
       border-color: #7f1d1d;
     }
-    /* Focus & Blur effect for active editing card */
+
+    /* Searchable Unit Combobox */
+    .unit-combobox-container {
+      position: relative;
+      width: 100%;
+    }
+    .unit-combobox-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .unit-combobox-input {
+      padding-left: 62px !important;
+      cursor: text;
+    }
+    .unit-combobox-actions {
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .unit-combobox-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .unit-combobox-btn:hover {
+      background: var(--btn-secondary-hover);
+      color: var(--text-color);
+    }
+    .unit-combobox-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1100;
+      max-height: 200px; /* Constrained to exactly ~5 items */
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+      animation: fadeInDropdown 0.15s ease;
+    }
+    @keyframes fadeInDropdown {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .unit-combobox-item {
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .unit-combobox-item:last-child {
+      border-bottom: none;
+    }
+    .unit-combobox-item:hover, .unit-combobox-item.is-highlighted {
+      background: var(--btn-secondary-hover);
+      color: #2196F3;
+    }
+    .unit-combobox-item.is-selected {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+      font-weight: bold;
+    }
+    .unit-combobox-item .unit-badge-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--status-bg);
+      padding: 2px 7px;
+      border-radius: 10px;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+    .unit-combobox-new-item {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #2e7d32;
+      font-weight: 500;
+      background: rgba(76, 175, 80, 0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px dashed var(--border-color);
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .unit-combobox-new-item:hover, .unit-combobox-new-item.is-highlighted {
+      background: rgba(76, 175, 80, 0.18);
+    }
+    [data-theme="dark"] .unit-combobox-new-item {
+      color: #81c784;
+      background: rgba(76, 175, 80, 0.12);
+    }
+    [data-theme="dark"] .unit-combobox-new-item:hover {
+      background: rgba(76, 175, 80, 0.22);
+    }
+    .unit-combobox-empty {
+      padding: 12px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .unit-highlight-match {
+      background: rgba(255, 235, 59, 0.45);
+      color: inherit;
+      font-weight: bold;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+    [data-theme="dark"] .unit-highlight-match {
+      background: rgba(255, 214, 0, 0.35);
+      color: #fff;
+    }
+    /* Focus & Backdrop effect for active editing card */
     .card-focus-backdrop {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      z-index: 700;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 750;
       opacity: 0;
-      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: auto;
+      transition: opacity 0.25s ease;
+      will-change: opacity;
     }
     body.card-edit-focus-active .card-focus-backdrop {
       display: block;
@@ -631,54 +1345,50 @@
     }
 
     body.card-edit-focus-active .app-header {
-      filter: blur(4px) opacity(0.3);
       pointer-events: none;
-      transition: filter 0.3s ease, opacity 0.3s ease;
+      opacity: 0.35;
+      filter: blur(2.5px);
+      transition: opacity 0.2s, filter 0.2s;
     }
 
-    /* Blur all other unit groups */
-    body.card-edit-focus-active .unit-group:not(.is-editing-active) {
-      filter: blur(6px) opacity(0.2);
-      pointer-events: none;
-      transform: scale(0.99);
-      transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    /* Dim and blur all other elements during card edit mode */
+    body.card-edit-focus-active .unit-group {
+      overflow: visible !important;
+      transition: opacity 0.2s, filter 0.2s;
     }
-
-    /* Blur table header in the active group */
-    body.card-edit-focus-active .unit-table thead {
-      filter: blur(4px) opacity(0.35);
-      pointer-events: none;
-      transition: filter 0.3s ease, opacity 0.3s ease;
+    body.card-edit-focus-active .unit-group.is-editing-active {
+      z-index: 850 !important;
+      position: relative !important;
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
     }
-
-    body.card-edit-focus-active .unit-group.is-editing-active .unit-header {
-      filter: blur(3px) opacity(0.4);
-      transition: filter 0.3s ease, opacity 0.3s ease;
-    }
-
-    /* Blur ALL other contact rows/cards above and below the active person */
-    body.card-edit-focus-active .unit-table tbody tr:not(.row-editing-active):not(.edit-actions-banner-row) {
-      filter: blur(6px) opacity(0.2) !important;
+    body.card-edit-focus-active .unit-group.is-editing-active .unit-header-container {
+      opacity: 0.25 !important;
+      filter: blur(3px) !important;
       pointer-events: none !important;
-      user-select: none !important;
-      transition: filter 0.3s ease, opacity 0.3s ease;
+      transition: opacity 0.2s, filter 0.2s;
     }
-
-    .unit-group {
-      margin-bottom: 20px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px var(--shadow-color);
-      background-color: var(--card-bg);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-      position: relative;
+    body.card-edit-focus-active .unit-group.is-editing-active .unit-table {
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
     }
-
-    .unit-group.is-editing-active {
-      z-index: 750;
-      position: relative;
-      background-color: var(--card-bg);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28) !important;
+    body.card-edit-focus-active .unit-group.is-editing-active .unit-table thead {
+      opacity: 0.25 !important;
+      filter: blur(3px) !important;
+    }
+    body.card-edit-focus-active .unit-group.is-editing-active .unit-table tbody tr:not(.row-editing-active):not(.edit-actions-banner-row) {
+      opacity: 0.2 !important;
+      filter: blur(3px) !important;
+      pointer-events: none !important;
+      transition: opacity 0.2s, filter 0.2s;
+    }
+    body.card-edit-focus-active .unit-group:not(.is-editing-active) {
+      opacity: 0.2 !important;
+      filter: blur(3px) !important;
+      pointer-events: none !important;
+      transition: opacity 0.2s, filter 0.2s;
     }
 
     /* Name Cell & Pencil Button */
@@ -695,74 +1405,75 @@
       flex-grow: 1;
     }
     .btn-pencil-edit {
-      background: rgba(33, 150, 243, 0.08);
-      border: 1px solid rgba(33, 150, 243, 0.3);
-      border-radius: 6px;
-      color: #1976d2;
-      font-size: 13.5px;
-      padding: 4px 7px;
-      cursor: pointer;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--unit-theme-color, #2196F3);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      color: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.18);
       flex-shrink: 0;
       line-height: 1;
+      padding: 0;
       margin-right: auto;
     }
-    [data-theme="dark"] .btn-pencil-edit {
-      background: rgba(59, 130, 246, 0.15);
-      border-color: rgba(59, 130, 246, 0.35);
-      color: #93c5fd;
+    .btn-pencil-edit svg {
+      stroke: #ffffff;
     }
     .btn-pencil-edit:hover {
-      background: #2196F3;
-      color: #ffffff;
-      border-color: #2196F3;
-      transform: scale(1.08);
+      transform: scale(1.15);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      filter: brightness(1.12);
     }
     .btn-pencil-edit:active {
-      transform: scale(0.95);
+      transform: scale(0.94);
     }
 
     /* Active Editing Row & Cell Styles */
     tr.row-editing-active {
       background: var(--card-bg) !important;
-      position: relative;
-      z-index: 800;
+      position: relative !important;
+      z-index: 900 !important;
       filter: none !important;
       opacity: 1 !important;
-      box-shadow: 0 0 0 2.5px #2196F3, 0 -6px 20px rgba(33, 150, 243, 0.25) !important;
-      border-radius: 8px 8px 0 0;
+      box-shadow: 0 0 0 2px var(--unit-theme-color, #2196F3), 0 12px 32px rgba(0, 0, 0, 0.28) !important;
+      border-radius: 12px 12px 0 0 !important;
     }
     [data-theme="dark"] tr.row-editing-active {
       background: #1e293b !important;
     }
 
     .admin-editable-cell.is-editing {
-      background: var(--card-bg) !important;
-      border: 1.5px solid #2196F3 !important;
-      border-radius: 6px !important;
-      padding: 6px 8px !important;
+      background: var(--input-bg) !important;
+      border: 1.5px solid var(--unit-theme-color, #2196F3) !important;
+      border-radius: 7px !important;
+      padding: 6px 10px !important;
       cursor: text !important;
       outline: none !important;
-      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.25) !important;
+      box-shadow: 0 0 0 2.5px rgba(33, 150, 243, 0.2) !important;
+      transition: all 0.2s ease;
     }
     .admin-editable-cell.is-editing:focus {
-      border-color: #1976d2 !important;
-      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.4) !important;
+      background: var(--card-bg) !important;
+      border-color: var(--unit-theme-color, #1976d2) !important;
+      box-shadow: 0 0 0 3.5px rgba(33, 150, 243, 0.35) !important;
     }
 
     /* Editing Actions Row */
     .edit-actions-banner-row {
       background: var(--status-bg) !important;
-      position: relative;
-      z-index: 800;
+      position: relative !important;
+      z-index: 900 !important;
       filter: none !important;
       opacity: 1 !important;
-      border-top: 1px dashed var(--border-color);
-      box-shadow: 0 0 0 2.5px #2196F3, 0 10px 24px rgba(33, 150, 243, 0.3) !important;
-      border-radius: 0 0 8px 8px;
+      border-top: 1px dashed var(--border-color) !important;
+      box-shadow: 0 0 0 2px var(--unit-theme-color, #2196F3), 0 12px 32px rgba(0, 0, 0, 0.28) !important;
+      border-radius: 0 0 12px 12px !important;
       animation: fadeInRow 0.25s ease;
     }
     @keyframes fadeInRow {
@@ -770,106 +1481,20 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .edit-actions-banner-cell {
-      padding: 10px 14px !important;
-      text-align: right !important;
+      padding: 8px 14px !important;
+      text-align: center !important;
     }
     .edit-actions-banner-flex {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .edit-status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #1976d2;
-    }
-    [data-theme="dark"] .edit-status-indicator {
-      color: #93c5fd;
-    }
-    .edit-pulse-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #2196F3;
-      display: inline-block;
-      animation: pulseDot 1.4s infinite;
-    }
-    @keyframes pulseDot {
-      0% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
-      70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(33, 150, 243, 0); }
-      100% { transform: scale(0.9); opacity: 0.8; box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+      justify-content: center;
+      gap: 12px;
     }
     .edit-actions-buttons {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .btn-save-row-prominent {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      background: #2e7d32;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .btn-save-row-prominent:hover {
-      background: #1b5e20;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(46, 125, 50, 0.4);
-    }
-    .btn-save-row-prominent:active {
-      transform: scale(0.96);
-    }
-    .btn-cancel-row-prominent {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 12px;
-      background: var(--selector-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .btn-cancel-row-prominent:hover {
-      background: var(--border-color);
-    }
-    .btn-delete-row-prominent {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 12px;
-      background: rgba(229, 57, 53, 0.1);
-      color: #e53935;
-      border: 1px solid rgba(229, 57, 53, 0.3);
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .btn-delete-row-prominent:hover {
-      background: #e53935;
-      color: #ffffff;
+      justify-content: center;
+      gap: 12px;
     }
     .row-saved-flash {
       animation: greenFlash 1s ease;
@@ -880,22 +1505,65 @@
     }
 
     @media (max-width: 768px) {
-      .unit-table { border: 0; }
+      .unit-container-body {
+        padding: 10px 8px;
+      }
+      .unit-header-container {
+        padding: 8px 10px;
+        min-height: 48px;
+      }
+      .unit-title-text {
+        font-size: 15.5px;
+      }
+      .unit-header-edit-form {
+        gap: 6px;
+      }
+      .unit-header-edit-input {
+        font-size: 13px;
+        padding: 5px 8px;
+        border-width: 1.5px;
+      }
+      .btn-unit-color-circle,
+      .btn-circle-action-save,
+      .btn-circle-action-cancel,
+      .btn-circle-action-delete {
+        width: 30px;
+        height: 30px;
+      }
+      .btn-unit-pencil-circle {
+        width: 28px;
+        height: 28px;
+      }
+      .unit-table { 
+        border: 0;
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
       .unit-table thead { display: none; }
+      .unit-table tbody {
+        display: block;
+        background-color: transparent !important;
+      }
       .unit-table tr {
         display: block;
-        margin-bottom: 12px;
-        border: 1px solid var(--card-border);
-        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
         background-color: var(--card-bg);
+        box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.04);
+      }
+      .unit-table tr:last-child {
+        margin-bottom: 0;
       }
       .unit-table td {
         display: block;
         position: relative;
-        padding: 10px;
-        padding-right: 45%;
+        padding: 9px 10px;
+        padding-right: 44%;
         border-bottom: 1px solid var(--border-color);
         text-align: center;
+        background-color: var(--card-bg);
       }
       .unit-table td:last-child { border-bottom: 0; }
       .unit-table td::before {
@@ -903,20 +1571,30 @@
         position: absolute;
         right: 0; top: 0; bottom: 0;
         display: flex; align-items: center; justify-content: center;
-        width: 42%;
+        width: 40%;
         font-weight: bold; color: #fff; font-size: 13px;
         background-color: var(--mobile-header-bg-color, #2196F3);
       }
-      .edit-actions-banner-row {
+      .unit-table tr.row-editing-active {
+        border: 2px solid var(--unit-theme-color, #2196F3) !important;
+        border-bottom: none !important;
+        border-radius: 12px 12px 0 0 !important;
+        margin-bottom: 0 !important;
+        box-shadow: 0 0 0 2px var(--unit-theme-color, #2196F3), 0 -4px 16px rgba(0,0,0,0.12) !important;
+      }
+      .unit-table tr.edit-actions-banner-row {
         display: block !important;
-        margin-top: -12px;
-        margin-bottom: 14px;
-        border-radius: 0 0 8px 8px;
-        border-top: none;
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+        border: 2px solid var(--unit-theme-color, #2196F3) !important;
+        border-top: 1px dashed var(--border-color) !important;
+        border-radius: 0 0 12px 12px !important;
+        background: var(--status-bg) !important;
+        box-shadow: 0 0 0 2px var(--unit-theme-color, #2196F3), 0 6px 16px rgba(0,0,0,0.12) !important;
       }
       .edit-actions-banner-cell {
         display: block !important;
-        padding: 10px !important;
+        padding: 8px 10px !important;
         padding-right: 10px !important;
       }
       .edit-actions-banner-cell::before {
@@ -925,6 +1603,11 @@
       .edit-actions-banner-flex {
         justify-content: center;
         text-align: center;
+      }
+      .admin-editable-cell.is-editing {
+        width: 95%;
+        margin: 0 auto;
+        font-size: 13.5px;
       }
     }
   </style>
@@ -937,7 +1620,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 1.0.3 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 1.1.0 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -945,13 +1628,28 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">1.0.3</span>
+        <span class="version-badge">1.1.0</span>
       </h1>
 
-      <div style="display: flex; gap: 6px; align-items: center;">
-        <button id="addContactBtn" class="btn-icon-small primary-highlight" style="display: none;" title="افزودن مخاطب جدید" onclick="openAddContactModal()">➕ مخاطب جدید</button>
-        <button id="authBtn" class="btn-icon-small" title="ورود به حساب مدیریت" onclick="handleAuthButtonClick()">🔐 ورود مدیر</button>
-        <button id="settingsBtn" class="btn-icon-small" title="تنظیمات برنامه" onclick="openSettingsModal()">⚙️ تنظیمات</button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="addContactBtn" class="btn-add-contact-circle" style="display: none;" title="افزودن مخاطب جدید" onclick="openAddContactModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button id="authBtn" class="btn-auth-circle" title="ورود به حساب مدیریت" onclick="handleAuthButtonClick()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+        <button id="settingsBtn" class="btn-settings-circle" title="تنظیمات برنامه" onclick="openSettingsModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -974,8 +1672,6 @@
         </h3>
         <button class="close-btn" onclick="closeSettingsModal()" title="بستن">✕</button>
       </div>
-
-      <div id="settingsAuthBanner" class="auth-status-banner"></div>
 
       <div class="accordion-container">
         <!-- Accordion 1: ظاهر و تجربه کاربری -->
@@ -1067,7 +1763,7 @@
                 <span class="btn-action-icon">📱</span>
                 <div class="btn-action-info">
                   <div class="btn-action-title">نسخه نصب‌شده برنامه</div>
-                  <div class="btn-action-desc">نسخه 1.0.2 (کاملاً آفلاین و مستقل)</div>
+                  <div class="btn-action-desc">نسخه 1.1.0 (کاملاً آفلاین و مستقل)</div>
                 </div>
               </button>
 
@@ -1099,15 +1795,24 @@
         <div id="loginErrorMsg" class="login-error-msg" style="display: none;"></div>
         <div class="form-group">
           <label class="form-label" for="loginUsername">نام کاربری:</label>
-          <input type="text" id="loginUsername" class="form-input" placeholder="نام کاربری (amirhd2)" required dir="ltr" autocomplete="username">
+          <input type="text" id="loginUsername" class="form-input" placeholder="نام کاربری" required dir="ltr" autocomplete="username">
         </div>
         <div class="form-group">
           <label class="form-label" for="loginPassword">کلمه عبور:</label>
           <input type="password" id="loginPassword" class="form-input" placeholder="کلمه عبور" required dir="ltr" autocomplete="current-password">
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 18px;">
-          <button type="submit" class="btn-confirm" style="margin-top: 0; background: #2196F3;">ورود به حساب</button>
-          <button type="button" class="btn-cancel" onclick="closeLoginModal()">انصراف</button>
+        <div class="modal-form-actions">
+          <button type="submit" class="btn-circle-action-save" title="ورود به حساب">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="btn-circle-action-cancel" onclick="closeLoginModal()" title="انصراف">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
       </form>
     </div>
@@ -1129,11 +1834,19 @@
           <input type="text" id="newContactName" class="form-input" placeholder="مثال: علی رضایی" required>
         </div>
         <div class="form-group">
-          <label class="form-label" for="newContactUnitSelect">واحد / بخش سازمانی <span style="color: #e53935;">*</span>:</label>
-          <select id="newContactUnitSelect" class="form-select" onchange="handleUnitSelectChange(this)" required>
-            <!-- Dynamically populated from units in data -->
-          </select>
-          <input type="text" id="newContactCustomUnit" class="form-input" placeholder="نام واحد جدید را وارد کنید..." style="display: none; margin-top: 6px;">
+          <label class="form-label" for="newContactUnitInput">واحد / بخش سازمانی <span style="color: #e53935;">*</span>:</label>
+          <div class="unit-combobox-container" id="unitComboboxContainer">
+            <div class="unit-combobox-input-wrapper">
+              <input type="text" id="newContactUnitInput" class="form-input unit-combobox-input" placeholder="جستجو یا انتخاب واحد سازمانی..." autocomplete="off" required oninput="handleUnitComboboxInput(event)" onkeydown="handleUnitComboboxKeyDown(event)" onfocus="openUnitComboboxDropdown()">
+              <div class="unit-combobox-actions">
+                <button type="button" id="unitComboboxClearBtn" class="unit-combobox-btn" title="پاک کردن متن" onclick="clearUnitCombobox(event)" style="display: none;">✕</button>
+                <button type="button" id="unitComboboxToggleBtn" class="unit-combobox-btn" title="نمایش لیست واحدها" onclick="toggleUnitComboboxDropdown(event)">▾</button>
+              </div>
+            </div>
+            <div id="unitDropdownList" class="unit-combobox-dropdown" style="display: none;">
+              <!-- Populated dynamically via JS with live search & max 5 visible items -->
+            </div>
+          </div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <div class="form-group">
@@ -1149,9 +1862,18 @@
           <label class="form-label" for="newContactDirect">تلفن مستقیم:</label>
           <input type="text" id="newContactDirect" class="form-input" placeholder="مثال: 021-88888888">
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 18px;">
-          <button type="submit" class="btn-confirm" style="margin-top: 0; background: #2e7d32;">💾 ثبت و افزودن مخاطب</button>
-          <button type="button" class="btn-cancel" onclick="closeAddContactModal()">انصراف</button>
+        <div class="modal-form-actions">
+          <button type="submit" class="btn-circle-action-save" title="ثبت و افزودن مخاطب">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="btn-circle-action-cancel" onclick="closeAddContactModal()" title="انصراف">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
       </form>
     </div>
@@ -1170,9 +1892,19 @@
       <p id="deleteSingleModalText" style="font-size: 14px; color: var(--text-color); margin: 12px 0 16px 0; line-height: 1.6;">
         آیا از حذف این مخاطب اطمینان دارید؟
       </p>
-      <div style="display: flex; gap: 8px;">
-        <button type="button" class="btn-danger-confirm" onclick="confirmDeleteSingleContact()">بله، حذف شود</button>
-        <button type="button" class="btn-cancel" onclick="closeDeleteSingleModal()">انصراف</button>
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-delete" onclick="confirmDeleteSingleContact()" title="حذف این مخاطب" style="width: 36px; height: 36px; background: #e53935; color: #fff;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+        <button type="button" class="btn-circle-action-cancel" onclick="closeDeleteSingleModal()" title="انصراف" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -1190,7 +1922,13 @@
       <div id="changelogContent" style="margin-top: 10px;">
         <!-- Filled dynamically -->
       </div>
-      <button type="button" class="btn-confirm" onclick="closeChangelogModal()">بستن</button>
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-save" onclick="closeChangelogModal()" title="بستن" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1207,7 +1945,13 @@
       <div id="versionInfoDetails" style="margin-top: 10px;">
         <!-- Filled dynamically -->
       </div>
-      <button type="button" class="btn-confirm" onclick="closeVersionInfoModal()">متوجه شدم</button>
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-save" onclick="closeVersionInfoModal()" title="متوجه شدم" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1227,12 +1971,76 @@
           📌 <strong>توجه:</strong> تمامی اطلاعات مخاطبین از حافظه دائمی (IndexedDB و حافظه مرورگر) به طور کامل پاک شده و برنامه به حالت اولیه بازمی‌گردد. این عملیات غیرقابل بازگشت است.
         </div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button type="button" class="btn-danger-confirm" onclick="executeClearAllData()">
-          <span>🗑️</span>
-          <span>بله، تمامی داده‌ها حذف شوند</span>
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-delete" onclick="executeClearAllData()" title="بله، تمامی داده‌ها حذف شوند" style="width: 38px; height: 38px; background: #e53935; color: #fff;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
         </button>
-        <button type="button" class="btn-cancel" onclick="closeDeleteConfirmModal()">انصراف</button>
+        <button type="button" class="btn-circle-action-cancel" onclick="closeDeleteConfirmModal()" title="انصراف" style="width: 38px; height: 38px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Color Palette Modal -->
+  <div id="unitColorModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px;">
+          <span>🎨</span>
+          <span>انتخاب رنگ واحد سازمانی</span>
+        </h3>
+        <button class="close-btn" onclick="closeUnitColorModal()" title="بستن">✕</button>
+      </div>
+
+      <div id="unitColorModalSubtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+        رنگ هدر، کانتینر و کارت‌های این واحد سازمانی را انتخاب نمایید:
+      </div>
+
+      <!-- Live Color Preview Card -->
+      <div id="unitColorPreviewBox" class="unit-color-preview-card">
+        <div id="unitColorPreviewHeader" class="unit-color-preview-header">پیش‌نمایش هدر واحد سازمانی</div>
+        <div id="unitColorPreviewBody" class="unit-color-preview-body">
+          <div id="unitColorPreviewCard" class="unit-color-preview-item">
+            <span id="unitColorPreviewLabel" class="unit-color-preview-label">نام و نشان</span>
+            <span style="font-size: 12px; color: var(--text-muted); padding: 6px;">کارت مخاطب داخل کانتینر واحد</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Palette Grid -->
+      <div style="font-size: 12.5px; font-weight: bold; margin-bottom: 6px; color: var(--text-color);">پالت رنگ‌های پیشنهادی:</div>
+      <div id="colorPaletteGrid" class="color-palette-grid">
+        <!-- Filled dynamically -->
+      </div>
+
+      <!-- Custom Color Picker -->
+      <div class="custom-color-picker-row">
+        <label for="customColorInput" style="font-size: 13px; font-weight: bold; color: var(--text-color);">انتخاب رنگ دلخواه دیگر:</label>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="customColorHexDisplay" style="font-size: 12.5px; font-family: monospace; direction: ltr; font-weight: bold; color: var(--text-muted);">#0D47A1</span>
+          <input type="color" id="customColorInput" class="custom-color-input" onchange="selectCustomUnitColor(this.value)">
+        </div>
+      </div>
+
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-save" onclick="applySelectedUnitColor()" title="تأیید و اعمال رنگ" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="btn-circle-action-cancel" onclick="closeUnitColorModal()" title="انصراف" style="width: 36px; height: 36px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -1246,6 +2054,14 @@
   </div>
 
   <div id="contactsContainer" class="contacts-container"></div>
+
+  <!-- Floating Scroll-to-Top Button -->
+  <button id="scrollToTopBtn" class="fab-scroll-top" onclick="scrollToTop()" title="رفتن به بالای صفحه" aria-label="رفتن به بالای صفحه">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+  </button>
 
   <script>
     const BUNDLED_EXCEL_PATH = './LMO%20phonebook.xlsx';
@@ -1334,9 +2150,14 @@
 
       if (isAdminLoggedIn) {
         if (authBtn) {
-          authBtn.innerHTML = '👤 amirhd2 <span style="font-size: 11px; opacity: 0.85;">(خروج)</span>';
-          authBtn.className = 'btn-icon-small btn-auth-active';
-          authBtn.title = 'خروج از حساب مدیریت';
+          authBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          `;
+          authBtn.className = 'btn-auth-circle is-logged-in';
+          authBtn.title = 'حساب مدیریت (amirhd2) فعال است (کلیک برای خروج)';
         }
         if (addContactBtn) {
           addContactBtn.style.display = 'inline-flex';
@@ -1359,8 +2180,13 @@
         }
       } else {
         if (authBtn) {
-          authBtn.innerHTML = '🔐 ورود مدیر';
-          authBtn.className = 'btn-icon-small';
+          authBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          `;
+          authBtn.className = 'btn-auth-circle';
           authBtn.title = 'ورود به حساب مدیریت';
         }
         if (addContactBtn) {
@@ -1386,6 +2212,20 @@
       }
     }
 
+    function lockBodyScroll() {
+      document.body.classList.add('modal-scroll-locked');
+    }
+
+    function unlockBodyScroll() {
+      // Check if any other modal is still visible or card is being edited
+      const openModals = Array.from(document.querySelectorAll('.modal-overlay')).filter(el => {
+        return window.getComputedStyle(el).display !== 'none';
+      });
+      if (openModals.length === 0 && activeEditingIdx === -1) {
+        document.body.classList.remove('modal-scroll-locked');
+      }
+    }
+
     function handleAuthButtonClick() {
       if (isAdminLoggedIn) {
         logoutAdmin();
@@ -1399,6 +2239,7 @@
       const errorDiv = document.getElementById('loginErrorMsg');
       if (errorDiv) errorDiv.style.display = 'none';
       if (modal) {
+        lockBodyScroll();
         modal.style.display = 'flex';
         setTimeout(() => {
           const userInput = document.getElementById('loginUsername');
@@ -1412,6 +2253,7 @@
       if (modal) modal.style.display = 'none';
       const form = document.getElementById('loginForm');
       if (form) form.reset();
+      unlockBodyScroll();
     }
 
     function handleLoginSubmit(e) {
@@ -1427,7 +2269,7 @@
         closeLoginModal();
         updateAuthUI();
         renderList(contacts);
-        showToast('🎉 خوش آمدید! با دسترسی مدیر (amirhd2) وارد شدید.');
+        showToast('🎉 خوش آمدید! با دسترسی مدیر وارد شدید.');
       } else {
         if (errorDiv) {
           errorDiv.textContent = '❌ نام کاربری یا کلمه عبور نادرست است.';
@@ -1449,6 +2291,7 @@
       if (modal) {
         updateAuthUI();
         applyTheme(currentThemeMode);
+        lockBodyScroll();
         modal.style.display = 'flex';
       }
     }
@@ -1456,6 +2299,7 @@
     function closeSettingsModal() {
       const modal = document.getElementById('settingsModal');
       if (modal) modal.style.display = 'none';
+      unlockBodyScroll();
     }
 
     function toggleAccordion(accId) {
@@ -1471,35 +2315,253 @@
     function handleModalOverlayClick(event) {
       if (event.target.classList.contains('modal-overlay')) {
         event.target.style.display = 'none';
+        unlockBodyScroll();
       }
     }
 
-    function getUniqueUnits() {
-      const units = new Set();
+    function normalizePersianText(str) {
+      if (!str) return '';
+      return String(str)
+        .toLowerCase()
+        .replace(/[\u064B-\u065F\u0670]/g, '') // Diacritics
+        .replace(/[\u064A\u0649\u06CC]/g, 'ی') // Standardize Yeh
+        .replace(/[\u0643\u06A9]/g, 'ک') // Standardize Kaf
+        .replace(/[\u0622\u0623\u0625\u0671]/g, 'ا') // Standardize Alef
+        .replace(/[\u0629]/g, 'ه')
+        .replace(/[\u200C\u200B]/g, ' ') // Standardize ZWNJ
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function getUniqueUnitsWithCounts() {
+      const unitCounts = {};
       contacts.forEach(c => {
         const u = (c['واحد'] || c['بخش'] || '').trim();
-        if (u && u !== 'نامشخص') units.add(u);
+        if (u && u !== 'نامشخص') {
+          unitCounts[u] = (unitCounts[u] || 0) + 1;
+        }
       });
-      return Array.from(units);
+      return Object.keys(unitCounts).map(u => ({
+        name: u,
+        count: unitCounts[u]
+      }));
+    }
+
+    let comboboxHighlightedIdx = -1;
+    let comboboxFilteredItems = [];
+
+    function highlightTextMatches(fullText, searchWord) {
+      if (!searchWord || !searchWord.trim()) return escapeHtml(fullText);
+      const cleanFull = normalizePersianText(fullText);
+      const cleanWord = normalizePersianText(searchWord);
+      const idx = cleanFull.indexOf(cleanWord);
+      if (idx === -1) return escapeHtml(fullText);
+
+      const start = fullText.slice(0, idx);
+      const match = fullText.slice(idx, idx + searchWord.length);
+      const end = fullText.slice(idx + searchWord.length);
+      return `${escapeHtml(start)}<span class="unit-highlight-match">${escapeHtml(match)}</span>${escapeHtml(end)}`;
+    }
+
+    function renderUnitComboboxDropdown(query = '') {
+      const dropdown = document.getElementById('unitDropdownList');
+      const input = document.getElementById('newContactUnitInput');
+      const clearBtn = document.getElementById('unitComboboxClearBtn');
+      if (!dropdown || !input) return;
+
+      const trimmedQuery = query.trim();
+      const normQ = normalizePersianText(trimmedQuery);
+      const allUnits = getUniqueUnitsWithCounts();
+
+      if (clearBtn) {
+        clearBtn.style.display = input.value.trim() ? 'flex' : 'none';
+      }
+
+      if (!normQ) {
+        comboboxFilteredItems = allUnits;
+      } else {
+        comboboxFilteredItems = allUnits.filter(u => normalizePersianText(u.name).includes(normQ));
+      }
+
+      comboboxHighlightedIdx = -1;
+
+      let html = '';
+      if (comboboxFilteredItems.length === 0) {
+        html += '<div class="unit-combobox-empty">واحدی با این عنوان یافت نشد</div>';
+      } else {
+        html += comboboxFilteredItems.map((u, idx) => {
+          const isSelected = (input.value.trim() === u.name);
+          return `
+            <div class="unit-combobox-item ${isSelected ? 'is-selected' : ''}" id="combobox-item-${idx}" onclick="selectUnitOption('${escapeHtml(u.name)}')">
+              <span class="unit-item-name">${highlightTextMatches(u.name, trimmedQuery)}</span>
+              <span class="unit-badge-count">${u.count} نفر</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Add dynamic option to create a new unit
+      const isExactMatch = allUnits.some(u => normalizePersianText(u.name) === normQ);
+      if (trimmedQuery && !isExactMatch) {
+        html += `
+          <div class="unit-combobox-new-item" id="combobox-item-new" onclick="selectUnitOption('${escapeHtml(trimmedQuery)}')">
+            <span>➕</span>
+            <span>ایجاد واحد جدید با عنوان: <strong>«${escapeHtml(trimmedQuery)}»</strong></span>
+          </div>
+        `;
+      } else if (!trimmedQuery) {
+        html += `
+          <div class="unit-combobox-new-item" id="combobox-item-new" onclick="promptCustomUnitCreation()">
+            <span>➕</span>
+            <span>ایجاد واحد سازمانی جدید...</span>
+          </div>
+        `;
+      }
+
+      dropdown.innerHTML = html;
+    }
+
+    function openUnitComboboxDropdown() {
+      const dropdown = document.getElementById('unitDropdownList');
+      const input = document.getElementById('newContactUnitInput');
+      if (!dropdown || !input) return;
+      dropdown.style.display = 'block';
+      renderUnitComboboxDropdown(input.value);
+    }
+
+    function closeUnitComboboxDropdown() {
+      const dropdown = document.getElementById('unitDropdownList');
+      if (dropdown) dropdown.style.display = 'none';
+      comboboxHighlightedIdx = -1;
+    }
+
+    function toggleUnitComboboxDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('unitDropdownList');
+      const input = document.getElementById('newContactUnitInput');
+      if (!dropdown || !input) return;
+
+      if (dropdown.style.display === 'block') {
+        closeUnitComboboxDropdown();
+      } else {
+        input.focus();
+        openUnitComboboxDropdown();
+      }
+    }
+
+    function selectUnitOption(unitName) {
+      const input = document.getElementById('newContactUnitInput');
+      if (input) {
+        input.value = unitName;
+        const clearBtn = document.getElementById('unitComboboxClearBtn');
+        if (clearBtn) clearBtn.style.display = 'flex';
+      }
+      closeUnitComboboxDropdown();
+    }
+
+    function promptCustomUnitCreation() {
+      const input = document.getElementById('newContactUnitInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+        const clearBtn = document.getElementById('unitComboboxClearBtn');
+        if (clearBtn) clearBtn.style.display = 'none';
+      }
+      renderUnitComboboxDropdown('');
+    }
+
+    function clearUnitCombobox(e) {
+      if (e) e.stopPropagation();
+      const input = document.getElementById('newContactUnitInput');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      const clearBtn = document.getElementById('unitComboboxClearBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+      openUnitComboboxDropdown();
+    }
+
+    function handleUnitComboboxInput(e) {
+      openUnitComboboxDropdown();
+      renderUnitComboboxDropdown(e.target.value);
+    }
+
+    function handleUnitComboboxKeyDown(e) {
+      const dropdown = document.getElementById('unitDropdownList');
+      const isOpen = (dropdown && dropdown.style.display === 'block');
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!isOpen) {
+          openUnitComboboxDropdown();
+          return;
+        }
+        const totalItems = comboboxFilteredItems.length + 1;
+        comboboxHighlightedIdx = (comboboxHighlightedIdx + 1) % totalItems;
+        updateComboboxHighlight();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!isOpen) {
+          openUnitComboboxDropdown();
+          return;
+        }
+        const totalItems = comboboxFilteredItems.length + 1;
+        comboboxHighlightedIdx = (comboboxHighlightedIdx - 1 + totalItems) % totalItems;
+        updateComboboxHighlight();
+      } else if (e.key === 'Enter') {
+        if (isOpen && comboboxHighlightedIdx >= 0) {
+          e.preventDefault();
+          if (comboboxHighlightedIdx < comboboxFilteredItems.length) {
+            selectUnitOption(comboboxFilteredItems[comboboxHighlightedIdx].name);
+          } else {
+            const input = document.getElementById('newContactUnitInput');
+            const trimmed = input ? input.value.trim() : '';
+            if (trimmed) {
+              selectUnitOption(trimmed);
+            } else {
+              promptCustomUnitCreation();
+            }
+          }
+        }
+      } else if (e.key === 'Escape') {
+        if (isOpen) {
+          e.preventDefault();
+          closeUnitComboboxDropdown();
+        }
+      }
+    }
+
+    function updateComboboxHighlight() {
+      document.querySelectorAll('.unit-combobox-item, .unit-combobox-new-item').forEach(el => el.classList.remove('is-highlighted'));
+      let targetEl = null;
+      if (comboboxHighlightedIdx >= 0 && comboboxHighlightedIdx < comboboxFilteredItems.length) {
+        targetEl = document.getElementById(`combobox-item-${comboboxHighlightedIdx}`);
+      } else if (comboboxHighlightedIdx === comboboxFilteredItems.length) {
+        targetEl = document.getElementById('combobox-item-new');
+      }
+
+      if (targetEl) {
+        targetEl.classList.add('is-highlighted');
+        try {
+          targetEl.scrollIntoView({ block: 'nearest' });
+        } catch (e) {}
+      }
     }
 
     function openAddContactModal() {
       const modal = document.getElementById('addContactModal');
-      const select = document.getElementById('newContactUnitSelect');
-      const customUnit = document.getElementById('newContactCustomUnit');
       const form = document.getElementById('addContactForm');
+      const unitInput = document.getElementById('newContactUnitInput');
+      const clearBtn = document.getElementById('unitComboboxClearBtn');
 
       if (form) form.reset();
-      if (customUnit) customUnit.style.display = 'none';
-
-      if (select) {
-        const units = getUniqueUnits();
-        select.innerHTML = '<option value="">-- انتخاب واحد سازمانی از دیتای موجود --</option>' +
-          units.map(u => `<option value="${escapeHtml(u)}">${escapeHtml(u)}</option>`).join('') +
-          '<option value="__NEW__">➕ ایجاد واحد سازمانی جدید...</option>';
-      }
+      if (unitInput) unitInput.value = '';
+      if (clearBtn) clearBtn.style.display = 'none';
+      closeUnitComboboxDropdown();
 
       if (modal) {
+        lockBodyScroll();
         modal.style.display = 'flex';
         setTimeout(() => {
           const nameInput = document.getElementById('newContactName');
@@ -1510,48 +2572,33 @@
 
     function closeAddContactModal() {
       const modal = document.getElementById('addContactModal');
+      closeUnitComboboxDropdown();
       if (modal) modal.style.display = 'none';
-    }
-
-    function handleUnitSelectChange(selectEl) {
-      const customInput = document.getElementById('newContactCustomUnit');
-      if (!customInput) return;
-      if (selectEl.value === '__NEW__') {
-        customInput.style.display = 'block';
-        customInput.required = true;
-        customInput.focus();
-      } else {
-        customInput.style.display = 'none';
-        customInput.required = false;
-        customInput.value = '';
-      }
+      unlockBodyScroll();
     }
 
     async function submitNewContact(e) {
       if (e) e.preventDefault();
       const name = document.getElementById('newContactName').value.trim();
-      const unitSelect = document.getElementById('newContactUnitSelect').value;
-      const customUnit = document.getElementById('newContactCustomUnit').value.trim();
+      const unitInput = document.getElementById('newContactUnitInput');
+      const finalUnit = unitInput ? unitInput.value.trim() : '';
       const internal = document.getElementById('newContactInternal').value.trim();
       const voip = document.getElementById('newContactVoip').value.trim();
       const direct = document.getElementById('newContactDirect').value.trim();
 
       if (!name) {
         showToast('⚠️ لطفاً نام و نام خانوادگی را وارد کنید.');
+        const nameInput = document.getElementById('newContactName');
+        if (nameInput) nameInput.focus();
         return;
       }
 
-      let finalUnit = '';
-      if (unitSelect === '__NEW__') {
-        if (!customUnit) {
-          showToast('⚠️ لطفاً نام واحد سازمانی جدید را وارد کنید.');
-          return;
+      if (!finalUnit) {
+        showToast('⚠️ لطفاً واحد سازمانی را مشخص یا انتخاب کنید.');
+        if (unitInput) {
+          unitInput.focus();
+          openUnitComboboxDropdown();
         }
-        finalUnit = customUnit;
-      } else if (unitSelect) {
-        finalUnit = unitSelect;
-      } else {
-        showToast('⚠️ لطفاً واحد سازمانی را انتخاب کنید.');
         return;
       }
 
@@ -1598,6 +2645,31 @@
       }
     }
 
+    function selectElementContents(el) {
+      if (!el) return;
+      setTimeout(() => {
+        try {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } catch (err) {}
+      }, 15);
+    }
+
+    function handleCellFocus(e, el) {
+      if (activeEditingIdx !== -1) {
+        selectElementContents(el);
+      }
+    }
+
+    function handleCellClick(e, el) {
+      if (activeEditingIdx !== -1 && el.getAttribute('contenteditable') === 'true') {
+        selectElementContents(el);
+      }
+    }
+
     function startEditRow(origIdx) {
       if (!isAdminLoggedIn) return;
 
@@ -1607,6 +2679,19 @@
 
       const row = document.getElementById(`contact-row-${origIdx}`);
       if (!row || !contacts[origIdx]) return;
+
+      // 1. Calculate precise document scroll target for this specific row
+      const headerEl = document.querySelector('.app-header');
+      const headerOffset = headerEl ? headerEl.offsetHeight + 16 : 80;
+      const rowRect = row.getBoundingClientRect();
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      const targetScrollY = Math.max(0, currentScroll + rowRect.top - headerOffset);
+
+      // Perform smooth scroll to target card
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: 'smooth'
+      });
 
       activeEditingIdx = origIdx;
       activeOriginalData = { ...contacts[origIdx] };
@@ -1636,19 +2721,23 @@
       actionRow.innerHTML = `
         <td colspan="4" class="edit-actions-banner-cell">
           <div class="edit-actions-banner-flex">
-            <div class="edit-status-indicator">
-              <span class="edit-pulse-dot"></span>
-              <span>در حال ویرایش مخاطب... (Enter: ثبت | Esc: انصراف)</span>
-            </div>
             <div class="edit-actions-buttons">
-              <button type="button" class="btn-save-row-prominent" onclick="saveContactRow(${origIdx})" title="ثبت نهایی تغییرات (تیک سبز)">
-                <span>✔️ ثبت تغییرات</span>
+              <button type="button" class="btn-circle-action-save" onclick="saveContactRow(${origIdx})" title="ثبت تغییرات">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
               </button>
-              <button type="button" class="btn-cancel-row-prominent" onclick="cancelEditRow(${origIdx})" title="انصراف از ویرایش">
-                <span>✕ انصراف</span>
+              <button type="button" class="btn-circle-action-cancel" onclick="cancelEditRow(${origIdx})" title="انصراف">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
-              <button type="button" class="btn-delete-row-prominent" onclick="openDeleteSingleModal(${origIdx})" title="حذف این مخاطب">
-                <span>🗑️ حذف</span>
+              <button type="button" class="btn-circle-action-delete" onclick="openDeleteSingleModal(${origIdx})" title="حذف مخاطب">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
               </button>
             </div>
           </div>
@@ -1656,21 +2745,14 @@
       `;
       row.after(actionRow);
 
-      const nameCell = row.querySelector('[data-field="نام و نام خانوادگی"]');
-      if (nameCell) {
-        nameCell.focus();
-        try {
-          const range = document.createRange();
-          range.selectNodeContents(nameCell);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-        } catch (e) {}
-      }
-
-      try {
-        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (e) {}
+      setTimeout(() => {
+        lockBodyScroll();
+        const nameCell = row.querySelector('[data-field="نام و نام خانوادگی"]');
+        if (nameCell) {
+          nameCell.focus();
+          selectElementContents(nameCell);
+        }
+      }, 350);
     }
 
     function cancelEditRow(origIdx, silent = false) {
@@ -1710,6 +2792,7 @@
 
       activeEditingIdx = -1;
       activeOriginalData = null;
+      unlockBodyScroll();
 
       if (!silent) {
         showToast('ویرایش مخاطب لغو شد.');
@@ -1766,6 +2849,7 @@
 
       activeEditingIdx = -1;
       activeOriginalData = null;
+      unlockBodyScroll();
 
       row.classList.add('row-saved-flash');
       setTimeout(() => row.classList.remove('row-saved-flash'), 1000);
@@ -1792,13 +2876,17 @@
         textEl.innerHTML = `آیا از حذف مخاطب <strong>«${escapeHtml(name)}»</strong> از دفترچه تلفن اطمینان دارید؟`;
       }
       const modal = document.getElementById('deleteSingleModal');
-      if (modal) modal.style.display = 'flex';
+      if (modal) {
+        lockBodyScroll();
+        modal.style.display = 'flex';
+      }
     }
 
     function closeDeleteSingleModal() {
       targetDeleteContactIdx = -1;
       const modal = document.getElementById('deleteSingleModal');
       if (modal) modal.style.display = 'none';
+      unlockBodyScroll();
     }
 
     async function confirmDeleteSingleContact() {
@@ -1823,11 +2911,12 @@
       }
       const backupData = {
         appName: 'دفترچه تلفن سازمان',
-        version: '1.0.2',
+        version: '1.0.5',
         exportDate: new Date().toISOString(),
         exportDateFa: new Date().toLocaleDateString('fa-IR'),
         contactsCount: contacts.length,
-        contacts: contacts
+        contacts: contacts,
+        unitColors: getSavedUnitColors()
       };
       const jsonStr = JSON.stringify(backupData, null, 2);
       const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
@@ -1862,6 +2951,9 @@
               listToRestore = parsed;
             } else if (parsed && Array.isArray(parsed.contacts)) {
               listToRestore = parsed.contacts;
+              if (parsed.unitColors && typeof parsed.unitColors === 'object') {
+                saveUnitColors(parsed.unitColors);
+              }
             }
 
             if (listToRestore.length === 0) {
@@ -1920,6 +3012,7 @@
     function openDeleteConfirmModal() {
       const modal = document.getElementById('deleteConfirmModal');
       if (modal) {
+        lockBodyScroll();
         modal.style.display = 'flex';
       }
     }
@@ -1929,6 +3022,7 @@
       if (modal) {
         modal.style.display = 'none';
       }
+      unlockBodyScroll();
     }
 
     async function executeClearAllData() {
@@ -1945,6 +3039,7 @@
         localStorage.removeItem('phonebook_cached_contacts');
         localStorage.removeItem('phonebook_cached_file_name');
         localStorage.removeItem('phonebook_cached_time');
+        localStorage.removeItem('phonebook_unit_colors');
         localStorage.setItem('phonebook_user_cleared', 'true');
       } catch (e) {
         console.warn('localStorage clear warning:', e);
@@ -2005,11 +3100,48 @@
         showStaticChangelog(container);
       }
 
+      lockBodyScroll();
       modal.style.display = 'flex';
     }
 
     function showStaticChangelog(container) {
       container.innerHTML = `
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.1.0</span>
+            <span class="changelog-ver-date">1405/05/28</span>
+          </div>
+          <ul class="changelog-items">
+            <li>تمرکز و جداسازی کامل کارت در حال ویرایش و تار (Blur) شدن تمام عناصر پس‌زمینه و کارت‌های دیگر</li>
+            <li>اسکرول نرم و هوشمند صفحه دقیقاً به موقعیت کارت انتخاب‌شده و غیرفعال شدن اسکرول صفحه در طول ویرایش</li>
+            <li>دکمه شناور دایره‌ای بازگشت به بالای صفحه (Scroll to Top) هنگام اسکرول به سمت بالا و پنهان شدن در اسکرول به پایین</li>
+            <li>بهینه‌سازی کامل انیمیشن باز شدن پنل ویرایش بدون لگ و پرش</li>
+            <li>ثابت ماندن حداقل ارتفاع کارت‌ها در حالت خالی بودن فیلدها و قابلیت رشد ارتفاع برای محتوای طولانی</li>
+            <li>دکمه‌های دایره‌ای استاندارد و یکپارچه در سراسر برنامه (تیک سبز، ضربدر قرمز، سطل زباله قرمز)</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.5</span>
+            <span class="changelog-ver-date">1405/05/28</span>
+          </div>
+          <ul class="changelog-items">
+            <li>تبدیل دکمه‌های هدر به آیکون‌های گرد فاقد متن (مخاطب جدید، تنظیمات، ورود با اسپارک)</li>
+            <li>طراحی هر واحد به صورت یک کانتینر اختصاصی دربرگیرنده کارت‌های همان واحد</li>
+            <li>امکان ویرایش عنوان هر واحد و پالت رنگی ۲۴ تایی انتخابگر رنگ</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 1.0.4</span>
+            <span class="changelog-ver-date">1405/05/27</span>
+          </div>
+          <ul class="changelog-items">
+            <li>باکس انتخاب واحد سازمانی با جستجوی زنده (Live Search) و تطبیق کلمات جزئی</li>
+            <li>نمایش حداکثر ۵ مورد واحد سازمانی و قابلیت اسکرول نرم برای سایر موارد</li>
+            <li>هایلایت بصری عبارات جستجو شده و امکان ایجاد سریع واحد جدید در زمان تایپ</li>
+          </ul>
+        </div>
         <div class="changelog-entry">
           <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 1.0.3</span>
@@ -2018,8 +3150,7 @@
           <ul class="changelog-items">
             <li>حذف ستون عملیات از حالت عادی برای تمیزی و یکدستی جدول</li>
             <li>افزودن آیکون مداد (✏️) در سمت چپ نام برای شروع ویرایش هر ردیف</li>
-            <li>افکت بلور و تمرکز نوری روی کارت در حال ویرایش و مات‌شدن پس‌زمینه</li>
-            <li>نوار ابزار هوشمند ثبت، انصراف و حذف با کلیدهای میانبر Enter و Esc</li>
+            <li>افکت تمرکز نوری روی کارت در حال ویرایش و نوار ابزار هوشمند ثبت، انصراف و حذف</li>
           </ul>
         </div>
         <div class="changelog-entry">
@@ -2028,7 +3159,7 @@
             <span class="changelog-ver-date">1405/05/27</span>
           </div>
           <ul class="changelog-items">
-            <li>افزودن سیستم احراز هویت و ورود مدیر (amirhd2)</li>
+            <li>افزودن سیستم احراز هویت و ورود مدیر</li>
             <li>ویرایش درون‌خطی سلول‌های مخاطبین با کلیک و دکمه ثبت سبز (✔️)</li>
             <li>دکمه اختصاصی افزودن مخاطب جدید با قابلیت انتخاب واحد سازمانی</li>
             <li>محدودسازی بخش داده‌ها و پشتیبان‌گیری به مدیر لاگین‌شده</li>
@@ -2065,6 +3196,7 @@
     function closeChangelogModal() {
       const modal = document.getElementById('changelogModal');
       if (modal) modal.style.display = 'none';
+      unlockBodyScroll();
     }
 
     function showInstalledVersionInfo() {
@@ -2076,22 +3208,24 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 1.0.3</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 1.1.0</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
           <div>💾 <strong>پایگاه داده:</strong> حافظه داخلی (IndexedDB)</div>
           <div>👥 <strong>تعداد مخاطبین ذخیره شده:</strong> ${contacts.length} نفر</div>
-          <div>🛡️ <strong>وضعیت احراز هویت:</strong> ${isAdminLoggedIn ? 'مدیر سیستم (amirhd2)' : 'کاربر مهمان'}</div>
+          <div>🛡️ <strong>وضعیت احراز هویت:</strong> ${isAdminLoggedIn ? 'مدیر سیستم' : 'کاربر مهمان'}</div>
           <div>⚡ <strong>سرویس ورکر:</strong> فعال و آماده کار بدون اینترنت</div>
         </div>
       `;
+      lockBodyScroll();
       modal.style.display = 'flex';
     }
 
     function closeVersionInfoModal() {
       const modal = document.getElementById('versionInfoModal');
       if (modal) modal.style.display = 'none';
+      unlockBodyScroll();
     }
 
     function openDatabase() {
@@ -2271,71 +3405,381 @@
       reader.readAsArrayBuffer(file);
     }
 
-    function hexGradient(start, end, steps) {
-      const startRGB = parseInt(start.slice(1), 16);
-      const endRGB = parseInt(end.slice(1), 16);
-      const gradient = [];
-      for (let i = 0; i < steps; i++) {
-        const r = Math.round(((startRGB >> 16) & 0xFF) + i * (((endRGB >> 16) & 0xFF) - ((startRGB >> 16) & 0xFF)) / (steps - 1));
-        const g = Math.round(((startRGB >> 8) & 0xFF) + i * (((endRGB >> 8) & 0xFF) - ((startRGB >> 8) & 0xFF)) / (steps - 1));
-        const b = Math.round((startRGB & 0xFF) + i * ((endRGB & 0xFF) - (startRGB & 0xFF)) / (steps - 1));
-        gradient.push(`#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1).toUpperCase()}`);
+    // Preset Unit Color Palette (24 harmonious, distinguishable shades)
+    const UNIT_COLOR_PALETTE = [
+      '#0d47a1', '#1565c0', '#1976d2', '#0288d1',
+      '#00838f', '#00695c', '#2e7d32', '#388e3c',
+      '#558b2f', '#f57f17', '#e65100', '#d84315',
+      '#c2185b', '#ad1457', '#6a1b9a', '#4a148c',
+      '#283593', '#37474f', '#455a64', '#4e342e',
+      '#009688', '#00acc1', '#3949ab', '#8e24aa'
+    ];
+
+    function getSavedUnitColors() {
+      try {
+        const stored = localStorage.getItem('phonebook_unit_colors');
+        return stored ? JSON.parse(stored) : {};
+      } catch (e) {
+        return {};
       }
-      return gradient;
     }
 
-    const customPalette = [
-      ...hexGradient('#0D47A1', '#64B5F6', 12),
-      ...hexGradient('#1B5E20', '#81C784', 7),
-      ...hexGradient('#E65100', '#FFB74D', 3),
-      ...hexGradient('#F9A825', '#FFF176', 2)
-    ];
+    function saveUnitColors(colorMap) {
+      try {
+        localStorage.setItem('phonebook_unit_colors', JSON.stringify(colorMap));
+      } catch (e) {
+        console.warn('Failed to save unit colors:', e);
+      }
+    }
+
+    function getUnitColor(unitName, index = 0) {
+      const colors = getSavedUnitColors();
+      if (colors && colors[unitName]) {
+        return colors[unitName];
+      }
+      return UNIT_COLOR_PALETTE[index % UNIT_COLOR_PALETTE.length];
+    }
+
+    function hexToRgb(hex) {
+      if (!hex || typeof hex !== 'string') return { r: 13, g: 71, b: 161 };
+      let c = hex.replace('#', '');
+      if (c.length === 3) {
+        c = c.split('').map(x => x + x).join('');
+      }
+      const num = parseInt(c, 16);
+      if (isNaN(num)) return { r: 13, g: 71, b: 161 };
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    function hexToRgba(hex, alpha) {
+      try {
+        const rgb = hexToRgb(hex);
+        return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      } catch (e) {
+        return hex;
+      }
+    }
+
+    function getLighterTint(hex, factor = 0.35) {
+      try {
+        const rgb = hexToRgb(hex);
+        const r = Math.round(rgb.r + (255 - rgb.r) * factor);
+        const g = Math.round(rgb.g + (255 - rgb.g) * factor);
+        const b = Math.round(rgb.b + (255 - rgb.b) * factor);
+        return `rgb(${r}, ${g}, ${b})`;
+      } catch (e) {
+        return hex;
+      }
+    }
+
+    // State for Unit Editing & Color Picking
+    let editingUnitOriginalName = null;
+    let editingUnitCurrentColor = null;
+    let targetColorPickerUnitName = null;
+    let tempSelectedColorInModal = null;
+
+    function startEditUnit(unitName, currentColor) {
+      if (!isAdminLoggedIn) return;
+      if (activeEditingIdx !== -1) {
+        cancelEditRow(activeEditingIdx, true);
+      }
+      editingUnitOriginalName = unitName;
+      editingUnitCurrentColor = currentColor || getUnitColor(unitName);
+      renderList(contacts);
+      setTimeout(() => {
+        const input = document.getElementById('unitEditTitleInput');
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }, 50);
+    }
+
+    function cancelUnitEdit() {
+      editingUnitOriginalName = null;
+      editingUnitCurrentColor = null;
+      renderList(contacts);
+    }
+
+    function handleUnitEditKeyDown(e, oldUnitName) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveUnitEdit(oldUnitName);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelUnitEdit();
+      }
+    }
+
+    async function saveUnitEdit(oldUnitName) {
+      const input = document.getElementById('unitEditTitleInput');
+      if (!input) return;
+      const newTitle = input.value.trim();
+      if (!newTitle) {
+        showToast('⚠️ عنوان واحد سازمانی نمی‌تواند خالی باشد.');
+        input.focus();
+        return;
+      }
+
+      const colorMap = getSavedUnitColors();
+      if (editingUnitCurrentColor) {
+        colorMap[newTitle] = editingUnitCurrentColor;
+      }
+      if (oldUnitName !== newTitle && colorMap[oldUnitName]) {
+        delete colorMap[oldUnitName];
+      }
+      saveUnitColors(colorMap);
+
+      if (oldUnitName !== newTitle) {
+        let count = 0;
+        contacts.forEach(c => {
+          const u = (c['واحد'] || c['بخش'] || '').trim();
+          if (u === oldUnitName) {
+            c['واحد'] = newTitle;
+            count++;
+          }
+        });
+        await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+        showToast(`✅ عنوان واحد به «${newTitle}» تغییر یافت (${count} مخاطب بروز شد)`);
+      } else {
+        showToast(`✅ تغییرات واحد «${newTitle}» با موفقیت ذخیره شد`);
+      }
+
+      editingUnitOriginalName = null;
+      editingUnitCurrentColor = null;
+      renderList(contacts);
+    }
+
+    function openUnitColorPaletteModal(unitName) {
+      targetColorPickerUnitName = unitName;
+      tempSelectedColorInModal = editingUnitCurrentColor || getUnitColor(unitName);
+      
+      const modal = document.getElementById('unitColorModal');
+      const subtitle = document.getElementById('unitColorModalSubtitle');
+      if (subtitle) {
+        subtitle.innerHTML = `رنگ هدر، کانتینر و کارت‌های واحد «<strong>${escapeHtml(unitName)}</strong>» را انتخاب نمایید:`;
+      }
+      
+      buildColorPaletteGrid(tempSelectedColorInModal);
+      updateColorModalPreview(tempSelectedColorInModal);
+      
+      if (modal) {
+        lockBodyScroll();
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeUnitColorModal() {
+      const modal = document.getElementById('unitColorModal');
+      if (modal) modal.style.display = 'none';
+      targetColorPickerUnitName = null;
+      unlockBodyScroll();
+    }
+
+    function buildColorPaletteGrid(activeColor) {
+      const grid = document.getElementById('colorPaletteGrid');
+      if (!grid) return;
+      grid.innerHTML = UNIT_COLOR_PALETTE.map(hex => {
+        const isActive = hex.toLowerCase() === (activeColor || '').toLowerCase();
+        return `
+          <button type="button" 
+                  class="color-swatch-btn ${isActive ? 'is-active' : ''}" 
+                  style="background-color: ${hex};" 
+                  title="${hex}"
+                  onclick="selectColorFromPalette('${hex}')">
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectColorFromPalette(hex) {
+      tempSelectedColorInModal = hex;
+      buildColorPaletteGrid(hex);
+      updateColorModalPreview(hex);
+    }
+
+    function selectCustomUnitColor(hex) {
+      tempSelectedColorInModal = hex;
+      buildColorPaletteGrid(hex);
+      updateColorModalPreview(hex);
+    }
+
+    function updateColorModalPreview(hex) {
+      const previewHeader = document.getElementById('unitColorPreviewHeader');
+      const previewBody = document.getElementById('unitColorPreviewBody');
+      const previewLabel = document.getElementById('unitColorPreviewLabel');
+      const hexDisplay = document.getElementById('customColorHexDisplay');
+      const customInput = document.getElementById('customColorInput');
+
+      if (previewHeader) previewHeader.style.backgroundColor = hex;
+      if (previewBody) previewBody.style.backgroundColor = hexToRgba(hex, 0.08);
+      if (previewLabel) previewLabel.style.backgroundColor = getLighterTint(hex, 0.3);
+      if (hexDisplay) hexDisplay.textContent = hex.toUpperCase();
+      if (customInput) customInput.value = hex;
+    }
+
+    function applySelectedUnitColor() {
+      if (!tempSelectedColorInModal) return;
+      
+      editingUnitCurrentColor = tempSelectedColorInModal;
+      
+      const colorBtn = document.getElementById('unitEditColorBtn');
+      if (colorBtn) {
+        colorBtn.style.backgroundColor = tempSelectedColorInModal;
+      }
+      
+      if (targetColorPickerUnitName) {
+        const unitGroup = document.getElementById(`unit-group-${targetColorPickerUnitName}`);
+        if (unitGroup) {
+          const themeColor = tempSelectedColorInModal;
+          const containerBg = hexToRgba(themeColor, 0.06);
+          const containerBorder = hexToRgba(themeColor, 0.28);
+          const lighterAccent = getLighterTint(themeColor, 0.35);
+          unitGroup.style.setProperty('--unit-theme-color', themeColor);
+          unitGroup.style.setProperty('--unit-container-bg', containerBg);
+          unitGroup.style.setProperty('--unit-container-border', containerBorder);
+          unitGroup.style.setProperty('--unit-lighter-accent', lighterAccent);
+          unitGroup.style.setProperty('--mobile-header-bg-color', lighterAccent);
+        }
+      }
+
+      closeUnitColorModal();
+    }
 
     function renderList(list) {
       const container = document.getElementById('contactsContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       if (!list || list.length === 0) {
-        container.innerHTML = '<div class="no-results">مخاطبی یافت نشد.</div>';
+        container.innerHTML = '<div class="no-results">مخاطبی با مشخصات وارد شده یافت نشد.</div>';
         return;
       }
 
       const groups = {};
       const ordered = [];
       list.forEach(c => {
-        const u = c['واحد'] || c['بخش'] || 'نامشخص';
+        const u = (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر';
         if (!groups[u]) { groups[u] = []; ordered.push(u); }
         groups[u].push(c);
       });
 
-      ordered.forEach((unit, index) => {
+      ordered.forEach((unitName, index) => {
         const groupDiv = document.createElement('div');
         groupDiv.className = 'unit-group';
-        const color = customPalette[index % customPalette.length];
+        groupDiv.id = `unit-group-${unitName}`;
 
-        groupDiv.style.setProperty('--mobile-header-bg-color', color);
+        const unitColor = (editingUnitOriginalName === unitName && editingUnitCurrentColor)
+          ? editingUnitCurrentColor
+          : getUnitColor(unitName, index);
 
-        const header = document.createElement('h2');
-        header.className = 'unit-header';
-        header.textContent = unit;
-        header.style.backgroundColor = color;
-        groupDiv.appendChild(header);
+        const containerBg = hexToRgba(unitColor, 0.06);
+        const containerBorder = hexToRgba(unitColor, 0.28);
+        const lighterAccent = getLighterTint(unitColor, 0.35);
+
+        groupDiv.style.setProperty('--unit-theme-color', unitColor);
+        groupDiv.style.setProperty('--unit-container-bg', containerBg);
+        groupDiv.style.setProperty('--unit-container-border', containerBorder);
+        groupDiv.style.setProperty('--unit-lighter-accent', lighterAccent);
+        groupDiv.style.setProperty('--mobile-header-bg-color', lighterAccent);
+
+        // Header Section
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'unit-header-container';
+
+        if (editingUnitOriginalName === unitName && isAdminLoggedIn) {
+          // Unit Title in Edit Mode
+          headerDiv.innerHTML = `
+            <div class="unit-header-edit-form">
+              <input type="text" 
+                     id="unitEditTitleInput" 
+                     class="unit-header-edit-input" 
+                     value="${escapeHtml(unitName)}" 
+                     placeholder="عنوان واحد سازمانی"
+                     onkeydown="handleUnitEditKeyDown(event, '${escapeHtml(unitName)}')">
+              <div class="unit-header-actions">
+                <button type="button" 
+                        id="unitEditColorBtn"
+                        class="btn-unit-color-circle" 
+                        style="background-color: ${unitColor};" 
+                        title="انتخاب رنگ هدر و کانتینر واحد" 
+                        onclick="openUnitColorPaletteModal('${escapeHtml(unitName)}')">
+                  🎨
+                </button>
+                <button type="button" 
+                        class="btn-circle-action-save" 
+                        onclick="saveUnitEdit('${escapeHtml(unitName)}')" 
+                        title="ثبت تغییرات (تیک سبز)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </button>
+                <button type="button" 
+                        class="btn-circle-action-cancel" 
+                        onclick="cancelUnitEdit()" 
+                        title="انصراف (ضربدر قرمز)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          // Normal Display Mode
+          let pencilHtml = '';
+          if (isAdminLoggedIn) {
+            pencilHtml = `
+              <button type="button" 
+                      class="btn-unit-pencil-circle" 
+                      title="ویرایش عنوان و رنگ واحد" 
+                      onclick="startEditUnit('${escapeHtml(unitName)}', '${unitColor}')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </button>
+            `;
+          }
+
+          headerDiv.innerHTML = `
+            <div class="unit-header-right">
+              <span class="unit-title-text">${escapeHtml(unitName)}</span>
+              <span class="unit-contacts-count">${groups[unitName].length} نفر</span>
+            </div>
+            <div class="unit-header-actions">
+              ${pencilHtml}
+            </div>
+          `;
+        }
+
+        groupDiv.appendChild(headerDiv);
+
+        // Body Container holding nested Table / Cards
+        const bodyDiv = document.createElement('div');
+        bodyDiv.className = 'unit-container-body';
 
         const table = document.createElement('table');
         table.className = 'unit-table';
         table.innerHTML = `
-          <thead style="background-color:${color}">
+          <thead>
             <tr>
-              <th>نام و نام خانوادگی</th>
-              <th>تلفن داخلی</th>
-              <th>VoIP</th>
-              <th>تلفن مستقیم</th>
+              <th style="width: 32%;">نام و نام خانوادگی</th>
+              <th style="width: 22%;">تلفن داخلی</th>
+              <th style="width: 22%;">VoIP</th>
+              <th style="width: 24%;">تلفن مستقیم</th>
             </tr>
           </thead>
           <tbody></tbody>
         `;
+
         const tbody = table.querySelector('tbody');
-        groups[unit].forEach(contact => {
+        groups[unitName].forEach(contact => {
           const origIdx = contacts.indexOf(contact);
           const isRowEditing = (activeEditingIdx === origIdx);
 
@@ -2350,20 +3794,20 @@
           }
 
           const name = contact['نام و نام خانوادگی'] || `${contact['نام'] || ''} ${contact['نام خانوادگی'] || ''}`.trim();
-          const internal = contact['تلفن داخلی'] || contact['داخلی'] || '—';
-          const voip = contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '—';
-          const direct = contact['تلفن مستقیم'] || contact['مستقیم'] || '—';
+          const internal = contact['تلفن داخلی'] || contact['داخلی'] || '';
+          const voip = contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '';
+          const direct = contact['تلفن مستقیم'] || contact['مستقیم'] || '';
 
           row.innerHTML = `
             <td data-label="نام و نام خانوادگی">
               <div class="name-cell-content">
-                <span class="name-text-wrapper admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" data-field="نام و نام خانوادگی" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${escapeHtml(name) || '—'}</span>
-                ${isAdminLoggedIn ? `<button type="button" class="btn-pencil-edit" style="${isRowEditing ? 'display: none;' : ''}" onclick="event.stopPropagation(); startEditRow(${origIdx})" title="ویرایش این مخاطب">✏️</button>` : ''}
+                <span class="name-text-wrapper admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" data-field="نام و نام خانوادگی" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(name) || '—'}</span>
+                ${isAdminLoggedIn ? `<button type="button" class="btn-pencil-edit" style="${isRowEditing ? 'display: none;' : ''}" onclick="event.stopPropagation(); startEditRow(${origIdx})" title="ویرایش این مخاطب"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>` : ''}
               </div>
             </td>
-            <td data-label="تلفن داخلی" data-field="تلفن داخلی" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${internal === '—' ? '' : escapeHtml(internal)}</td>
-            <td data-label="VoIP" data-field="VoIP" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${voip === '—' ? '' : escapeHtml(voip)}</td>
-            <td data-label="تلفن مستقیم" data-field="تلفن مستقیم" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})">${direct === '—' ? '' : escapeHtml(direct)}</td>
+            <td data-label="تلفن داخلی" data-field="تلفن داخلی" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(internal)}</td>
+            <td data-label="VoIP" data-field="VoIP" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(voip)}</td>
+            <td data-label="تلفن مستقیم" data-field="تلفن مستقیم" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(direct)}</td>
           `;
 
           tbody.appendChild(row);
@@ -2375,19 +3819,23 @@
             actionRow.innerHTML = `
               <td colspan="4" class="edit-actions-banner-cell">
                 <div class="edit-actions-banner-flex">
-                  <div class="edit-status-indicator">
-                    <span class="edit-pulse-dot"></span>
-                    <span>در حال ویرایش مخاطب... (Enter: ثبت | Esc: انصراف)</span>
-                  </div>
                   <div class="edit-actions-buttons">
-                    <button type="button" class="btn-save-row-prominent" onclick="saveContactRow(${origIdx})" title="ثبت نهایی تغییرات (تیک سبز)">
-                      <span>✔️ ثبت تغییرات</span>
+                    <button type="button" class="btn-circle-action-save" onclick="saveContactRow(${origIdx})" title="ثبت تغییرات">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
                     </button>
-                    <button type="button" class="btn-cancel-row-prominent" onclick="cancelEditRow(${origIdx})" title="انصراف از ویرایش">
-                      <span>✕ انصراف</span>
+                    <button type="button" class="btn-circle-action-cancel" onclick="cancelEditRow(${origIdx})" title="انصراف">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
                     </button>
-                    <button type="button" class="btn-delete-row-prominent" onclick="openDeleteSingleModal(${origIdx})" title="حذف این مخاطب">
-                      <span>🗑️ حذف</span>
+                    <button type="button" class="btn-circle-action-delete" onclick="openDeleteSingleModal(${origIdx})" title="حذف مخاطب">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -2396,7 +3844,9 @@
             tbody.appendChild(actionRow);
           }
         });
-        groupDiv.appendChild(table);
+
+        bodyDiv.appendChild(table);
+        groupDiv.appendChild(bodyDiv);
         container.appendChild(groupDiv);
       });
     }
@@ -2478,6 +3928,52 @@
     document.getElementById('restoreFileInput').addEventListener('change', (e) => {
       if (e.target.files.length > 0) handleRestoreFile(e.target.files[0]);
     });
+
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('unitComboboxContainer');
+      if (container && !container.contains(e.target)) {
+        closeUnitComboboxDropdown();
+      }
+    });
+
+    // Scroll-to-Top Floating Button Logic
+    let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    let scrollTicking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(() => {
+          handleScrollFAB();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+    function handleScrollFAB() {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const fab = document.getElementById('scrollToTopBtn');
+      if (!fab) return;
+
+      // Only show when scrolled away from header (> 240px) AND currently scrolling UP
+      const scrollDiff = lastScrollY - currentScrollY;
+      if (currentScrollY > 240 && scrollDiff > 5) {
+        fab.classList.add('is-visible');
+      } else if (currentScrollY <= 160 || currentScrollY > lastScrollY) {
+        // Hide when scrolling DOWN or near the top
+        fab.classList.remove('is-visible');
+      }
+      lastScrollY = currentScrollY;
+    }
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+      const fab = document.getElementById('scrollToTopBtn');
+      if (fab) fab.classList.remove('is-visible');
+    }
 
     window.addEventListener('DOMContentLoaded', async () => {
       setTimeout(() => {
