@@ -534,6 +534,12 @@
       position: relative;
     }
 
+    .unit-container-body {
+      padding: 12px;
+      background-color: var(--unit-container-bg, transparent);
+      transition: background-color 0.25s ease;
+    }
+
     .unit-group.is-collapsed {
       border-bottom-left-radius: 14px !important;
       border-bottom-right-radius: 14px !important;
@@ -1765,7 +1771,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.0 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.1 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -1773,7 +1779,7 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">2.0.0</span>
+        <span class="version-badge">2.0.1</span>
       </h1>
 
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -3354,6 +3360,18 @@
       container.innerHTML = `
         <div class="changelog-entry">
           <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 2.0.1</span>
+            <span class="changelog-ver-date">1405/06/01</span>
+          </div>
+          <ul class="changelog-items">
+            <li>پررنگ‌تر و واضح‌تر شدن پس‌زمینه و کانتینر اختصاصی هر واحد متناسب با رنگ انتخابی واحد</li>
+            <li>رفع مشکل عدم نمایش آیکون برنامه در زمان نصب PWA بر روی مرورگر کروم و شورتکات دسکتاپ (ابعاد استاندارد ۱۹۲ و ۵۱۲ و تگ‌های manifest)</li>
+            <li>تبدیل سوئیچر حالت‌های نمایش به آیتم متنی فشرده، کم‌جا و شیک با عنوان «نمای چارت سازمانی» با قابلیت تیک زدن</li>
+            <li>بهینه‌سازی کارایی، وضوح بصری و هماهنگی کامل تم‌های روشن و تاریک</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 2.0.0</span>
             <span class="changelog-ver-date">1405/05/28</span>
           </div>
@@ -3468,7 +3486,7 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.0</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.1</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
@@ -3878,8 +3896,8 @@
       const customInput = document.getElementById('customColorInput');
 
       if (previewHeader) previewHeader.style.backgroundColor = hex;
-      if (previewBody) previewBody.style.backgroundColor = hexToRgba(hex, 0.08);
-      if (previewLabel) previewLabel.style.backgroundColor = getLighterTint(hex, 0.3);
+      if (previewBody) previewBody.style.backgroundColor = hexToRgba(hex, 0.15);
+      if (previewLabel) previewLabel.style.backgroundColor = getLighterTint(hex, 0.25);
       if (hexDisplay) hexDisplay.textContent = hex.toUpperCase();
       if (customInput) customInput.value = hex;
     }
@@ -3898,9 +3916,10 @@
         const unitGroup = document.getElementById(`unit-group-${targetColorPickerUnitName}`);
         if (unitGroup) {
           const themeColor = tempSelectedColorInModal;
-          const containerBg = hexToRgba(themeColor, 0.06);
-          const containerBorder = hexToRgba(themeColor, 0.28);
-          const lighterAccent = getLighterTint(themeColor, 0.35);
+          const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+          const containerBg = hexToRgba(themeColor, isDarkMode ? 0.24 : 0.15);
+          const containerBorder = hexToRgba(themeColor, isDarkMode ? 0.60 : 0.45);
+          const lighterAccent = getLighterTint(themeColor, 0.25);
           unitGroup.style.setProperty('--unit-theme-color', themeColor);
           unitGroup.style.setProperty('--unit-container-bg', containerBg);
           unitGroup.style.setProperty('--unit-container-border', containerBorder);
@@ -3930,6 +3949,8 @@
         groups[u].push(c);
       });
 
+      const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
       ordered.forEach((unitName, index) => {
         const groupDiv = document.createElement('div');
         groupDiv.className = 'unit-group';
@@ -3944,9 +3965,9 @@
           ? editingUnitCurrentColor
           : getUnitColor(unitName, index);
 
-        const containerBg = hexToRgba(unitColor, 0.06);
-        const containerBorder = hexToRgba(unitColor, 0.28);
-        const lighterAccent = getLighterTint(unitColor, 0.35);
+        const containerBg = hexToRgba(unitColor, isDarkMode ? 0.24 : 0.15);
+        const containerBorder = hexToRgba(unitColor, isDarkMode ? 0.60 : 0.45);
+        const lighterAccent = getLighterTint(unitColor, 0.25);
 
         groupDiv.style.setProperty('--unit-theme-color', unitColor);
         groupDiv.style.setProperty('--unit-container-bg', containerBg);
