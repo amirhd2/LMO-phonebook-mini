@@ -1,9 +1,13 @@
-const CACHE_NAME = 'phonebook-pwa-v2.0.0-live';
+const CACHE_NAME = 'phonebook-pwa-v2.0.1-live';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './icon.png',
+  './icon-192.png',
+  './icon-512.png',
+  './favicon.png',
+  './favicon-32.png',
   './xlsx.full.min.js',
   './Version Info.json',
   './service_worker.js',
