@@ -1,13 +1,15 @@
-const CACHE_NAME = 'phonebook-pwa-v2.0.1-live';
+const CACHE_NAME = 'phonebook-pwa-v2.0.2-live';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
+  './favicon.ico',
+  './favicon.svg',
+  './favicon-32.png',
+  './apple-touch-icon.png',
   './icon.png',
   './icon-192.png',
   './icon-512.png',
-  './favicon.png',
-  './favicon-32.png',
   './xlsx.full.min.js',
   './Version Info.json',
   './service_worker.js',

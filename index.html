@@ -11,11 +11,14 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" id="theme-color-meta" content="#2196F3">
 
+  <!-- آیکون‌ها و فاویکون‌های استاندارد PWA و مرورگر -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <link rel="shortcut icon" href="icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
   <link rel="manifest" href="manifest.json">
@@ -1771,7 +1774,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.1 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.2 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -1779,7 +1782,7 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">2.0.1</span>
+        <span class="version-badge">2.0.2</span>
       </h1>
 
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -3360,6 +3363,16 @@
       container.innerHTML = `
         <div class="changelog-entry">
           <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 2.0.2</span>
+            <span class="changelog-ver-date">1405/06/01</span>
+          </div>
+          <ul class="changelog-items">
+            <li>اتصال و تنظیم کامل تمامی استانداردهای آیکون و فاویکون (ICO, SVG, PNG 32x32, 192x192, 512x512 و Apple Touch Icon)</li>
+            <li>پاکسازی ارجاعات آیکون‌های قدیمی و بهبود کش PWA در سرویس‌ورکر برای بارگذاری ۱۰۰٪ آفلاین و نصب بدون نقص در تمام مرورگرها و پلتفرم‌ها</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 2.0.1</span>
             <span class="changelog-ver-date">1405/06/01</span>
           </div>
@@ -3486,7 +3499,7 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.1</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.2</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
