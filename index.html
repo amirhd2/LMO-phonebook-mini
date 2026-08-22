@@ -2027,16 +2027,16 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <div class="form-group">
             <label class="form-label" for="newContactInternal">تلفن داخلی:</label>
-            <input type="text" id="newContactInternal" class="form-input" placeholder="مثال: 120">
+            <input type="text" id="newContactInternal" class="form-input" placeholder="مثال: 120" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" data-numeric-type="integer" autocomplete="off">
           </div>
           <div class="form-group">
             <label class="form-label" for="newContactVoip">VoIP:</label>
-            <input type="text" id="newContactVoip" class="form-input" placeholder="مثال: 205">
+            <input type="text" id="newContactVoip" class="form-input" placeholder="مثال: 205" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" data-numeric-type="integer" autocomplete="off">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" for="newContactDirect">تلفن مستقیم:</label>
-          <input type="text" id="newContactDirect" class="form-input" placeholder="مثال: 021-88888888">
+          <input type="tel" id="newContactDirect" class="form-input" placeholder="مثال: 021-88888888" inputmode="tel" data-numeric-type="phone" autocomplete="tel">
         </div>
         <div class="modal-form-actions">
           <button type="submit" class="btn-circle-action-save" title="ثبت و افزودن مخاطب">
@@ -2240,6 +2240,236 @@
   </button>
 
   <script>
+    // =========================================================================
+    // 🔢 UNIVERSAL NUMERIC INPUT & DIGIT NORMALIZATION ENGINE
+    // =========================================================================
+    const NumericInputSystem = {
+      persianDigits: ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+      arabicDigits: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+
+      /**
+       * Converts all Persian (۰-۹) and Arabic-Indic (٠-٩) digits to ASCII English digits (0-9).
+       */
+      normalizeDigits(input) {
+        if (input === null || input === undefined) return '';
+        let str = String(input);
+        // Persian digits (U+06F0 - U+06F9)
+        str = str.replace(/[\u06F0-\u06F9]/g, d => String.fromCharCode(d.charCodeAt(0) - 1728));
+        // Arabic-Indic digits (U+0660 - U+0669)
+        str = str.replace(/[\u0660-\u0669]/g, d => String.fromCharCode(d.charCodeAt(0) - 1584));
+        return str;
+      },
+
+      /**
+       * Converts English digits (0-9) to Persian digits (۰-۹) for display purposes.
+       */
+      toPersianDigits(input) {
+        if (input === null || input === undefined) return '';
+        const str = this.normalizeDigits(input);
+        return str.replace(/[0-9]/g, d => this.persianDigits[parseInt(d, 10)]);
+      },
+
+      /**
+       * Converts English digits (0-9) to Arabic-Indic digits (٠-٩) for display purposes.
+       */
+      toArabicDigits(input) {
+        if (input === null || input === undefined) return '';
+        const str = this.normalizeDigits(input);
+        return str.replace(/[0-9]/g, d => this.arabicDigits[parseInt(d, 10)]);
+      },
+
+      /**
+       * Standardizes decimal separators (٫, ،, /, ,) to '.' and unicode minus (—, –, −) to '-'.
+       */
+      normalizeDecimal(input) {
+        if (input === null || input === undefined) return '';
+        let str = this.normalizeDigits(input);
+        // Standardize minuses: − (U+2212), – (U+2013), — (U+2014)
+        str = str.replace(/[\u2212\u2013\u2014]/g, '-');
+        // Persian decimal: ٫ (U+066B), Arabic comma: ، (U+060C), slash: /
+        str = str.replace(/[\u066B\u060C\/]/g, '.');
+        return str;
+      },
+
+      /**
+       * Normalizes any input based on its type:
+       * - 'integer': digits only, optional minus
+       * - 'decimal': single decimal point '.', optional minus
+       * - 'phone': preserves +, -, (, ), #, *, spaces while standardizing digits to ASCII 0-9
+       */
+      normalize(input, type = 'integer', options = {}) {
+        if (input === null || input === undefined) return '';
+        let str = this.normalizeDecimal(input).trim();
+
+        if (type === 'phone') {
+          // Standardize digits while keeping phone separators
+          return str.replace(/[^\d+\-()#* ]/g, '');
+        }
+
+        const allowNegative = options.allowNegative ?? (type === 'signed-integer' || type === 'signed-decimal');
+        let isNegative = false;
+        if (allowNegative && str.startsWith('-')) {
+          isNegative = true;
+        }
+
+        if (type === 'decimal' || type === 'signed-decimal') {
+          let clean = str.replace(/[^\d.]/g, '');
+          const parts = clean.split('.');
+          if (parts.length > 2) {
+            clean = parts[0] + '.' + parts.slice(1).join('');
+          }
+          return (isNegative && clean ? '-' : '') + clean;
+        }
+
+        // Integer by default
+        let clean = str.replace(/[^\d]/g, '');
+        return (isNegative && clean ? '-' : '') + clean;
+      },
+
+      /**
+       * Safely parses an input string into a JavaScript number.
+       */
+      parse(input, type = 'integer', fallback = NaN) {
+        const norm = this.normalize(input, type, { allowNegative: true });
+        if (!norm) return fallback;
+        const num = (type === 'decimal' || type === 'signed-decimal') ? parseFloat(norm) : parseInt(norm, 10);
+        return isNaN(num) ? fallback : num;
+      },
+
+      /**
+       * Validates whether an input represents a valid number.
+       */
+      isValid(input, type = 'integer', options = {}) {
+        const norm = this.normalize(input, type, options);
+        if (!norm) return false;
+        const num = (type === 'decimal' || type === 'signed-decimal') ? parseFloat(norm) : parseInt(norm, 10);
+        return !isNaN(num);
+      },
+
+      /**
+       * Formats a number for display according to locale options without corrupting underlying data.
+       */
+      formatDisplay(num, locale = 'fa-IR', options = {}) {
+        if (num === null || num === undefined || num === '') return '';
+        const n = typeof num === 'number' ? num : this.parse(num, 'decimal', NaN);
+        if (isNaN(n)) return String(num);
+        return new Intl.NumberFormat(locale, options).format(n);
+      },
+
+      /**
+       * Automatically configures appropriate inputmode, pattern, and listeners on an element.
+       */
+      configureElement(el) {
+        if (!el || !(el instanceof HTMLElement)) return;
+        const isInput = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA';
+        const isContentEditable = el.getAttribute('contenteditable') === 'true';
+        if (!isInput && !isContentEditable) return;
+
+        const inputmode = el.getAttribute('inputmode');
+        const numericType = el.getAttribute('data-numeric-type');
+        const dataField = el.getAttribute('data-field') || '';
+        const placeholder = el.getAttribute('placeholder') || '';
+        const nameOrId = ((el.id || '') + ' ' + (el.name || '')).toLowerCase();
+
+        // Detect if this element represents a numeric or phone field
+        let detectedType = numericType;
+        let detectedMode = inputmode;
+
+        if (!detectedType && !detectedMode) {
+          if (el.type === 'tel' || dataField.includes('مستقیم') || nameOrId.includes('phone') || nameOrId.includes('mobile') || nameOrId.includes('direct') || nameOrId.includes('tel')) {
+            detectedType = 'phone';
+            detectedMode = 'tel';
+          } else if (nameOrId.includes('amount') || nameOrId.includes('price') || nameOrId.includes('مبلغ') || nameOrId.includes('decimal') || dataField.includes('اعشار')) {
+            detectedType = 'decimal';
+            detectedMode = 'decimal';
+          } else if (
+            el.type === 'number' ||
+            dataField.includes('داخلی') || dataField.includes('VoIP') || dataField.includes('ویپ') ||
+            nameOrId.includes('internal') || nameOrId.includes('voip') || nameOrId.includes('count') ||
+            nameOrId.includes('age') || nameOrId.includes('year') || nameOrId.includes('hour') ||
+            nameOrId.includes('minute') || nameOrId.includes('percent') || nameOrId.includes('installment') ||
+            placeholder.includes('120') || placeholder.includes('205') ||
+            /تعداد|سن|سال|ساعت|دقیقه|شماره|مقدار|درصد|قسط|موجودی|بدهی|طلب|وام/.test(dataField)
+          ) {
+            detectedType = 'integer';
+            detectedMode = 'numeric';
+          }
+        }
+
+        if (detectedMode && !el.getAttribute('inputmode')) {
+          el.setAttribute('inputmode', detectedMode);
+        }
+        if (detectedType && !el.getAttribute('data-numeric-type')) {
+          el.setAttribute('data-numeric-type', detectedType);
+        }
+
+        // Add pattern hint for mobile keyboards to trigger numeric keypad
+        if (detectedMode === 'numeric' && !el.getAttribute('pattern') && isInput) {
+          el.setAttribute('pattern', '[0-9۰-۹٠-٩]*');
+        } else if (detectedMode === 'decimal' && !el.getAttribute('pattern') && isInput) {
+          el.setAttribute('pattern', '[0-9۰-۹٠-٩.,٫]*');
+        }
+      },
+
+      /**
+       * Attaches global delegation and MutationObserver so every current and future numeric input is standardized.
+       */
+      init() {
+        document.querySelectorAll('input, [contenteditable="true"]').forEach(el => this.configureElement(el));
+
+        document.addEventListener('focusin', (e) => {
+          if (e.target && e.target instanceof HTMLElement) {
+            this.configureElement(e.target);
+          }
+        }, true);
+
+        // Normalize on paste
+        document.addEventListener('paste', (e) => {
+          const target = e.target;
+          if (!target || !(target instanceof HTMLElement)) return;
+          const inputmode = target.getAttribute('inputmode');
+          const numericType = target.getAttribute('data-numeric-type');
+          if (inputmode === 'numeric' || inputmode === 'decimal' || inputmode === 'tel' || numericType) {
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            if (pasteData && /[\u06F0-\u06F9\u0660-\u0669]/.test(pasteData)) {
+              e.preventDefault();
+              const normalizedPaste = this.normalize(pasteData, numericType || (inputmode === 'tel' ? 'phone' : inputmode === 'decimal' ? 'decimal' : 'integer'));
+              document.execCommand('insertText', false, normalizedPaste);
+            }
+          }
+        });
+
+        // MutationObserver to automatically configure any dynamically created inputs
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.tagName === 'INPUT' || node.getAttribute('contenteditable') === 'true') {
+                  this.configureElement(node);
+                }
+                node.querySelectorAll && node.querySelectorAll('input, [contenteditable="true"]').forEach(el => this.configureElement(el));
+              }
+            }
+          }
+        });
+
+        if (document.body) {
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
+      }
+    };
+
+    // Expose globally for app-wide & external access
+    window.NumericInputSystem = NumericInputSystem;
+    window.NumericInput = NumericInputSystem;
+
+    // Initialize Universal Numeric Engine
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => NumericInputSystem.init());
+    } else {
+      NumericInputSystem.init();
+    }
+
     const BUNDLED_EXCEL_PATH = './LMO%20phonebook.xlsx';
     
     const DB_NAME = 'PhonebookAppDB';
@@ -2827,9 +3057,9 @@
       const name = document.getElementById('newContactName').value.trim();
       const unitInput = document.getElementById('newContactUnitInput');
       const finalUnit = unitInput ? unitInput.value.trim() : '';
-      const internal = document.getElementById('newContactInternal').value.trim();
-      const voip = document.getElementById('newContactVoip').value.trim();
-      const direct = document.getElementById('newContactDirect').value.trim();
+      const internal = NumericInputSystem.normalize(document.getElementById('newContactInternal').value, 'integer');
+      const voip = NumericInputSystem.normalize(document.getElementById('newContactVoip').value, 'integer');
+      const direct = NumericInputSystem.normalize(document.getElementById('newContactDirect').value, 'phone');
 
       if (!name) {
         showToast('⚠️ لطفاً نام و نام خانوادگی را وارد کنید.');
@@ -3064,9 +3294,9 @@
       const directCell = row.querySelector('[data-field="تلفن مستقیم"]');
 
       const newName = nameCell ? nameCell.innerText.trim() : '';
-      const newInternal = internalCell ? internalCell.innerText.trim() : '';
-      const newVoip = voipCell ? voipCell.innerText.trim() : '';
-      const newDirect = directCell ? directCell.innerText.trim() : '';
+      const newInternal = NumericInputSystem.normalize(internalCell ? internalCell.innerText : '', 'integer');
+      const newVoip = NumericInputSystem.normalize(voipCell ? voipCell.innerText : '', 'integer');
+      const newDirect = NumericInputSystem.normalize(directCell ? directCell.innerText : '', 'phone');
 
       if (!newName || newName === '—') {
         showToast('⚠️ نام و نام خانوادگی نمی‌تواند خالی باشد.');
@@ -4108,9 +4338,9 @@
                 ${isAdminLoggedIn ? `<button type="button" class="btn-pencil-edit" style="${isRowEditing ? 'display: none;' : ''}" onclick="event.stopPropagation(); startEditRow(${origIdx})" title="ویرایش این مخاطب"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>` : ''}
               </div>
             </td>
-            <td data-label="تلفن داخلی" data-field="تلفن داخلی" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(internal)}</td>
-            <td data-label="VoIP" data-field="VoIP" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(voip)}</td>
-            <td data-label="تلفن مستقیم" data-field="تلفن مستقیم" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(direct)}</td>
+            <td data-label="تلفن داخلی" data-field="تلفن داخلی" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} inputmode="numeric" data-numeric-type="integer" onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(internal)}</td>
+            <td data-label="VoIP" data-field="VoIP" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} inputmode="numeric" data-numeric-type="integer" onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(voip)}</td>
+            <td data-label="تلفن مستقیم" data-field="تلفن مستقیم" class="admin-editable-cell ${isRowEditing ? 'is-editing' : ''}" ${isRowEditing ? 'contenteditable="true"' : ''} inputmode="tel" data-numeric-type="phone" onkeydown="handleCellKeyDown(event, ${origIdx})" onclick="handleCellClick(event, this)" onfocus="handleCellFocus(event, this)">${escapeHtml(direct)}</td>
           `;
 
           tbody.appendChild(row);
@@ -4160,6 +4390,8 @@
       }
       const searchInput = document.getElementById('searchInput');
       searchInput.value = '';
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
       initViewModeUnits();
       renderList(contacts);
       searchInput.focus();
@@ -4220,14 +4452,25 @@
       if (activeEditingIdx !== -1) {
         cancelEditRow(activeEditingIdx, true);
       }
-      const q = e.target.value.trim().toLowerCase();
-      if (!q) {
+      const rawQ = e.target.value.trim();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.style.display = rawQ ? 'block' : 'none';
+
+      if (!rawQ) {
         initViewModeUnits();
         renderList(contacts);
         return;
       }
 
-      const filtered = contacts.filter(c => Object.values(c).some(v => String(v).toLowerCase().includes(q)));
+      const normQ = NumericInputSystem.normalizeDigits(normalizePersianText(rawQ));
+      const filtered = contacts.filter(c => {
+        return Object.values(c).some(v => {
+          if (v === null || v === undefined) return false;
+          const normV = NumericInputSystem.normalizeDigits(normalizePersianText(String(v)));
+          return normV.includes(normQ);
+        });
+      });
+
       // Auto-expand units with matching contacts so they are instantly visible
       filtered.forEach(c => {
         const u = (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر';
