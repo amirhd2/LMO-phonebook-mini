@@ -23,8 +23,9 @@
   <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- کتابخانه کامل SheetJS به صورت محلی برای کارکرد ۱۰۰٪ آفلاین -->
+  <!-- کتابخانه‌های کامل اکسل به صورت محلی برای کارکرد ۱۰۰٪ آفلاین -->
   <script src="xlsx.full.min.js"></script>
+  <script src="exceljs.min.js"></script>
 
   <style>
     :root {
@@ -1774,7 +1775,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.2 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.3 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -1782,7 +1783,7 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">2.0.2</span>
+        <span class="version-badge">2.0.3</span>
       </h1>
 
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -1892,8 +1893,16 @@
               <button type="button" class="settings-action-btn" onclick="exportBackupData()">
                 <span class="btn-action-icon">📤</span>
                 <div class="btn-action-info">
-                  <div class="btn-action-title">پشتیبان‌گیری از داده‌ها</div>
-                  <div class="btn-action-desc">دریافت و ذخیره فایل خروجی کامل از مخاطبین</div>
+                  <div class="btn-action-title">پشتیبان‌گیری از داده‌ها (JSON)</div>
+                  <div class="btn-action-desc">دریافت و ذخیره فایل ساختاریافته از تمامی اطلاعات</div>
+                </div>
+              </button>
+
+              <button type="button" class="settings-action-btn" onclick="exportContactsToExcel()">
+                <span class="btn-action-icon">📊</span>
+                <div class="btn-action-info">
+                  <div class="btn-action-title">خروجی فایل اکسل (Excel)</div>
+                  <div class="btn-action-desc">دریافت فایل اکسل (.xlsx) با چیدمان و ظاهر مشابه برنامه</div>
                 </div>
               </button>
 
@@ -1939,7 +1948,7 @@
                 <span class="btn-action-icon">📱</span>
                 <div class="btn-action-info">
                   <div class="btn-action-title">نسخه نصب‌شده برنامه</div>
-                  <div class="btn-action-desc">نسخه 2.0.0 (کاملاً آفلاین و مستقل)</div>
+                  <div class="btn-action-desc">نسخه 2.0.3 (کاملاً آفلاین و مستقل)</div>
                 </div>
               </button>
 
@@ -3420,6 +3429,290 @@
       showToast(`فایل پشتیبان با موفقیت دانلود شد (${contacts.length} مخاطب)`);
     }
 
+    async function exportContactsToExcel() {
+      if (!contacts || contacts.length === 0) {
+        showToast('⚠️ مخاطبی برای خروجی اکسل در حافظه برنامه یافت نشد.');
+        return;
+      }
+
+      showToast('⏳ در حال آماده‌سازی و ساخت فایل اکسل با ظاهر سازمانی...');
+
+      try {
+        const now = new Date();
+        const jalaliDate = now.toLocaleDateString('fa-IR');
+        const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const fileName = `phonebook-export-${dateStr}.xlsx`;
+
+        // ترتیب قرارگیری واحدها و مخاطبین دقیقاً مطابق با نمایش در برنامه
+        const groups = {};
+        const orderedUnits = [];
+        contacts.forEach(c => {
+          const u = (c['واحد'] || c['بخش'] || 'سایر').trim() || 'سایر';
+          if (!groups[u]) {
+            groups[u] = [];
+            orderedUnits.push(u);
+          }
+          groups[u].push(c);
+        });
+
+        if (typeof ExcelJS !== 'undefined') {
+          const workbook = new ExcelJS.Workbook();
+          workbook.creator = 'دفترچه تلفن سازمان';
+          workbook.lastModifiedBy = 'دفترچه تلفن سازمان';
+          workbook.created = now;
+          workbook.modified = now;
+
+          function toArgb(hex, fallback = '0D47A1') {
+            if (!hex) return 'FF' + fallback;
+            let clean = String(hex).replace('#', '').trim();
+            if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+            if (clean.length === 6) return ('FF' + clean).toUpperCase();
+            if (clean.length === 8) return clean.toUpperCase();
+            return ('FF' + fallback).toUpperCase();
+          }
+
+          function getSoftTintArgb(hex, intensity = 0.08) {
+            let clean = (hex || '#0d47a1').replace('#', '').trim();
+            if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+            const num = parseInt(clean, 16) || 0;
+            const r = (num >> 16) & 255;
+            const g = (num >> 8) & 255;
+            const b = num & 255;
+            const tr = Math.round(255 - (255 - r) * intensity);
+            const tg = Math.round(255 - (255 - g) * intensity);
+            const tb = Math.round(255 - (255 - b) * intensity);
+            const toHex = (n) => n.toString(16).padStart(2, '0').toUpperCase();
+            return 'FF' + toHex(tr) + toHex(tg) + toHex(tb);
+          }
+
+          // ==========================================
+          // برگه اول: نمای سازمانی (دقیقاً مشابه برنامه)
+          // ==========================================
+          const ws1 = workbook.addWorksheet('دفتر تلفن سازمانی', {
+            views: [{ rightToLeft: true }]
+          });
+
+          // تنظیم عرض ستون‌ها
+          ws1.columns = [
+            { key: 'rowNum', width: 9 },    // ردیف
+            { key: 'name', width: 34 },      // نام و نام خانوادگی
+            { key: 'internal', width: 18 },  // تلفن داخلی
+            { key: 'voip', width: 18 },      // VoIP
+            { key: 'direct', width: 24 }     // تلفن مستقیم
+          ];
+
+          // سطر ۱: فاصله اولیه
+          ws1.addRow(['']).height = 10;
+
+          // سطر ۲: بنر عنوان برنامه
+          const titleRow = ws1.addRow(['دفترچه تلفن سازمان', '', '', '', '']);
+          const titleRowIdx = titleRow.number;
+          ws1.mergeCells(`A${titleRowIdx}:E${titleRowIdx}`);
+          titleRow.height = 36;
+          const titleCell = ws1.getCell(`A${titleRowIdx}`);
+          titleCell.font = { name: 'Tahoma', size: 15, bold: true, color: { argb: 'FFFFFFFF' } };
+          titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
+          titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+          // سطر ۳: زیرعنوان و تاریخ
+          const subRow = ws1.addRow([`تاریخ خروجی: ${jalaliDate}   |   تعداد کل مخاطبین: ${contacts.length} نفر   |   تعداد واحدها: ${orderedUnits.length} واحد سازمانی`, '', '', '', '']);
+          const subRowIdx = subRow.number;
+          ws1.mergeCells(`A${subRowIdx}:E${subRowIdx}`);
+          subRow.height = 22;
+          const subCell = ws1.getCell(`A${subRowIdx}`);
+          subCell.font = { name: 'Tahoma', size: 9.5, bold: false, color: { argb: 'FFF1F5F9' } };
+          subCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF334155' } };
+          subCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+          orderedUnits.forEach((unitName, unitIndex) => {
+            const unitList = groups[unitName];
+            const unitColor = getUnitColor(unitName, unitIndex);
+            const unitArgb = toArgb(unitColor);
+            const softTintArgb = getSoftTintArgb(unitColor, 0.08);
+
+            // سطر فاصله قبل از هر واحد
+            ws1.addRow(['']).height = 12;
+
+            // سطر هدر واحد
+            const unitHeaderRow = ws1.addRow([`🏢  واحد: ${unitName}  (${unitList.length} نفر)`, '', '', '', '']);
+            const uRowIdx = unitHeaderRow.number;
+            ws1.mergeCells(`A${uRowIdx}:E${uRowIdx}`);
+            unitHeaderRow.height = 28;
+            const uCell = ws1.getCell(`A${uRowIdx}`);
+            uCell.font = { name: 'Tahoma', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
+            uCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: unitArgb } };
+            uCell.alignment = { horizontal: 'right', vertical: 'middle', indent: 1 };
+            uCell.border = {
+              top: { style: 'medium', color: { argb: unitArgb } },
+              bottom: { style: 'medium', color: { argb: unitArgb } },
+              left: { style: 'medium', color: { argb: unitArgb } },
+              right: { style: 'medium', color: { argb: unitArgb } }
+            };
+
+            // سطر سرستون‌های جدول آن واحد
+            const thRow = ws1.addRow(['ردیف', 'نام و نام خانوادگی', 'تلفن داخلی', 'VoIP', 'تلفن مستقیم']);
+            thRow.height = 25;
+            ['A', 'B', 'C', 'D', 'E'].forEach(col => {
+              const cell = ws1.getCell(`${col}${thRow.number}`);
+              cell.font = { name: 'Tahoma', size: 10.5, bold: true, color: { argb: 'FF1E293B' } };
+              cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF1F5F9' } };
+              cell.alignment = { horizontal: col === 'B' ? 'right' : 'center', vertical: 'middle' };
+              cell.border = {
+                top: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                bottom: { style: 'medium', color: { argb: unitArgb } },
+                left: { style: 'thin', color: { argb: 'FFCBD5E1' } },
+                right: { style: 'thin', color: { argb: 'FFCBD5E1' } }
+              };
+            });
+
+            // سطرهای مخاطبین این واحد
+            unitList.forEach((c, idx) => {
+              const name = c['نام و نام خانوادگی'] || `${c['نام'] || ''} ${c['نام خانوادگی'] || ''}`.trim() || '—';
+              const internal = c['تلفن داخلی'] || c['داخلی'] || '—';
+              const voip = c['VoIP'] || c['Voip'] || c['ویپ'] || '—';
+              const direct = c['تلفن مستقیم'] || c['مستقیم'] || '—';
+
+              const dataRow = ws1.addRow([
+                idx + 1,
+                name,
+                internal !== '—' ? String(internal) : '—',
+                voip !== '—' ? String(voip) : '—',
+                direct !== '—' ? String(direct) : '—'
+              ]);
+              dataRow.height = 23;
+
+              const isEven = (idx % 2 === 1);
+              const rowBgArgb = isEven ? softTintArgb : 'FFFFFFFF';
+
+              ['A', 'B', 'C', 'D', 'E'].forEach(col => {
+                const cell = ws1.getCell(`${col}${dataRow.number}`);
+                cell.font = { name: 'Tahoma', size: 10, color: { argb: 'FF1E293B' } };
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rowBgArgb } };
+                cell.alignment = { horizontal: col === 'B' ? 'right' : 'center', vertical: 'middle' };
+                cell.border = {
+                  top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
+                };
+                if (col !== 'A') {
+                  cell.numFmt = '@'; // حفظ صفر ابتدای شماره و فرمت رشته
+                }
+              });
+            });
+          });
+
+          // ==========================================
+          // برگه دوم: فهرست جامع داده‌ها (Raw Data با قابلیت فیلتر)
+          // ==========================================
+          const ws2 = workbook.addWorksheet('فهرست جامع داده‌ها', {
+            views: [{ rightToLeft: true }]
+          });
+
+          ws2.columns = [
+            { header: 'ردیف', key: 'rowNum', width: 8 },
+            { header: 'نام و نام خانوادگی', key: 'name', width: 32 },
+            { header: 'واحد سازمانی', key: 'unit', width: 24 },
+            { header: 'تلفن داخلی', key: 'internal', width: 16 },
+            { header: 'VoIP', key: 'voip', width: 16 },
+            { header: 'تلفن مستقیم', key: 'direct', width: 22 }
+          ];
+
+          // استایل هدر برگه دوم
+          const hRow2 = ws2.getRow(1);
+          hRow2.height = 26;
+          ['A', 'B', 'C', 'D', 'E', 'F'].forEach(col => {
+            const cell = ws2.getCell(`${col}1`);
+            cell.font = { name: 'Tahoma', size: 10.5, bold: true, color: { argb: 'FFFFFFFF' } };
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
+            cell.alignment = { horizontal: (col === 'B' || col === 'C') ? 'right' : 'center', vertical: 'middle' };
+          });
+
+          let flatIndex = 0;
+          orderedUnits.forEach(unitName => {
+            groups[unitName].forEach(c => {
+              flatIndex++;
+              const name = c['نام و نام خانوادگی'] || `${c['نام'] || ''} ${c['نام خانوادگی'] || ''}`.trim() || '';
+              const internal = c['تلفن داخلی'] || c['داخلی'] || '';
+              const voip = c['VoIP'] || c['Voip'] || c['ویپ'] || '';
+              const direct = c['تلفن مستقیم'] || c['مستقیم'] || '';
+
+              const r = ws2.addRow({
+                rowNum: flatIndex,
+                name: name,
+                unit: unitName,
+                internal: internal ? String(internal) : '',
+                voip: voip ? String(voip) : '',
+                direct: direct ? String(direct) : ''
+              });
+              r.height = 22;
+
+              ['A', 'B', 'C', 'D', 'E', 'F'].forEach(col => {
+                const cell = ws2.getCell(`${col}${r.number}`);
+                cell.font = { name: 'Tahoma', size: 10, color: { argb: 'FF1E293B' } };
+                cell.alignment = { horizontal: (col === 'B' || col === 'C') ? 'right' : 'center', vertical: 'middle' };
+                cell.border = {
+                  top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                  right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
+                };
+                if (col !== 'A') {
+                  cell.numFmt = '@';
+                }
+              });
+            });
+          });
+
+          ws2.autoFilter = `A1:F${flatIndex + 1}`;
+
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 200);
+
+          showToast(`فایل اکسل با موفقیت دانلود شد (${contacts.length} مخاطب در ${orderedUnits.length} واحد)`);
+        } else {
+          // Fallback with SheetJS XLSX
+          const aoa = [
+            ['دفترچه تلفن سازمان'],
+            [`تاریخ خروجی: ${jalaliDate} - تعداد کل: ${contacts.length} مخاطب`],
+            []
+          ];
+          orderedUnits.forEach(unitName => {
+            aoa.push([`واحد: ${unitName} (${groups[unitName].length} نفر)`]);
+            aoa.push(['ردیف', 'نام و نام خانوادگی', 'تلفن داخلی', 'VoIP', 'تلفن مستقیم']);
+            groups[unitName].forEach((c, idx) => {
+              const name = c['نام و نام خانوادگی'] || `${c['نام'] || ''} ${c['نام خانوادگی'] || ''}`.trim() || '';
+              const internal = c['تلفن داخلی'] || c['داخلی'] || '';
+              const voip = c['VoIP'] || c['Voip'] || c['ویپ'] || '';
+              const direct = c['تلفن مستقیم'] || c['مستقیم'] || '';
+              aoa.push([idx + 1, name, internal, voip, direct]);
+            });
+            aoa.push([]);
+          });
+
+          const ws = XLSX.utils.aoa_to_sheet(aoa);
+          ws['!views'] = [{ rightToLeft: true }];
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'دفتر تلفن سازمانی');
+          XLSX.writeFile(wb, fileName);
+          showToast(`فایل اکسل با موفقیت دانلود شد (${contacts.length} مخاطب)`);
+        }
+      } catch (err) {
+        console.error('Error exporting Excel file:', err);
+        showToast('❌ خطا در ساخت فایل اکسل. لطفاً مجدداً تلاش کنید.');
+      }
+    }
+
     async function handleRestoreFile(file) {
       if (!file) return;
 
@@ -3593,6 +3886,19 @@
       container.innerHTML = `
         <div class="changelog-entry">
           <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 2.0.3</span>
+            <span class="changelog-ver-date">1405/06/24</span>
+          </div>
+          <ul class="changelog-items">
+            <li>افزودن دکمه خروجی فایل اکسل (.xlsx) در بخش تنظیمات و پشتیبان‌گیری با چیدمان و ظاهر مشابه نمای برنامه</li>
+            <li>حفظ دقیق ترتیب گروه‌بندی واحدها و چینش سطرها عیناً مطابق با ترتیب نمایش مخاطبین در نرم‌افزار</li>
+            <li>طراحی بصری سازمانی راست‌به‌چپ (RTL)، رنگ‌آمیزی هدر هر واحد متناسب با رنگ اختصاصی آن، کادربندی استاندارد و حفظ فرمت کدهای تلفنی</li>
+            <li>تولید خودکار دو برگه (شیت): نمای سازمانی تفکیک‌شده و فهرست جامع فلت با فیلتر خودکار جهت سهولت در تحلیل داده‌ها و جستجو</li>
+            <li>یکپارچه‌سازی و بهینه‌سازی قابلیت بازیابی داده‌ها برای خواندن مستقیم فایل‌های اکسل صادرشده</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 2.0.2</span>
             <span class="changelog-ver-date">1405/06/01</span>
           </div>
@@ -3729,7 +4035,7 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.2</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.3</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
@@ -3835,7 +4141,14 @@
 
     async function parseWorkbook(arrayBuffer) {
       const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
+      // اگر شیتی شامل نام داده‌ها، جامع، Data، یا مخاطبین بود، آن را ترجیح بده
+      let sheetName = workbook.SheetNames[0];
+      const dataSheetCandidate = workbook.SheetNames.find(s => 
+        s.includes('داده') || s.includes('Data') || s.includes('جامع') || s.includes('مخاطبین') || s.includes('فهرست')
+      );
+      if (dataSheetCandidate) {
+        sheetName = dataSheetCandidate;
+      }
       const raw = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
       return raw.map(c => {
         const clean = {};

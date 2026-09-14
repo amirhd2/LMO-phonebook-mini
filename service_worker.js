@@ -1,4 +1,4 @@
-const CACHE_NAME = 'phonebook-pwa-v2.0.2-live';
+const CACHE_NAME = 'phonebook-pwa-v2.0.3-live';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,6 +11,7 @@ const ASSETS_TO_CACHE = [
   './icon-192.png',
   './icon-512.png',
   './xlsx.full.min.js',
+  './exceljs.min.js',
   './Version Info.json',
   './service_worker.js',
   './LMO phonebook.xlsx',
