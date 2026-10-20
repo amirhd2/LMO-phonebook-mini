@@ -1,4 +1,4 @@
-const CACHE_NAME = 'phonebook-pwa-v2.0.3-live';
+const CACHE_NAME = 'phonebook-pwa-v2.0.4-live';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

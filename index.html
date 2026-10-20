@@ -1714,13 +1714,21 @@
       .unit-table td {
         display: block;
         position: relative;
+        min-height: 44px;
+        line-height: 26px;
         padding: 9px 10px;
         padding-right: 44%;
+        box-sizing: border-box;
         border-bottom: 1px solid var(--border-color);
         text-align: center;
         background-color: var(--card-bg);
       }
       .unit-table td:last-child { border-bottom: 0; }
+      .unit-table td:empty::after {
+        content: '\00a0';
+        visibility: hidden;
+        display: inline-block;
+      }
       .unit-table td::before {
         content: attr(data-label);
         position: absolute;
@@ -1751,8 +1759,13 @@
         display: block !important;
         padding: 8px 10px !important;
         padding-right: 10px !important;
+        min-height: auto !important;
+        line-height: normal !important;
       }
       .edit-actions-banner-cell::before {
+        display: none !important;
+      }
+      .edit-actions-banner-cell:empty::after {
         display: none !important;
       }
       .edit-actions-banner-flex {
@@ -1763,6 +1776,29 @@
         width: 95%;
         margin: 0 auto;
         font-size: 13.5px;
+      }
+      .unit-table td.admin-editable-cell.is-editing {
+        width: 100% !important;
+        margin: 0 !important;
+        min-height: 44px !important;
+        line-height: 26px !important;
+        padding: 9px 10px !important;
+        padding-right: 44% !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        border-radius: 0 !important;
+        box-shadow: inset 0 0 0 2px var(--unit-theme-color, #2196F3) !important;
+      }
+      .unit-table td:last-child.admin-editable-cell.is-editing {
+        border-bottom: none !important;
+      }
+      .name-cell-content .name-text-wrapper.admin-editable-cell.is-editing {
+        width: 95%;
+        margin: 0 auto;
+        font-size: 13.5px;
+        min-height: 30px;
+        box-sizing: border-box;
       }
     }
   </style>
@@ -1775,7 +1811,7 @@
   <div id="splashScreen" class="splash-screen">
     <img src="icon.png" alt="دفترچه تلفن">
     <h2>دفترچه تلفن سازمان</h2>
-    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.3 (آفلاین)</span>
+    <span class="version-badge" style="margin-top: 8px;">نسخه 2.0.4 (آفلاین)</span>
   </div>
 
   <div class="app-header">
@@ -1783,7 +1819,7 @@
       <h1 class="header-title">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
         <span>دفترچه تلفن سازمان</span>
-        <span class="version-badge">2.0.3</span>
+        <span class="version-badge">2.0.4</span>
       </h1>
 
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -1948,7 +1984,7 @@
                 <span class="btn-action-icon">📱</span>
                 <div class="btn-action-info">
                   <div class="btn-action-title">نسخه نصب‌شده برنامه</div>
-                  <div class="btn-action-desc">نسخه 2.0.3 (کاملاً آفلاین و مستقل)</div>
+                  <div class="btn-action-desc">نسخه 2.0.4 (کاملاً آفلاین و مستقل)</div>
                 </div>
               </button>
 
@@ -3886,6 +3922,18 @@
       container.innerHTML = `
         <div class="changelog-entry">
           <div class="changelog-ver-header">
+            <span class="changelog-ver-badge">نسخه 2.0.4</span>
+            <span class="changelog-ver-date">1405/07/28</span>
+          </div>
+          <ul class="changelog-items">
+            <li>استانداردسازی و تثبیت ارتفاع تمامی سلول‌های کارت مخاطب در صفحه‌های کوچک (موبایل و تبلت)</li>
+            <li>رفع کامل مشکل کاهش و جمع‌شدن خودکار ارتفاع سلول‌های فاقد محتوا (تلفن داخلی، VoIP و تلفن مستقیم) و یکسان‌سازی دقیق ارتفاع با سلول‌های دارای داده</li>
+            <li>پشتیبانی یکپارچه برای ورودی‌های قبلی پایگاه داده و مخاطبین جدید واردشده به برنامه</li>
+            <li>تنظیم دقیق تراز عمودی و افقی نشانگر فیلدها و کادرهای ویرایش کارت بدون تداخل یا افتادگی</li>
+          </ul>
+        </div>
+        <div class="changelog-entry">
+          <div class="changelog-ver-header">
             <span class="changelog-ver-badge">نسخه 2.0.3</span>
             <span class="changelog-ver-date">1405/06/24</span>
           </div>
@@ -4035,7 +4083,7 @@
         <div style="text-align: center; margin-bottom: 14px;">
           <img src="icon.png" width="56" height="56" style="border-radius: 12px; margin-bottom: 6px;" alt="logo" onerror="this.style.display='none'">
           <h3 style="margin: 0; font-size: 17px;">دفترچه تلفن سازمان</h3>
-          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.3</div>
+          <div class="version-badge" style="margin-top: 6px;">نسخه فعلی 2.0.4</div>
         </div>
         <div style="background: var(--status-bg); padding: 14px; border-radius: 10px; font-size: 13px; line-height: 2;">
           <div>📌 <strong>وضعیت برنامه:</strong> کاملاً آفلاین و مستقل (PWA)</div>
