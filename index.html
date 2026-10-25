@@ -2532,20 +2532,36 @@
     }
     .field-config-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 7px 10px;
-      margin-bottom: 6px;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
       gap: 8px;
     }
+    .field-config-line-1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .field-config-line-2 {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-color);
+      width: 100%;
+    }
     .field-config-label {
-      font-size: 13px;
-      font-weight: 500;
-      flex-grow: 1;
-      text-align: right;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .field-config-actions {
       display: flex;
@@ -3292,6 +3308,45 @@
     </div>
   </div>
 
+  <!-- Field Edit Modal -->
+  <div id="fieldEditModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 400px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px;">
+          <span>✏️</span>
+          <span>ویرایش فیلد نمایشی</span>
+        </h3>
+        <button class="close-btn" onclick="closeFieldEditModal()" title="بستن">✕</button>
+      </div>
+      <div style="margin-top: 10px;">
+        <div class="form-group">
+          <label class="form-label" for="fieldEditLabelInput">عنوان فیلد:</label>
+          <input type="text" id="fieldEditLabelInput" class="form-input" placeholder="عنوان فیلد..." inputmode="text" data-text-input="true" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fieldEditTypeSelect">نوع ورودی داده:</label>
+          <select id="fieldEditTypeSelect" class="form-input" style="font-weight: 600;">
+            <option value="text">📝 متنی (حروف)</option>
+            <option value="phone">🔢 عددی / تلفن (اعداد)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-save" onclick="saveFieldEditModal()" title="ذخیره تغییرات">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="btn-circle-action-cancel" onclick="closeFieldEditModal()" title="انصراف">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Generic In-App Prompt Modal (Replaces window.prompt) -->
   <div id="appPromptModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
     <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
@@ -3632,6 +3687,14 @@
         const isInput = el.tagName === 'INPUT' || el.tagName === 'TEXTAREA';
         const isContentEditable = el.getAttribute('contenteditable') === 'true';
         if (!isInput && !isContentEditable) return;
+
+        // Strictly preserve text mode for explicitly marked text input elements
+        if (el.getAttribute('data-text-input') === 'true' || el.getAttribute('inputmode') === 'text') {
+          el.setAttribute('inputmode', 'text');
+          el.removeAttribute('pattern');
+          el.removeAttribute('data-numeric-type');
+          return;
+        }
 
         const inputmode = el.getAttribute('inputmode');
         const numericType = el.getAttribute('data-numeric-type');
@@ -4597,36 +4660,36 @@
       if (countBadge) countBadge.textContent = phonebooks.length;
 
       container.innerHTML = `
-        <div class="fullpage-workspace-header">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <span style="font-size: 26px;">📖</span>
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <h3 style="margin: 0; font-size: 17.5px; font-weight: 800; color: var(--text-color);">${escapeHtml(pb.name)}</h3>
-                ${isActivePb ? '<span class="header-pb-badge" style="background: rgba(46, 125, 50, 0.15); color: #2e7d32; border-color: rgba(46, 125, 50, 0.3);">✓ دفترتلفن فعال صفحه اصلی</span>' : ''}
-                ${pb.isDefault ? '<span class="header-pb-badge" style="background: rgba(245, 127, 23, 0.15); color: #e65100; border-color: rgba(245, 127, 23, 0.3);">پیش‌فرض</span>' : ''}
-              </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
-                ${pbContacts.length} مخاطب ثبت‌شده • ${unitsCount} واحد سازمانی
-              </div>
+        <div class="fullpage-workspace-header" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Row 1: Badges on Left -->
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;">
+            ${pb.isDefault ? '<span class="header-pb-badge" style="background: rgba(245, 127, 23, 0.15); color: #e65100; border-color: rgba(245, 127, 23, 0.3);">پیش‌فرض</span>' : ''}
+            ${isActivePb ? '<span class="header-pb-badge" style="background: rgba(46, 125, 50, 0.15); color: #2e7d32; border-color: rgba(46, 125, 50, 0.3);">✓ دفترتلفن فعال</span>' : ''}
+            ${!isActivePb ? `<button type="button" class="btn-icon-small primary-highlight" style="padding: 3px 10px; font-size: 11.5px; font-weight: 600;" onclick="switchPhonebook('${escapeHtml(pb.id)}'); renderFullpagePbList(); renderFullpagePbWorkspace();">✓ انتخاب به عنوان فعال</button>` : ''}
+          </div>
+
+          <!-- Row 2: Icon + Name on Right, Edit & Delete icons on Left -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+              <span style="font-size: 26px;">📖</span>
+              <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: var(--text-color);">${escapeHtml(pb.name)}</h3>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" class="btn-icon-small mobile-back-to-list-btn" style="padding: 6px 10px; font-size: 11.5px;" onclick="setFullpageMobileTab('list')" title="لیست دفترتلفن‌ها">
+                📋 لیست
+              </button>
+              <button type="button" class="btn-icon-small" style="padding: 6px 10px; font-size: 13px;" title="تغییر نام دفترتلفن" onclick="promptRenameCurrentPhonebook()">
+                ✏️
+              </button>
+              <button type="button" class="btn-icon-small" style="color: #e53935; padding: 6px 10px; font-size: 13px;" title="حذف دفترتلفن" onclick="promptDeleteCurrentPhonebook()">
+                🗑️
+              </button>
             </div>
           </div>
 
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button type="button" class="btn-icon-small mobile-back-to-list-btn" style="padding: 7px 12px; font-size: 12px; font-weight: 600;" onclick="setFullpageMobileTab('list')">
-              📋 لیست دفترتلفن‌ها
-            </button>
-            ${!isActivePb ? `
-              <button type="button" class="btn-icon-small primary-highlight" style="padding: 7px 14px; font-size: 12.5px; font-weight: 600;" onclick="switchPhonebook('${escapeHtml(pb.id)}'); renderFullpagePbList(); renderFullpagePbWorkspace();">
-                ✓ انتخاب به عنوان فعال
-              </button>
-            ` : ''}
-            <button type="button" class="btn-icon-small" style="padding: 7px 12px; font-size: 12.5px;" title="ویرایش عنوان این دفترتلفن" onclick="promptRenameCurrentPhonebook()">
-              ✏️ تغییر نام
-            </button>
-            <button type="button" class="btn-icon-small" style="color: #e53935; padding: 7px 12px; font-size: 12.5px;" title="حذف این دفترتلفن" onclick="promptDeleteCurrentPhonebook()">
-              🗑️ حذف دفترتلفن
-            </button>
+          <!-- Row 3: Contacts & Units count -->
+          <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
+            ${pbContacts.length} مخاطب ثبت‌شده • ${unitsCount} واحد سازمانی
           </div>
         </div>
 
@@ -4641,8 +4704,12 @@
           <div id="fullpagePbFieldsConfigList">
             <!-- Rendered via renderFieldsConfigList -->
           </div>
-          <div style="display: flex; gap: 8px; margin-top: 12px; max-width: 480px; width: 100%;">
-            <input type="text" id="fullpageNewCustomFieldInput" class="form-input" style="flex: 1; min-width: 0; font-size: 13px; padding: 7px 12px;" placeholder="عنوان فیلد جدید (مثلاً: شماره اتاق، ایمیل)">
+          <div style="display: flex; gap: 8px; margin-top: 12px; width: 100%; flex-wrap: wrap;">
+            <input type="text" id="fullpageNewCustomFieldInput" class="form-input" style="flex: 2; min-width: 160px; font-size: 13px; padding: 7px 12px;" placeholder="عنوان فیلد جدید (مثلاً: سمت، شماره همراه، ایمیل)" inputmode="text" data-text-input="true" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomFieldToPhonebook();}">
+            <select id="fullpageNewCustomFieldTypeSelect" class="form-input" style="flex: 1; min-width: 140px; font-size: 12.5px; font-weight: 600; padding: 7px 10px;" title="نوع ورودی داده">
+              <option value="text">📝 متنی (حروف)</option>
+              <option value="phone">🔢 عددی / تلفن (اعداد)</option>
+            </select>
             <button type="button" class="btn-icon-small primary-highlight" style="flex-shrink: 0; padding: 7px 14px; font-size: 12.5px; white-space: nowrap;" onclick="addCustomFieldToPhonebook()">➕ افزودن فیلد</button>
           </div>
         </div>
@@ -4655,8 +4722,8 @@
           <div style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.6;">
             واحدهای سازمانی این دفترتلفن را تعریف کرده، رنگ اختصاصی آن‌ها را مشخص نمایید و ترتیب قرارگیری واحدها و بخش‌های زیرمجموعه را با درگ و دراپ تعیین کنید.
           </div>
-          <div style="display: flex; gap: 8px; margin-bottom: 14px; max-width: 480px; width: 100%;">
-            <input type="text" id="fullpageNewPbUnitInput" class="form-input" style="flex: 1; min-width: 0; font-size: 13px; padding: 7px 12px;" placeholder="عنوان واحد سازمانی جدید...">
+          <div style="display: flex; gap: 8px; margin-bottom: 14px; width: 100%; flex-wrap: wrap;">
+            <input type="text" id="fullpageNewPbUnitInput" class="form-input" style="flex: 1; min-width: 200px; font-size: 13px; padding: 7px 12px;" placeholder="عنوان واحد سازمانی جدید..." inputmode="text" data-text-input="true" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault(); addNewUnitToPhonebook();}">
             <button type="button" class="btn-icon-small primary-highlight" style="flex-shrink: 0; padding: 7px 14px; font-size: 12.5px; white-space: nowrap;" onclick="addNewUnitToPhonebook()">➕ افزودن واحد</button>
           </div>
           <div id="fullpagePbUnitsTreeList">
@@ -4885,23 +4952,31 @@
                ondragover="handleFieldDragOver(event)"
                ondragleave="handleFieldDragLeave(event)"
                ondrop="handleFieldDrop(event, '${escapeHtml(field.id)}')">
-            <div class="field-config-actions">
-              <button type="button" class="drag-handle-btn" title="جابه‌جایی با درگ و دراپ">⠿</button>
-              <button type="button" class="btn-arrow-order" ${isFirst ? 'disabled' : ''} onclick="moveFieldOrder('${escapeHtml(field.id)}', -1)" title="انتقال به بالا">▲</button>
-              <button type="button" class="btn-arrow-order" ${isLast ? 'disabled' : ''} onclick="moveFieldOrder('${escapeHtml(field.id)}', 1)" title="انتقال به پایین">▼</button>
+            <div class="field-config-line-1">
+              <div class="field-config-actions">
+                <button type="button" class="drag-handle-btn" title="جابه‌جایی با درگ و دراپ">⠿</button>
+                <button type="button" class="btn-arrow-order" ${isFirst ? 'disabled' : ''} onclick="moveFieldOrder('${escapeHtml(field.id)}', -1)" title="انتقال به بالا">▲</button>
+                <button type="button" class="btn-arrow-order" ${isLast ? 'disabled' : ''} onclick="moveFieldOrder('${escapeHtml(field.id)}', 1)" title="انتقال به پایین">▼</button>
+              </div>
+              <div class="field-config-label">
+                <span>${escapeHtml(field.label)}</span>
+                ${isFixed ? '<span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">(اصلی)</span>' : ''}
+                <span style="font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 8px; background: var(--selector-bg); color: var(--text-color); margin-right: 6px;">
+                  ${(field.type === 'phone' || field.type === 'integer' || field.type === 'numeric') ? '🔢 عددی' : '📝 متنی'}
+                </span>
+              </div>
             </div>
-            <div class="field-config-label">
-              <span>${escapeHtml(field.label)}</span>
-              ${isFixed ? '<span style="font-size: 11px; color: var(--text-muted); margin-right: 4px;">(اصلی)</span>' : ''}
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
-                <input type="checkbox" ${isChecked ? 'checked' : ''} ${isFixed ? 'disabled' : ''} onchange="toggleFieldVisibility('${escapeHtml(field.id)}', this.checked)">
-                <span>نمایش</span>
-              </label>
-              ${!isFixed ? `
-                <button type="button" class="btn-icon-small" style="color: #e53935; padding: 2px 6px; font-size: 11px;" onclick="removeCustomField('${escapeHtml(field.id)}')" title="حذف فیلد">🗑️</button>
-              ` : ''}
+            <div class="field-config-line-2">
+              <div style="display: flex; align-items: center; gap: 8px; margin-right: auto;">
+                <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                  <input type="checkbox" ${isChecked ? 'checked' : ''} ${isFixed ? 'disabled' : ''} onchange="toggleFieldVisibility('${escapeHtml(field.id)}', this.checked)">
+                  <span>نمایش</span>
+                </label>
+                <button type="button" class="btn-icon-small" style="color: #2196F3; padding: 3px 8px; font-size: 11.5px;" onclick="promptEditCustomField('${escapeHtml(field.id)}')" title="ویرایش نام و نوع فیلد">✏️ ویرایش</button>
+                ${!isFixed ? `
+                  <button type="button" class="btn-icon-small" style="color: #e53935; padding: 3px 8px; font-size: 11.5px;" onclick="removeCustomField('${escapeHtml(field.id)}')" title="حذف فیلد">🗑️ حذف</button>
+                ` : ''}
+              </div>
             </div>
           </div>
         `;
@@ -4953,6 +5028,9 @@
         input.focus();
         return;
       }
+      const typeSelect = document.getElementById('fullpageNewCustomFieldTypeSelect');
+      const selectedType = typeSelect ? typeSelect.value : 'text';
+
       const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
       if (!activePb) return;
       if (!activePb.fields) activePb.fields = [];
@@ -4965,7 +5043,7 @@
       activePb.fields.push({
         id: label,
         label: label,
-        type: 'text',
+        type: selectedType,
         visible: true,
         order: activePb.fields.length,
         isFixed: false
@@ -4977,7 +5055,8 @@
       if (activePb.id === currentPhonebookId) {
         renderList(getContactsForActivePhonebook());
       }
-      showToast(`✅ فیلد «${label}» اضافه شد`);
+      const typeLabel = selectedType === 'phone' ? 'عددی/تلفن' : 'متنی';
+      showToast(`✅ فیلد ${typeLabel} «${label}» اضافه شد`);
     }
 
     async function removeCustomField(fieldId) {
@@ -4991,6 +5070,89 @@
         renderList(getContactsForActivePhonebook());
       }
       showToast(`🗑️ فیلد حذف شد`);
+    }
+
+    let editingFieldIdContext = null;
+
+    function promptEditCustomField(fieldId) {
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.fields) return;
+      const field = activePb.fields.find(f => f.id === fieldId);
+      if (!field) return;
+
+      editingFieldIdContext = fieldId;
+      const labelInput = document.getElementById('fieldEditLabelInput');
+      const typeSelect = document.getElementById('fieldEditTypeSelect');
+      if (labelInput) labelInput.value = field.label || field.id;
+      if (typeSelect) typeSelect.value = (field.type === 'phone' || field.type === 'integer' || field.type === 'numeric') ? 'phone' : 'text';
+
+      const modal = document.getElementById('fieldEditModal');
+      if (modal) {
+        lockBodyScroll();
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          if (labelInput) {
+            labelInput.focus();
+            labelInput.select();
+          }
+        }, 100);
+      }
+    }
+
+    function closeFieldEditModal() {
+      const modal = document.getElementById('fieldEditModal');
+      if (modal) modal.style.display = 'none';
+      editingFieldIdContext = null;
+      unlockBodyScroll();
+    }
+
+    async function saveFieldEditModal() {
+      if (!editingFieldIdContext) return;
+      const labelInput = document.getElementById('fieldEditLabelInput');
+      const typeSelect = document.getElementById('fieldEditTypeSelect');
+      if (!labelInput) return;
+
+      const newLabel = labelInput.value.trim();
+      if (!newLabel) {
+        showToast('⚠️ عنوان فیلد نمی‌تواند خالی باشد.');
+        labelInput.focus();
+        return;
+      }
+      const newType = typeSelect ? typeSelect.value : 'text';
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.fields) return;
+
+      if (activePb.fields.some(f => f.id !== editingFieldIdContext && (f.label === newLabel || f.id === newLabel))) {
+        showToast('⚠️ فیلدی با این عنوان از قبل وجود دارد.');
+        return;
+      }
+
+      const field = activePb.fields.find(f => f.id === editingFieldIdContext);
+      if (field) {
+        const oldId = field.id;
+        field.label = newLabel;
+        field.type = newType;
+
+        if (!field.isFixed && oldId !== newLabel) {
+          field.id = newLabel;
+          contacts.forEach(c => {
+            if ((c.phonebookId || 'pb-central') === activePb.id && c[oldId] !== undefined) {
+              c[newLabel] = c[oldId];
+              delete c[oldId];
+            }
+          });
+          await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+        }
+
+        await savePhonebooksData(phonebooks);
+        renderFieldsConfigList(activePb);
+        if (activePb.id === currentPhonebookId) {
+          renderList(getContactsForActivePhonebook());
+        }
+        closeFieldEditModal();
+        showToast(`✅ تغییرات فیلد «${newLabel}» با موفقیت ذخیره شد`);
+      }
     }
 
     function handleUnitDragStart(e, unitId) {
@@ -5200,7 +5362,47 @@
       input.value = '';
       renderUnitsTreeList(activePb);
       renderFullpagePbList();
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
       showToast(`✅ واحد «${unitName}» افزوده شد`);
+    }
+
+    async function addSubUnitToUnit(unitId) {
+      const input = document.getElementById(`newSubUnitInput-${unitId}`);
+      if (!input) return;
+      const subName = input.value.trim();
+      if (!subName) {
+        showToast('⚠️ لطفاً عنوان بخش جدید را وارد کنید.');
+        input.focus();
+        return;
+      }
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const u = activePb.units.find(item => item.id === unitId);
+      if (!u) return;
+
+      if (!u.subUnits) u.subUnits = [];
+
+      if (u.subUnits.some(s => s.name === subName)) {
+        showToast('⚠️ بخشی با این عنوان در این واحد قبلاً تعریف شده است.');
+        return;
+      }
+
+      u.subUnits.push({
+        id: 'sub-' + Date.now(),
+        name: subName,
+        order: u.subUnits.length
+      });
+
+      await savePhonebooksData(phonebooks);
+      input.value = '';
+      renderUnitsTreeList(activePb);
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+      showToast(`✅ بخش «${subName}» به واحد «${u.name}» افزوده شد`);
     }
 
     async function promptRenameUnit(unitId) {
@@ -6009,12 +6211,24 @@
         return;
       }
       const customFields = pb.fields.filter(f => !f.isFixed && f.visible !== false && f.id !== 'نام و نام خانوادگی' && f.id !== 'تلفن داخلی' && f.id !== 'VoIP' && f.id !== 'تلفن مستقیم');
-      container.innerHTML = customFields.map(cf => `
-        <div class="form-group">
-          <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)}:</label>
-          <input type="text" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}">
-        </div>
-      `).join('');
+      container.innerHTML = customFields.map(cf => {
+        const isNumeric = (cf.type === 'phone' || cf.type === 'integer' || cf.type === 'numeric');
+        if (isNumeric) {
+          return `
+            <div class="form-group">
+              <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(عددی/تلفن)</span>:</label>
+              <input type="tel" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}" data-custom-type="numeric" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" autocomplete="off">
+            </div>
+          `;
+        } else {
+          return `
+            <div class="form-group">
+              <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(متنی)</span>:</label>
+              <input type="text" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}" data-custom-type="text" inputmode="text" data-text-input="true" autocomplete="off">
+            </div>
+          `;
+        }
+      }).join('');
     }
 
     async function promptAddSubUnitInline() {
@@ -6110,8 +6324,13 @@
       const customFieldValues = {};
       document.querySelectorAll('[data-custom-field]').forEach(cfInput => {
         const fieldKey = cfInput.getAttribute('data-custom-field');
+        const customType = cfInput.getAttribute('data-custom-type');
         if (fieldKey) {
-          customFieldValues[fieldKey] = cfInput.value.trim();
+          let val = cfInput.value.trim();
+          if (customType === 'numeric') {
+            val = NumericInputSystem.normalize(val, 'phone');
+          }
+          customFieldValues[fieldKey] = val;
         }
       });
 
@@ -7715,10 +7934,13 @@
           subUnitGroups[s].push(c);
         });
 
-        // Sort sub-units: empty sub-unit (عمومی) first, then by configured order
+        // Sort sub-units: contacts with sub-units first (ordered by sub-unit configuration), contacts without sub-units last.
         foundSubUnits.sort((a, b) => {
-          if (!a && b) return -1;
-          if (a && !b) return 1;
+          const hasA = Boolean(a && a.trim());
+          const hasB = Boolean(b && b.trim());
+          if (hasA && !hasB) return -1;
+          if (!hasA && hasB) return 1;
+          if (!hasA && !hasB) return 0;
           const ordA = subUnitOrderMap.has(normalizePersianText(a)) ? subUnitOrderMap.get(normalizePersianText(a)) : 9999;
           const ordB = subUnitOrderMap.has(normalizePersianText(b)) ? subUnitOrderMap.get(normalizePersianText(b)) : 9999;
           return ordA - ordB;
