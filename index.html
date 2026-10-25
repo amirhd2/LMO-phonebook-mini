@@ -155,7 +155,9 @@
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 4px 12px var(--shadow-color);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1200;
     }
     
     .header-top-line {
@@ -360,10 +362,28 @@
       }
     }
 
+    /* Sticky Standalone Search Bar Wrapper (Sticks across full document body) */
+    .sticky-search-bar-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      padding: 10px 0;
+      margin: 0 0 14px 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--bg-color);
+      transition: background-color 0.3s ease;
+    }
     .search-container {
       position: relative;
       display: flex;
       align-items: center;
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 6px 20px var(--shadow-color);
+      backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
     }
     .search-box {
       width: 100%;
@@ -889,15 +909,21 @@
 
     .color-palette-grid {
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 8px;
-      max-height: 220px;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 7px;
+      max-height: 250px;
       overflow-y: auto;
-      padding: 6px;
+      padding: 8px;
       margin-bottom: 12px;
       border: 1px solid var(--border-color);
       border-radius: 10px;
       background: var(--input-bg);
+      scrollbar-width: thin;
+    }
+    @media (max-width: 600px) {
+      .color-palette-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
     }
     .color-swatch-btn {
       width: 100%;
@@ -945,7 +971,7 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.6);
-      z-index: 1000;
+      z-index: 3000;
       align-items: center;
       justify-content: center;
       padding: 16px;
@@ -1817,19 +1843,22 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
     }
     .header-pb-dropdown-anchor {
       position: relative;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 6px;
     }
     .header-active-pb-trigger {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      width: 100%;
       background: var(--status-bg);
       border: 1.5px solid var(--border-color);
       border-radius: 20px;
-      padding: 5px 12px;
+      padding: 7px 14px;
       cursor: pointer;
       color: var(--text-color);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1847,10 +1876,10 @@
       box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.15);
     }
     .header-pb-title-label {
-      font-size: 15.5px;
+      font-size: 15px;
       font-weight: 800;
       letter-spacing: 0.2px;
-      max-width: 220px;
+      max-width: 240px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1884,16 +1913,15 @@
     /* Header Phonebook Dropdown with Live Search */
     .header-pb-dropdown {
       position: absolute;
-      top: calc(100% + 8px);
+      top: calc(100% + 6px);
       right: 0;
-      min-width: 300px;
-      max-width: 380px;
-      width: 90vw;
+      left: 0;
+      width: 100%;
       background: var(--card-bg);
       border: 1.5px solid var(--border-color);
       border-radius: 14px;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.22);
-      z-index: 1050;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.28);
+      z-index: 2500;
       overflow: hidden;
       animation: pbDropdownFade 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -2369,38 +2397,90 @@
       color: #60a5fa;
     }
 
-    /* Sub-unit section headers and tags */
+    /* Sub-unit section headers and tags (Executive Capsule Ribbon Styling) */
     .subunit-section-container {
-      margin-top: 10px;
-      margin-bottom: 6px;
+      margin-top: 14px;
+      margin-bottom: 8px;
     }
-    .subunit-header-banner {
-      background: var(--status-bg);
-      border-right: 4px solid var(--unit-theme-color, #2196F3);
-      border-radius: 8px;
-      padding: 7px 12px;
-      font-size: 13px;
-      font-weight: bold;
+    .subunit-capsule-ribbon {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
+      margin: 18px 0 10px 0;
+      padding: 2px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .subunit-capsule-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: var(--unit-container-bg, rgba(33, 150, 243, 0.12));
+      color: var(--unit-theme-color, #1976d2);
+      border: 1.5px solid var(--unit-container-border, rgba(33, 150, 243, 0.35));
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .subunit-capsule-pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+    [data-theme="dark"] .subunit-capsule-pill {
+      color: var(--unit-lighter-accent, #93c5fd);
+    }
+    .subunit-label-prefix {
+      font-size: 12px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    .subunit-title-text {
+      font-weight: 800;
+      font-size: 13.5px;
+      letter-spacing: -0.2px;
+    }
+    .subunit-divider-line {
+      flex-grow: 1;
+      height: 1.5px;
+      background: linear-gradient(to left, var(--unit-container-border, rgba(33, 150, 243, 0.35)), transparent);
+      margin: 0 6px;
+      opacity: 0.7;
+      border-radius: 1px;
+    }
+    .subunit-badge-count-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--unit-container-border, var(--border-color));
       color: var(--text-color);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      font-size: 11.5px;
+      font-weight: 700;
+      box-shadow: 0 1px 4px var(--shadow-color);
+      flex-shrink: 0;
     }
     .subunit-tag-pill {
       display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 8px;
-      background: rgba(33, 150, 243, 0.1);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 10px;
+      background: rgba(33, 150, 243, 0.12);
       color: #1976d2;
-      border: 1px solid rgba(33, 150, 243, 0.2);
+      border: 1px solid rgba(33, 150, 243, 0.25);
     }
     [data-theme="dark"] .subunit-tag-pill {
-      background: rgba(59, 130, 246, 0.15);
+      background: rgba(59, 130, 246, 0.18);
       color: #93c5fd;
-      border-color: rgba(59, 130, 246, 0.3);
+      border-color: rgba(59, 130, 246, 0.35);
     }
 
     /* Phonebook Manager in Settings */
@@ -2603,45 +2683,14 @@
   </div>
 
   <div class="app-header">
+    <!-- Row 1: Brand (Phone Logo + Version Badge) on Right, 3 Circular Action Buttons on Left -->
     <div class="header-top-line">
       <div class="header-brand-group">
         <img src="icon.png" width="28" height="28" style="border-radius: 6px; object-fit: cover;" alt="logo" onerror="this.style.display='none'">
-        <div class="header-pb-dropdown-anchor" id="headerPbDropdownAnchor">
-          <button type="button" class="header-active-pb-trigger" id="headerActivePbTrigger" onclick="togglePhonebookDropdown(event)" title="انتخاب دفترتلفن یا استان فعال (کلیک برای باز کردن لیست و جستجو)">
-            <span style="font-size: 15px;">📖</span>
-            <span class="header-pb-title-label" id="headerActivePbTitle">دفتر مرکزی</span>
-            <span class="header-pb-badge" id="headerActivePbBadge">فعال</span>
-            <span class="header-pb-arrow" id="headerActivePbArrow">▾</span>
-          </button>
-
-          <!-- Header Phonebook Dropdown with Live Search -->
-          <div class="header-pb-dropdown" id="headerPbDropdown" style="display: none;" onclick="event.stopPropagation()">
-            <div class="pb-dropdown-header">
-              <div class="pb-dropdown-search-box">
-                <span style="font-size: 13px; color: var(--text-muted);">🔍</span>
-                <input type="text" id="pbDropdownSearchInput" class="pb-dropdown-search-input" placeholder="جستجوی استان یا دفترتلفن..." oninput="handlePbDropdownSearch(this.value)" autocomplete="off">
-                <button type="button" class="pb-dropdown-clear-search" id="pbDropdownClearSearch" style="display: none;" onclick="clearPbDropdownSearch()">✕</button>
-              </div>
-            </div>
-            <div class="pb-dropdown-list" id="pbDropdownList">
-              <!-- Rendered dynamically via JS -->
-            </div>
-            <div class="pb-dropdown-footer">
-              <button type="button" id="dropdownManagePbBtn" class="pb-dropdown-action-btn primary" style="display: none;" onclick="closePhonebookDropdown(); openFullpagePhonebookManager();">
-                <span>⚙️</span>
-                <span>مدیریت جامع دفترتلفن‌ها و ساختار</span>
-              </button>
-              <button type="button" id="dropdownAddPbBtn" class="pb-dropdown-action-btn" style="display: none;" onclick="closePhonebookDropdown(); promptCreatePhonebook();">
-                <span>➕</span>
-                <span>افزودن دفترتلفن جدید</span>
-              </button>
-            </div>
-          </div>
-        </div>
         <span class="version-badge">3.0.0</span>
       </div>
 
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div class="header-actions-group" style="display: flex; gap: 8px; align-items: center;">
         <button id="addContactBtn" class="btn-add-contact-circle" style="display: none;" title="افزودن مخاطب جدید" onclick="openAddContactModal()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -2663,14 +2712,45 @@
       </div>
     </div>
 
+    <!-- Row 2: Dedicated Full-Width Active Phonebook Selector Dropdown -->
+    <div class="header-pb-dropdown-anchor" id="headerPbDropdownAnchor">
+      <button type="button" class="header-active-pb-trigger" id="headerActivePbTrigger" onclick="togglePhonebookDropdown(event)" title="انتخاب دفترتلفن یا استان فعال (کلیک برای باز کردن لیست و جستجو)">
+        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+          <span style="font-size: 15px;">📖</span>
+          <span class="header-pb-title-label" id="headerActivePbTitle">دفتر مرکزی</span>
+          <span class="header-pb-badge" id="headerActivePbBadge">فعال</span>
+        </div>
+        <span class="header-pb-arrow" id="headerActivePbArrow">▾</span>
+      </button>
+
+      <!-- Header Phonebook Dropdown with Live Search -->
+      <div class="header-pb-dropdown" id="headerPbDropdown" style="display: none;" onclick="event.stopPropagation()">
+        <div class="pb-dropdown-header">
+          <div class="pb-dropdown-search-box">
+            <span style="font-size: 13px; color: var(--text-muted);">🔍</span>
+            <input type="text" id="pbDropdownSearchInput" class="pb-dropdown-search-input" placeholder="جستجوی استان یا دفترتلفن..." oninput="handlePbDropdownSearch(this.value)" autocomplete="off">
+            <button type="button" class="pb-dropdown-clear-search" id="pbDropdownClearSearch" style="display: none;" onclick="clearPbDropdownSearch()">✕</button>
+          </div>
+        </div>
+        <div class="pb-dropdown-list" id="pbDropdownList">
+          <!-- Rendered dynamically via JS -->
+        </div>
+        <div class="pb-dropdown-footer">
+          <button type="button" id="dropdownManagePbBtn" class="pb-dropdown-action-btn primary" style="display: none;" onclick="closePhonebookDropdown(); openFullpagePhonebookManager();">
+            <span>⚙️</span>
+            <span>مدیریت جامع دفترتلفن‌ها و ساختار</span>
+          </button>
+          <button type="button" id="dropdownAddPbBtn" class="pb-dropdown-action-btn" style="display: none;" onclick="closePhonebookDropdown(); promptCreatePhonebook();">
+            <span>➕</span>
+            <span>افزودن دفترتلفن جدید</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Multi-Phonebook Tabs Navigation Row (Maintained for compatibility, hidden in favor of header dropdown) -->
     <div id="phonebookSwitcherRow" class="phonebook-switcher-row" style="display: none;">
       <!-- Populated dynamically via JS -->
-    </div>
-
-    <div class="search-container">
-      <input type="text" id="searchInput" class="search-box" placeholder="جستجوی نام، واحد یا شماره داخلی...">
-      <button type="button" class="clear-search-btn" id="clearSearchBtn" title="پاک کردن جستجو" onclick="clearSearchInput()">✕</button>
     </div>
 
     <!-- Org Chart View Checkbox Item (فشرده، متنی و زیبا با قابلیت تیک زدن) -->
@@ -2693,6 +2773,14 @@
           <span class="org-chart-text">نمای چارت سازمانی</span>
         </span>
       </label>
+    </div>
+  </div>
+
+  <!-- Standalone Sticky Search Bar Wrapper (Sticks across entire document body scroll) -->
+  <div class="sticky-search-bar-wrapper">
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-box" placeholder="جستجوی نام، واحد یا شماره داخلی...">
+      <button type="button" class="clear-search-btn" id="clearSearchBtn" title="پاک کردن جستجو" onclick="clearSearchInput()">✕</button>
     </div>
   </div>
 
@@ -3083,6 +3171,88 @@
           📥 دریافت فایل اکسل
         </button>
         <button type="button" class="btn-circle-action-cancel" onclick="closeExcelExportModal()" title="انصراف">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit & Sub-Unit Contact Migration Modal (Prevent Orphaned Data) -->
+  <div id="unitMigrationModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 520px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16.5px; color: #1976d2;">
+          <span>🔄</span>
+          <span id="migrationModalTitle">انتقال مخاطبین و پاکسازی</span>
+        </h3>
+        <button class="close-btn" onclick="closeMigrationModal()" title="بستن">✕</button>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <!-- Banner Info -->
+        <div id="migrationModalBanner" style="background: rgba(33, 150, 243, 0.1); border-right: 4px solid #2196F3; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; color: var(--text-color); margin-bottom: 14px; line-height: 1.6;">
+          <!-- Filled dynamically via JS -->
+        </div>
+
+        <!-- Mode Radio Group -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" style="font-weight: bold; margin-bottom: 8px;">تعیین وضعیت مخاطبین این واحد/بخش:</label>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--text-color);">
+              <input type="radio" name="migrationTypeRadio" value="bulk" checked onchange="toggleMigrationModeUI('bulk')">
+              <span>انتقال یکجای تمامی مخاطبین به واحد/بخش دیگر</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--text-color);">
+              <input type="radio" name="migrationTypeRadio" value="individual" onchange="toggleMigrationModeUI('individual')">
+              <span>انتقال تک‌به‌تک و انفرادی مخاطبین</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #e53935; font-weight: 600;">
+              <input type="radio" name="migrationTypeRadio" value="delete_all" onchange="toggleMigrationModeUI('delete_all')">
+              <span>حذف تمامی مخاطبین همراه با واحد/بخش</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bulk Transfer Settings -->
+        <div id="migrationBulkContainer" style="background: var(--status-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label class="form-label" for="migrationTargetUnitSelect">واحد مقصد <span style="color: #e53935;">*</span>:</label>
+            <select id="migrationTargetUnitSelect" class="form-input" onchange="handleMigrationTargetUnitChange(this.value)">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="migrationTargetSubUnitSelect">بخش مقصد:</label>
+            <select id="migrationTargetSubUnitSelect" class="form-input">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Individual Transfer Table Container -->
+        <div id="migrationIndividualContainer" style="display: none; background: var(--status-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; margin-bottom: 14px; max-height: 240px; overflow-y: auto;">
+          <div id="migrationIndividualList">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Delete All Warning Banner -->
+        <div id="migrationDeleteAllWarning" style="display: none; background: #ffebee; border: 1px solid #ffcdd2; color: #c62828; padding: 10px 12px; border-radius: 8px; font-size: 12.5px; line-height: 1.6; margin-bottom: 14px;">
+          ⚠️ <strong>هشدار:</strong> با انتخاب این گزینه، تمامی مخاطبین این واحد/بخش به‌طور کامل پاک خواهند شد و داده‌ای باقی نخواهد ماند.
+        </div>
+      </div>
+
+      <div class="modal-form-actions">
+        <button type="button" class="btn-circle-action-save" onclick="executeMigrationAndDelete()" title="تأیید و اجرای تغییرات" style="width: auto; height: 38px; border-radius: 20px; padding: 0 18px; gap: 6px; font-size: 13.5px; font-weight: bold;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>تأیید و اجرا</span>
+        </button>
+        <button type="button" class="btn-circle-action-cancel" onclick="closeMigrationModal()" title="انصراف">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -5065,6 +5235,229 @@
       showToast(`✅ عنوان واحد به «${u.name}» تغییر یافت`);
     }
 
+    let currentMigrationContext = null;
+
+    function openMigrationModalForUnit(pbId, unitName, unitId) {
+      const pbContacts = contacts.filter(c => (c.phonebookId || 'pb-central') === pbId && normalizePersianText((c['واحد'] || c['بخش'] || '').trim()) === normalizePersianText(unitName));
+      
+      currentMigrationContext = {
+        type: 'unit',
+        pbId,
+        unitName,
+        subUnitName: '',
+        unitId,
+        subUnitId: null,
+        matchingContacts: pbContacts
+      };
+
+      setupMigrationModalUI();
+    }
+
+    function openMigrationModalForSubUnit(pbId, unitName, subUnitName, unitId, subUnitId) {
+      const pbContacts = contacts.filter(c => (c.phonebookId || 'pb-central') === pbId && 
+        normalizePersianText((c['واحد'] || '').trim()) === normalizePersianText(unitName) &&
+        normalizePersianText((c['بخش'] || '').trim()) === normalizePersianText(subUnitName)
+      );
+
+      currentMigrationContext = {
+        type: 'subunit',
+        pbId,
+        unitName,
+        subUnitName,
+        unitId,
+        subUnitId,
+        matchingContacts: pbContacts
+      };
+
+      setupMigrationModalUI();
+    }
+
+    function setupMigrationModalUI() {
+      if (!currentMigrationContext) return;
+      const ctx = currentMigrationContext;
+      const modal = document.getElementById('unitMigrationModal');
+      const banner = document.getElementById('migrationModalBanner');
+      const title = document.getElementById('migrationModalTitle');
+
+      if (ctx.type === 'unit') {
+        if (title) title.textContent = `انتقال مخاطبین واحد «${ctx.unitName}»`;
+        if (banner) {
+          banner.innerHTML = `🏢 واحد <strong>«${escapeHtml(ctx.unitName)}»</strong> دارای <strong>${ctx.matchingContacts.length} مخاطب</strong> ثبت‌شده است. برای جلوگیری از یتیم شدن مخاطبین، لطفاً تعیین کنید مایلید آن‌ها به کجا منتقل شوند:`;
+        }
+      } else {
+        if (title) title.textContent = `انتقال مخاطبین بخش «${ctx.subUnitName}»`;
+        if (banner) {
+          banner.innerHTML = `📁 بخش <strong>«${escapeHtml(ctx.subUnitName)}»</strong> (در واحد ${escapeHtml(ctx.unitName)}) دارای <strong>${ctx.matchingContacts.length} مخاطب</strong> است. لطفاً مقصد انتقال مخاطبین را انتخاب نمایید:`;
+        }
+      }
+
+      // Populate Destination Unit dropdown
+      const pb = getPhonebookById(ctx.pbId);
+      const unitSelect = document.getElementById('migrationTargetUnitSelect');
+      let unitsHtml = '';
+      if (pb && pb.units) {
+        pb.units.forEach(u => {
+          if (ctx.type === 'unit' && normalizePersianText(u.name) === normalizePersianText(ctx.unitName)) return;
+          unitsHtml += `<option value="${escapeHtml(u.name)}">${escapeHtml(u.name)}</option>`;
+        });
+      }
+      unitsHtml += `<option value="__NEW_UNIT__">➕ (ایجاد واحد جدید...)</option>`;
+      if (unitSelect) {
+        unitSelect.innerHTML = unitsHtml;
+        handleMigrationTargetUnitChange(unitSelect.value);
+      }
+
+      // Build Individual Migration List
+      const indList = document.getElementById('migrationIndividualList');
+      if (indList) {
+        let html = '<div style="font-size: 12px; font-weight: bold; margin-bottom: 8px; color: var(--text-color);">مقصد هر مخاطب را به طور مجزا تعیین کنید:</div>';
+        ctx.matchingContacts.forEach((c, i) => {
+          const name = c['نام و نام خانوادگی'] || 'مخاطب';
+          html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: 12.5px; background: var(--card-bg); padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+              <span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; color: var(--text-color);">${escapeHtml(name)}</span>
+              <select id="indMigUnit-${i}" class="form-input" style="padding: 4px 8px; font-size: 12px; max-width: 180px;">
+                ${unitsHtml}
+              </select>
+            </div>
+          `;
+        });
+        indList.innerHTML = html;
+      }
+
+      // Reset radio to bulk
+      const radios = document.getElementsByName('migrationTypeRadio');
+      if (radios.length > 0) radios[0].checked = true;
+      toggleMigrationModeUI('bulk');
+
+      if (modal) {
+        lockBodyScroll();
+        modal.style.display = 'flex';
+      }
+    }
+
+    function handleMigrationTargetUnitChange(unitName) {
+      const subSelect = document.getElementById('migrationTargetSubUnitSelect');
+      if (!subSelect || !currentMigrationContext) return;
+      const pb = getPhonebookById(currentMigrationContext.pbId);
+
+      let subHtml = '<option value="">(بدون بخش / عمومی)</option>';
+      if (unitName && unitName !== '__NEW_UNIT__' && pb && pb.units) {
+        const u = pb.units.find(item => normalizePersianText(item.name) === normalizePersianText(unitName));
+        if (u && u.subUnits) {
+          u.subUnits.forEach(su => {
+            if (currentMigrationContext.type === 'subunit' && normalizePersianText(u.name) === normalizePersianText(currentMigrationContext.unitName) && normalizePersianText(su.name) === normalizePersianText(currentMigrationContext.subUnitName)) return;
+            subHtml += `<option value="${escapeHtml(su.name)}">${escapeHtml(su.name)}</option>`;
+          });
+        }
+      }
+      subHtml += `<option value="__NEW_SUBUNIT__">➕ (ایجاد بخش جدید...)</option>`;
+      subSelect.innerHTML = subHtml;
+    }
+
+    function toggleMigrationModeUI(mode) {
+      const bulkContainer = document.getElementById('migrationBulkContainer');
+      const indContainer = document.getElementById('migrationIndividualContainer');
+      const deleteWarning = document.getElementById('migrationDeleteAllWarning');
+
+      if (bulkContainer) bulkContainer.style.display = (mode === 'bulk') ? 'block' : 'none';
+      if (indContainer) indContainer.style.display = (mode === 'individual') ? 'block' : 'none';
+      if (deleteWarning) deleteWarning.style.display = (mode === 'delete_all') ? 'block' : 'none';
+    }
+
+    function closeMigrationModal() {
+      const modal = document.getElementById('unitMigrationModal');
+      if (modal) modal.style.display = 'none';
+      currentMigrationContext = null;
+      unlockBodyScroll();
+    }
+
+    async function executeMigrationAndDelete() {
+      if (!currentMigrationContext) return;
+      const ctx = currentMigrationContext;
+      const pb = getPhonebookById(ctx.pbId);
+      if (!pb) return;
+
+      const selectedRadio = document.querySelector('input[name="migrationTypeRadio"]:checked');
+      const mode = selectedRadio ? selectedRadio.value : 'bulk';
+
+      if (mode === 'delete_all') {
+        const confirmed = await showConfirmModal(`آیا از حذف کامل تمامی ${ctx.matchingContacts.length} مخاطب اطمینان دارید؟`, 'تأیید حذف مخاطبین', '⚠️');
+        if (!confirmed) return;
+
+        const matchSet = new Set(ctx.matchingContacts);
+        contacts = contacts.filter(c => !matchSet.has(c));
+      } else if (mode === 'bulk') {
+        let targetUnit = document.getElementById('migrationTargetUnitSelect').value;
+        let targetSubUnit = document.getElementById('migrationTargetSubUnitSelect').value;
+
+        if (targetUnit === '__NEW_UNIT__') {
+          const newU = await showPromptModal('نام واحد جدید مقصد را وارد کنید:', '', 'ایجاد واحد جدید');
+          if (!newU || !newU.trim()) return;
+          targetUnit = newU.trim();
+        }
+
+        if (targetSubUnit === '__NEW_SUBUNIT__') {
+          const newS = await showPromptModal(`نام بخش جدید در واحد «${targetUnit}» را وارد کنید:`, '', 'ایجاد بخش جدید');
+          if (!newS || !newS.trim()) return;
+          targetSubUnit = newS.trim();
+        }
+
+        // Ensure target unit & subunit exist in phonebook
+        if (!pb.units) pb.units = [];
+        let uObj = pb.units.find(item => normalizePersianText(item.name) === normalizePersianText(targetUnit));
+        if (!uObj) {
+          uObj = { id: 'unit-' + Date.now(), name: targetUnit, order: pb.units.length, subUnits: [] };
+          pb.units.push(uObj);
+        }
+        if (targetSubUnit && !uObj.subUnits.some(s => s.name === targetSubUnit)) {
+          uObj.subUnits.push({ id: 'sub-' + Date.now(), name: targetSubUnit, order: uObj.subUnits.length });
+        }
+
+        // Update all matching contacts
+        ctx.matchingContacts.forEach(c => {
+          c['واحد'] = targetUnit;
+          c['بخش'] = targetSubUnit;
+        });
+      } else if (mode === 'individual') {
+        for (let i = 0; i < ctx.matchingContacts.length; i++) {
+          const sel = document.getElementById(`indMigUnit-${i}`);
+          let targetUnit = sel ? sel.value : '';
+          if (targetUnit === '__NEW_UNIT__') {
+            const newU = await showPromptModal(`نام واحد مقصد جدید برای مخاطب «${ctx.matchingContacts[i]['نام و نام خانوادگی']}» را وارد کنید:`, '', 'ایجاد واحد جدید');
+            targetUnit = (newU && newU.trim()) ? newU.trim() : 'عمومی';
+          }
+          if (targetUnit) {
+            ctx.matchingContacts[i]['واحد'] = targetUnit;
+          }
+        }
+      }
+
+      // Remove the old unit / sub-unit from phonebook schema
+      if (ctx.type === 'unit') {
+        pb.units = pb.units.filter(u => u.id !== ctx.unitId);
+        pb.units.forEach((u, idx) => u.order = idx);
+      } else if (ctx.type === 'subunit') {
+        const parentU = pb.units.find(u => u.id === ctx.unitId);
+        if (parentU && parentU.subUnits) {
+          parentU.subUnits = parentU.subUnits.filter(s => s.id !== ctx.subUnitId);
+          parentU.subUnits.forEach((s, idx) => s.order = idx);
+        }
+      }
+
+      await savePhonebooksData(phonebooks);
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+
+      closeMigrationModal();
+      renderUnitsTreeList(pb);
+      renderFullpagePbList();
+      if (pb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+
+      showToast(`✅ تغییرات و انتقال مخاطبین با موفقیت انجام گردید.`);
+    }
+
     async function deleteUnitFromPhonebook(unitId) {
       if (!isAdminLoggedIn) return;
       const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
@@ -5072,76 +5465,29 @@
       const u = activePb.units.find(item => item.id === unitId);
       if (!u) return;
 
-      const confirmed = await showConfirmModal(`آیا از حذف واحد «${u.name}» اطمینان دارید؟`, 'حذف واحد سازمانی', '🗑️');
-      if (!confirmed) return;
+      const pbId = activePb.id;
+      const matchingContacts = contacts.filter(c => 
+        (c.phonebookId || 'pb-central') === pbId && 
+        normalizePersianText((c['واحد'] || c['بخش'] || '').trim()) === normalizePersianText(u.name)
+      );
 
-      activePb.units = activePb.units.filter(item => item.id !== unitId);
-      activePb.units.forEach((item, idx) => item.order = idx);
+      if (matchingContacts.length === 0) {
+        const confirmed = await showConfirmModal(`آیا از حذف واحد «${u.name}» اطمینان دارید؟`, 'حذف واحد سازمانی', '🗑️');
+        if (!confirmed) return;
 
-      await savePhonebooksData(phonebooks);
-      renderUnitsTreeList(activePb);
-      renderFullpagePbList();
-      if (activePb.id === currentPhonebookId) {
-        renderList(getContactsForActivePhonebook());
+        activePb.units = activePb.units.filter(item => item.id !== unitId);
+        activePb.units.forEach((item, idx) => item.order = idx);
+
+        await savePhonebooksData(phonebooks);
+        renderUnitsTreeList(activePb);
+        renderFullpagePbList();
+        if (activePb.id === currentPhonebookId) {
+          renderList(getContactsForActivePhonebook());
+        }
+        showToast(`🗑️ واحد «${u.name}» حذف شد`);
+      } else {
+        openMigrationModalForUnit(pbId, u.name, unitId);
       }
-      showToast(`🗑️ واحد «${u.name}» حذف شد`);
-    }
-
-    async function moveUnitOrder(unitId, direction) {
-      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
-      if (!activePb || !activePb.units) return;
-      activePb.units.sort((a, b) => (a.order || 0) - (b.order || 0));
-      const idx = activePb.units.findIndex(item => item.id === unitId);
-      if (idx === -1) return;
-      const targetIdx = idx + direction;
-      if (targetIdx < 0 || targetIdx >= activePb.units.length) return;
-
-      const temp = activePb.units[idx];
-      activePb.units[idx] = activePb.units[targetIdx];
-      activePb.units[targetIdx] = temp;
-
-      activePb.units.forEach((item, i) => item.order = i);
-      await savePhonebooksData(phonebooks);
-      renderUnitsTreeList(activePb);
-      if (activePb.id === currentPhonebookId) {
-        renderList(getContactsForActivePhonebook());
-      }
-    }
-
-    async function addSubUnitToUnit(unitId) {
-      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
-      if (!activePb || !activePb.units) return;
-      const u = activePb.units.find(item => item.id === unitId);
-      if (!u) return;
-
-      const input = document.getElementById(`newSubUnitInput-${unitId}`);
-      if (!input) return;
-      const subName = input.value.trim();
-      if (!subName) {
-        showToast('⚠️ لطفاً نام بخش را وارد کنید.');
-        input.focus();
-        return;
-      }
-
-      if (!u.subUnits) u.subUnits = [];
-      if (u.subUnits.some(s => s.name === subName)) {
-        showToast('⚠️ بخشی با این نام در این واحد وجود دارد.');
-        return;
-      }
-
-      u.subUnits.push({
-        id: 'sub-' + Date.now(),
-        name: subName,
-        order: u.subUnits.length
-      });
-
-      await savePhonebooksData(phonebooks);
-      input.value = '';
-      renderUnitsTreeList(activePb);
-      if (activePb.id === currentPhonebookId) {
-        renderList(getContactsForActivePhonebook());
-      }
-      showToast(`✅ بخش «${subName}» به واحد «${u.name}» افزوده شد`);
     }
 
     async function deleteSubUnit(unitId, subUnitId) {
@@ -5150,19 +5496,32 @@
       if (!activePb || !activePb.units) return;
       const u = activePb.units.find(item => item.id === unitId);
       if (!u || !u.subUnits) return;
+      const su = u.subUnits.find(s => s.id === subUnitId);
+      if (!su) return;
 
-      const confirmed = await showConfirmModal('آیا از حذف این بخش زیرمجموعه اطمینان دارید؟', 'حذف بخش', '🗑️');
-      if (!confirmed) return;
+      const pbId = activePb.id;
+      const matchingContacts = contacts.filter(c => 
+        (c.phonebookId || 'pb-central') === pbId && 
+        normalizePersianText((c['واحد'] || '').trim()) === normalizePersianText(u.name) &&
+        normalizePersianText((c['بخش'] || '').trim()) === normalizePersianText(su.name)
+      );
 
-      u.subUnits = u.subUnits.filter(s => s.id !== subUnitId);
-      u.subUnits.forEach((s, idx) => s.order = idx);
+      if (matchingContacts.length === 0) {
+        const confirmed = await showConfirmModal('آیا از حذف این بخش زیرمجموعه اطمینان دارید؟', 'حذف بخش', '🗑️');
+        if (!confirmed) return;
 
-      await savePhonebooksData(phonebooks);
-      renderUnitsTreeList(activePb);
-      if (activePb.id === currentPhonebookId) {
-        renderList(getContactsForActivePhonebook());
+        u.subUnits = u.subUnits.filter(s => s.id !== subUnitId);
+        u.subUnits.forEach((s, idx) => s.order = idx);
+
+        await savePhonebooksData(phonebooks);
+        renderUnitsTreeList(activePb);
+        if (activePb.id === currentPhonebookId) {
+          renderList(getContactsForActivePhonebook());
+        }
+        showToast(`🗑️ بخش حذف شد`);
+      } else {
+        openMigrationModalForSubUnit(pbId, u.name, su.name, unitId, subUnitId);
       }
-      showToast(`🗑️ بخش حذف شد`);
     }
 
     async function moveSubUnitOrder(unitId, subUnitId, direction) {
@@ -6823,14 +7182,18 @@
       reader.readAsArrayBuffer(file);
     }
 
-    // Preset Unit Color Palette (24 harmonious, distinguishable shades)
+    // Preset Unit Color Palette (50 classic, sophisticated, non-neon shades)
     const UNIT_COLOR_PALETTE = [
-      '#0d47a1', '#1565c0', '#1976d2', '#0288d1',
-      '#00838f', '#00695c', '#2e7d32', '#388e3c',
-      '#558b2f', '#f57f17', '#e65100', '#d84315',
-      '#c2185b', '#ad1457', '#6a1b9a', '#4a148c',
-      '#283593', '#37474f', '#455a64', '#4e342e',
-      '#009688', '#00acc1', '#3949ab', '#8e24aa'
+      '#1a365d', '#1e293b', '#0f172a', '#1e3a8a', '#1d3557',
+      '#283593', '#0d47a1', '#1f4e5b', '#004d40', '#064e3b',
+      '#1b4332', '#1b5e20', '#283618', '#3a5a40', '#2e4a3e',
+      '#335c67', '#583101', '#7f4f24', '#9a031e', '#4a0e17',
+      '#581845', '#7209b7', '#4a154b', '#3c096c', '#240046',
+      '#6b2d5c', '#600f0f', '#800020', '#4a2c2a', '#8b3a0f',
+      '#a47148', '#996515', '#78590c', '#2b4c7e', '#1b4965',
+      '#005f73', '#2a9d8f', '#4d5b25', '#384e32', '#2f3e46',
+      '#343a40', '#495057', '#3d2314', '#5c0632', '#4d0a34',
+      '#3a0ca3', '#4a148c', '#2c3e50', '#134e4a', '#14532d'
     ];
 
     function getSavedUnitColors() {
@@ -7333,13 +7696,17 @@
           // Render Sub-unit banner if subUnitName exists
           if (subUnitName) {
             const subBanner = document.createElement('div');
-            subBanner.className = 'subunit-header-banner';
+            subBanner.className = 'subunit-capsule-ribbon';
             subBanner.innerHTML = `
-              <div class="subunit-header-title">
-                <span class="subunit-icon">📁</span>
-                <span>بخش: <strong>${escapeHtml(subUnitName)}</strong></span>
-                <span class="subunit-count">${subContacts.length} نفر</span>
+              <div class="subunit-capsule-pill">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span class="subunit-label-prefix">بخش:</span>
+                <strong class="subunit-title-text">${escapeHtml(subUnitName)}</strong>
               </div>
+              <div class="subunit-divider-line"></div>
+              <div class="subunit-badge-count-pill">${subContacts.length} نفر</div>
             `;
             bodyDiv.appendChild(subBanner);
           }
