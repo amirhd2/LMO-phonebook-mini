@@ -5153,7 +5153,10 @@
                     </div>
                     <span>📂 ${escapeHtml(su.name)}</span>
                   </div>
-                  <button type="button" class="btn-icon-small" style="color: #e53935; font-size: 11px; padding: 2px 6px;" onclick="deleteSubUnit('${escapeHtml(u.id)}', '${escapeHtml(su.id)}')">✕</button>
+                  <div style="display: flex; gap: 4px; align-items: center;">
+                    <button type="button" class="btn-icon-small" style="font-size: 11px; padding: 2px 6px;" title="ویرایش نام بخش" onclick="promptRenameSubUnit('${escapeHtml(u.id)}', '${escapeHtml(su.id)}')">✏️</button>
+                    <button type="button" class="btn-icon-small" style="color: #e53935; font-size: 11px; padding: 2px 6px;" title="حذف بخش" onclick="deleteSubUnit('${escapeHtml(u.id)}', '${escapeHtml(su.id)}')">✕</button>
+                  </div>
                 </div>
               `).join('')}
               <div style="display: flex; gap: 6px; margin-top: 6px;">
@@ -5233,6 +5236,38 @@
         renderList(getContactsForActivePhonebook());
       }
       showToast(`✅ عنوان واحد به «${u.name}» تغییر یافت`);
+    }
+
+    async function promptRenameSubUnit(unitId, subUnitId) {
+      if (!isAdminLoggedIn) return;
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const u = activePb.units.find(item => item.id === unitId);
+      if (!u || !u.subUnits) return;
+      const su = u.subUnits.find(s => s.id === subUnitId);
+      if (!su) return;
+
+      const newName = await showPromptModal(`عنوان جدید برای بخش «${su.name}»:`, su.name, 'تغییر نام بخش');
+      if (!newName || !newName.trim() || newName.trim() === su.name) return;
+
+      const oldSubName = su.name;
+      su.name = newName.trim();
+
+      contacts.forEach(c => {
+        if ((c.phonebookId || 'pb-central') === activePb.id &&
+            normalizePersianText((c['واحد'] || '').trim()) === normalizePersianText(u.name) &&
+            normalizePersianText((c['بخش'] || '').trim()) === normalizePersianText(oldSubName)) {
+          c['بخش'] = su.name;
+        }
+      });
+
+      await savePhonebooksData(phonebooks);
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+      renderUnitsTreeList(activePb);
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+      showToast(`✅ عنوان بخش به «${su.name}» تغییر یافت`);
     }
 
     let currentMigrationContext = null;
