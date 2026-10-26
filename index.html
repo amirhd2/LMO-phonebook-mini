@@ -2712,6 +2712,184 @@
       background: rgba(33, 150, 243, 0.08) !important;
     }
 
+    /* =========================================================================
+       🌳 ORGANIZATIONAL UNIT HIERARCHY & TREE CONNECTOR (v3.1.0)
+       ========================================================================= */
+    /* Phonebook Manager Hierarchy & Tree Lines */
+    .unit-root-drop-zone {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 2px dashed #2196F3;
+      background: rgba(33, 150, 243, 0.08);
+      color: #1976d2;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    [data-theme="dark"] .unit-root-drop-zone {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: #3b82f6;
+      color: #93c5fd;
+    }
+    .unit-root-drop-zone.is-dragging-active {
+      display: flex;
+    }
+    .unit-root-drop-zone.drag-over-active {
+      border-color: #0d47a1;
+      background: rgba(13, 71, 161, 0.2);
+      color: #0d47a1;
+      transform: scale(1.02);
+    }
+    [data-theme="dark"] .unit-root-drop-zone.drag-over-active {
+      border-color: #60a5fa;
+      background: rgba(59, 130, 246, 0.3);
+      color: #ffffff;
+    }
+    .unit-tree-node {
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .unit-tree-node.is-child-unit {
+      margin-right: 36px !important; /* ~1cm indentation from right */
+      position: relative;
+      border-right: 3.5px solid var(--unit-parent-theme-color, #1976d2) !important;
+    }
+    @media (max-width: 600px) {
+      .unit-tree-node.is-child-unit {
+        margin-right: 24px !important;
+      }
+    }
+    /* Vertical connecting line from parent down to child in manager */
+    .unit-tree-node.is-child-unit::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -10px;
+      height: 32px;
+      width: 17px;
+      border-right: 2.5px solid var(--unit-parent-theme-color, #1976d2);
+      border-bottom: 2.5px solid var(--unit-parent-theme-color, #1976d2);
+      border-bottom-right-radius: 6px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .unit-tree-node.is-child-unit.has-child-after::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -10px;
+      bottom: -10px;
+      width: 2.5px;
+      background: var(--unit-parent-theme-color, #1976d2);
+      pointer-events: none;
+      z-index: 4;
+    }
+    .unit-tree-node.drop-target-nest {
+      outline: 2.5px dashed #0d47a1 !important;
+      background: rgba(33, 150, 243, 0.16) !important;
+      box-shadow: 0 0 14px rgba(13, 71, 161, 0.35) !important;
+      transform: scale(1.015);
+    }
+    [data-theme="dark"] .unit-tree-node.drop-target-nest {
+      outline-color: #60a5fa !important;
+      background: rgba(59, 130, 246, 0.25) !important;
+    }
+    .unit-tree-node.drop-target-before {
+      border-top: 3.5px solid #0d47a1 !important;
+      background: rgba(33, 150, 243, 0.06) !important;
+    }
+    .unit-tree-node.drop-target-after {
+      border-bottom: 3.5px solid #0d47a1 !important;
+      background: rgba(33, 150, 243, 0.06) !important;
+    }
+    .nest-badge-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(13, 71, 161, 0.1);
+      color: #0d47a1;
+      border: 1px solid rgba(13, 71, 161, 0.25);
+      white-space: nowrap;
+    }
+    [data-theme="dark"] .nest-badge-indicator {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    /* Main Page (صفحه اصلی) Hierarchy & Tree Lines */
+    .unit-group.is-child-unit {
+      margin-right: 36px !important; /* ~1cm indentation from right */
+      position: relative;
+      box-shadow: 0 3px 14px var(--shadow-color);
+      border-right: 4px solid var(--unit-parent-theme-color, #1976d2) !important;
+      overflow: visible !important; /* Critical: allows tree connector lines to render outside card without clipping */
+    }
+    .unit-group.is-child-unit .unit-header-container {
+      border-top-right-radius: 12px;
+      border-top-left-radius: 12px;
+    }
+    .unit-group.is-child-unit.is-collapsed .unit-header-container {
+      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+    .unit-group.is-child-unit .unit-container-body {
+      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+    @media (max-width: 600px) {
+      .unit-group.is-child-unit {
+        margin-right: 24px !important;
+      }
+      .unit-group.is-child-unit::before {
+        right: -15px !important;
+        width: 15px !important;
+      }
+      .unit-group.is-child-unit.has-child-after::after {
+        right: -15px !important;
+      }
+    }
+    /* Vertical connecting line and elbow branch from parent down to child on main page */
+    .unit-group.is-child-unit::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -24px;
+      height: 48px;
+      width: 20px;
+      border-right: 3px solid var(--unit-parent-theme-color, #1976d2);
+      border-bottom: 3px solid var(--unit-parent-theme-color, #1976d2);
+      border-bottom-right-radius: 8px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    /* Stem continuity if another sibling child unit follows on main page */
+    .unit-group.is-child-unit.has-child-after::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -24px;
+      bottom: -24px;
+      width: 3px;
+      background: var(--unit-parent-theme-color, #1976d2);
+      pointer-events: none;
+      z-index: 9;
+    }
+    .unit-parent-badge {
+      display: none !important; /* Parent badge removed per user request */
+    }
+
     /* Multi-Phonebook Excel Export Selection Modal */
     .pb-select-container {
       display: flex;
@@ -3637,6 +3815,41 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit Parent Change Modal -->
+  <div id="unitParentModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+    <div class="modal-content" style="max-width: 420px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16px;">
+          <span>📁</span>
+          <span id="unitParentModalTitle">تنظیم واحد والد</span>
+        </h3>
+        <button class="close-btn" onclick="closeUnitParentModal()" title="بستن">✕</button>
+      </div>
+      <div style="margin-top: 12px;">
+        <p style="font-size: 13.5px; color: var(--text-color); margin-bottom: 12px; line-height: 1.6;">
+          واحد والد این واحد سازمانی را انتخاب کنید. در صورت انتخاب «واحد اصلی»، این واحد در سطح اول قرار می‌گیرد:
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="unitParentModalSelect">واحد والد:</label>
+          <select id="unitParentModalSelect" class="form-input" style="font-weight: 600;"></select>
+        </div>
+        <div class="modal-form-actions">
+          <button type="button" class="btn-circle-action-save" onclick="saveUnitParentChange()" title="ذخیره">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+          <button type="button" class="btn-circle-action-cancel" onclick="closeUnitParentModal()" title="انصراف">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -5337,42 +5550,393 @@
       }
     }
 
+    // Helper: detect if making childId a child of potentialParentId would cause a cycle
+    function isUnitDescendant(childId, potentialParentId, units) {
+      if (!childId || !potentialParentId) return false;
+      if (childId === potentialParentId) return true;
+      let curr = units.find(u => u.id === potentialParentId);
+      let depth = 0;
+      while (curr && curr.parentId && depth < 50) {
+        if (curr.parentId === childId) return true;
+        curr = units.find(u => u.id === curr.parentId);
+        depth++;
+      }
+      return false;
+    }
+
+    // Helper: construct hierarchical display list of units for main page and exports
+    function buildHierarchicalDisplayUnits(configuredUnits, foundUnits, groups) {
+      if (!foundUnits || foundUnits.length === 0) return [];
+      if (!configuredUnits || configuredUnits.length === 0) {
+        return foundUnits.map(name => ({
+          unitName: name,
+          level: 0,
+          parentUnit: null,
+          hasChildAfter: false
+        }));
+      }
+
+      const idToUnit = new Map();
+      const normNameToUnit = new Map();
+      configuredUnits.forEach(u => {
+        if (u.id) idToUnit.set(u.id, u);
+        if (u.name) normNameToUnit.set(normalizePersianText(u.name), u);
+      });
+
+      // Break any cycles or invalid parent references
+      configuredUnits.forEach(u => {
+        if (u.parentId && (!idToUnit.has(u.parentId) || isUnitDescendant(u.id, u.parentId, configuredUnits))) {
+          u.parentId = null;
+        }
+      });
+
+      const childrenMap = new Map();
+      configuredUnits.forEach(u => {
+        if (u.parentId) {
+          if (!childrenMap.has(u.parentId)) childrenMap.set(u.parentId, []);
+          childrenMap.get(u.parentId).push(u);
+        }
+      });
+      childrenMap.forEach(arr => {
+        arr.sort((a, b) => (a.order || 0) - (b.order || 0));
+      });
+
+      const rootUnits = configuredUnits.filter(u => !u.parentId);
+      rootUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      const processedNormNames = new Set();
+      const displayItems = [];
+
+      function traverseUnit(u, level, parentUnit, hasSiblingAfter) {
+        const norm = normalizePersianText(u.name);
+        const isPresent = foundUnits.some(f => normalizePersianText(f) === norm);
+        if (isPresent && !processedNormNames.has(norm)) {
+          const actualName = foundUnits.find(f => normalizePersianText(f) === norm) || u.name;
+          displayItems.push({
+            unitName: actualName,
+            level: level,
+            parentUnit: parentUnit,
+            hasChildAfter: hasSiblingAfter
+          });
+          processedNormNames.add(norm);
+        }
+
+        const directChildren = childrenMap.get(u.id) || [];
+        const activeChildren = directChildren.filter(child => {
+          const cNorm = normalizePersianText(child.name);
+          return foundUnits.some(f => normalizePersianText(f) === cNorm);
+        });
+
+        activeChildren.forEach((child, idx) => {
+          const isSiblingAfter = idx < activeChildren.length - 1;
+          traverseUnit(child, level + 1, u, isSiblingAfter);
+        });
+      }
+
+      rootUnits.forEach(ru => {
+        traverseUnit(ru, 0, null, false);
+      });
+
+      // Any remaining units from foundUnits that were not matched in configuredUnits
+      foundUnits.forEach(fName => {
+        const norm = normalizePersianText(fName);
+        if (!processedNormNames.has(norm)) {
+          displayItems.push({
+            unitName: fName,
+            level: 0,
+            parentUnit: null,
+            hasChildAfter: false
+          });
+          processedNormNames.add(norm);
+        }
+      });
+
+      return displayItems;
+    }
+
+    let currentDropMode = null; // 'nest' | 'before' | 'after'
+
     function handleUnitDragStart(e, unitId) {
       draggedUnitId = unitId;
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', unitId);
+      const dropZone = document.getElementById('unitRootDropZone');
+      if (dropZone) dropZone.classList.add('is-dragging-active');
     }
-    function handleUnitDragOver(e) {
+
+    function handleUnitDragEnd(e) {
+      draggedUnitId = null;
+      currentDropMode = null;
+      document.querySelectorAll('.unit-tree-node').forEach(node => {
+        node.classList.remove('drop-target-nest', 'drop-target-before', 'drop-target-after', 'drag-over-active');
+      });
+      const dropZone = document.getElementById('unitRootDropZone');
+      if (dropZone) dropZone.classList.remove('is-dragging-active', 'drag-over-active');
+    }
+
+    function handleUnitDragOver(e, targetUnitId) {
       e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      e.currentTarget.classList.add('drag-over-active');
-    }
-    function handleUnitDragLeave(e) {
-      e.currentTarget.classList.remove('drag-over-active');
-    }
-    async function handleUnitDrop(e, targetUnitId) {
-      e.preventDefault();
-      e.currentTarget.classList.remove('drag-over-active');
       if (!draggedUnitId || draggedUnitId === targetUnitId) return;
 
       const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
       if (!activePb || !activePb.units) return;
 
-      activePb.units.sort((a, b) => (a.order || 0) - (b.order || 0));
-      const fromIdx = activePb.units.findIndex(u => u.id === draggedUnitId);
-      const toIdx = activePb.units.findIndex(u => u.id === targetUnitId);
-
-      if (fromIdx !== -1 && toIdx !== -1) {
-        const [moved] = activePb.units.splice(fromIdx, 1);
-        activePb.units.splice(toIdx, 0, moved);
-        activePb.units.forEach((u, i) => u.order = i);
-        await savePhonebooksData(phonebooks);
-        renderUnitsTreeList(activePb);
-        if (activePb.id === currentPhonebookId) {
-          renderList(getContactsForActivePhonebook());
-        }
+      // Prevent cycles
+      if (isUnitDescendant(draggedUnitId, targetUnitId, activePb.units)) {
+        e.dataTransfer.dropEffect = 'none';
+        return;
       }
-      draggedUnitId = null;
+
+      e.dataTransfer.dropEffect = 'move';
+      const node = e.currentTarget;
+      const rect = node.getBoundingClientRect();
+      const relY = e.clientY - rect.top;
+      const ratio = relY / rect.height;
+
+      node.classList.remove('drop-target-nest', 'drop-target-before', 'drop-target-after');
+
+      if (ratio < 0.25) {
+        currentDropMode = 'before';
+        node.classList.add('drop-target-before');
+      } else if (ratio > 0.75) {
+        currentDropMode = 'after';
+        node.classList.add('drop-target-after');
+      } else {
+        currentDropMode = 'nest';
+        node.classList.add('drop-target-nest');
+      }
+    }
+
+    function handleUnitDragLeave(e) {
+      e.currentTarget.classList.remove('drop-target-nest', 'drop-target-before', 'drop-target-after');
+    }
+
+    async function handleUnitDrop(e, targetUnitId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drop-target-nest', 'drop-target-before', 'drop-target-after');
+      if (!draggedUnitId || draggedUnitId === targetUnitId) {
+        handleUnitDragEnd();
+        return;
+      }
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) {
+        handleUnitDragEnd();
+        return;
+      }
+
+      const draggedUnit = activePb.units.find(u => u.id === draggedUnitId);
+      const targetUnit = activePb.units.find(u => u.id === targetUnitId);
+      if (!draggedUnit || !targetUnit) {
+        handleUnitDragEnd();
+        return;
+      }
+
+      if (isUnitDescendant(draggedUnitId, targetUnitId, activePb.units)) {
+        showToast('⚠️ یک واحد نمی‌تواند زیرمجموعه خودش یا زیرمجموعه‌های خود شود.');
+        handleUnitDragEnd();
+        return;
+      }
+
+      const mode = currentDropMode || 'nest';
+
+      if (mode === 'nest') {
+        // Dragged unit becomes a child/sub-unit of target unit
+        draggedUnit.parentId = targetUnit.id;
+        const siblings = activePb.units.filter(u => u.parentId === targetUnit.id && u.id !== draggedUnit.id);
+        draggedUnit.order = siblings.length;
+        showToast(`✅ واحد «${draggedUnit.name}» به عنوان زیرمجموعه «${targetUnit.name}» قرار گرفت`);
+      } else {
+        // Dragged unit is placed before or after target unit at the same level
+        draggedUnit.parentId = targetUnit.parentId || null;
+        const sameLevelUnits = activePb.units.filter(u => (u.parentId || null) === (targetUnit.parentId || null));
+        sameLevelUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+        const fromIdx = sameLevelUnits.findIndex(u => u.id === draggedUnit.id);
+        if (fromIdx !== -1) sameLevelUnits.splice(fromIdx, 1);
+
+        let toIdx = sameLevelUnits.findIndex(u => u.id === targetUnit.id);
+        if (mode === 'after') toIdx += 1;
+        sameLevelUnits.splice(toIdx, 0, draggedUnit);
+
+        sameLevelUnits.forEach((u, idx) => {
+          u.order = idx;
+        });
+        showToast(`✅ ترتیب واحدها با موفقیت بروزرسانی شد`);
+      }
+
+      await savePhonebooksData(phonebooks);
+      handleUnitDragEnd();
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+    }
+
+    function handleRootDropOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const dropZone = document.getElementById('unitRootDropZone');
+      if (dropZone) dropZone.classList.add('drag-over-active');
+    }
+
+    function handleRootDropLeave(e) {
+      const dropZone = document.getElementById('unitRootDropZone');
+      if (dropZone) dropZone.classList.remove('drag-over-active');
+    }
+
+    async function handleRootDrop(e) {
+      e.preventDefault();
+      const dropZone = document.getElementById('unitRootDropZone');
+      if (dropZone) dropZone.classList.remove('drag-over-active');
+      if (!draggedUnitId) return;
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const draggedUnit = activePb.units.find(u => u.id === draggedUnitId);
+      if (!draggedUnit) return;
+
+      draggedUnit.parentId = null;
+      const rootUnits = activePb.units.filter(u => !u.parentId);
+      draggedUnit.order = rootUnits.length;
+
+      await savePhonebooksData(phonebooks);
+      handleUnitDragEnd();
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+      showToast(`✅ واحد «${draggedUnit.name}» به سطح اصلی منتقل شد`);
+    }
+
+    async function unNestUnit(unitId) {
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const unit = activePb.units.find(u => u.id === unitId);
+      if (!unit) return;
+
+      unit.parentId = null;
+      const rootUnits = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
+      unit.order = rootUnits.length;
+
+      await savePhonebooksData(phonebooks);
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+      showToast(`✅ واحد «${unit.name}» به عنوان واحد اصلی قرار گرفت`);
+    }
+
+    let currentUnitParentChangeId = null;
+
+    function promptChangeUnitParent(unitId) {
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const unit = activePb.units.find(u => u.id === unitId);
+      if (!unit) return;
+
+      // Eligible parents: any unit that is NOT unit itself and NOT a descendant
+      const eligibleParents = activePb.units.filter(u => u.id !== unitId && !isUnitDescendant(unitId, u.id, activePb.units));
+
+      const modal = document.getElementById('unitParentModal');
+      const title = document.getElementById('unitParentModalTitle');
+      const select = document.getElementById('unitParentModalSelect');
+
+      if (title) title.textContent = `تنظیم والد برای واحد «${unit.name}»`;
+      if (select) {
+        let html = `<option value="">🌐 (واحد اصلی - بدون والد)</option>`;
+        eligibleParents.forEach(p => {
+          const isSelected = unit.parentId === p.id;
+          html += `<option value="${escapeHtml(p.id)}" ${isSelected ? 'selected' : ''}>🏢 ${escapeHtml(p.name)}</option>`;
+        });
+        select.innerHTML = html;
+      }
+
+      currentUnitParentChangeId = unitId;
+      if (modal) {
+        lockBodyScroll();
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeUnitParentModal() {
+      const modal = document.getElementById('unitParentModal');
+      if (modal) modal.style.display = 'none';
+      currentUnitParentChangeId = null;
+      unlockBodyScroll();
+    }
+
+    async function saveUnitParentChange() {
+      if (!currentUnitParentChangeId) return;
+      const select = document.getElementById('unitParentModalSelect');
+      const targetParentId = select ? select.value.trim() : '';
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+
+      const unit = activePb.units.find(u => u.id === currentUnitParentChangeId);
+      if (!unit) return;
+
+      if (targetParentId) {
+        if (isUnitDescendant(currentUnitParentChangeId, targetParentId, activePb.units)) {
+          showToast('⚠️ انتخاب این واحد به عنوان والد غیرمجاز است (ایجاد حلقه).');
+          return;
+        }
+        unit.parentId = targetParentId;
+        const parentUnit = activePb.units.find(u => u.id === targetParentId);
+        const siblings = activePb.units.filter(u => u.parentId === targetParentId && u.id !== unit.id);
+        unit.order = siblings.length;
+        showToast(`✅ واحد «${unit.name}» به عنوان زیرمجموعه «${parentUnit ? parentUnit.name : ''}» تنظیم شد`);
+      } else {
+        unit.parentId = null;
+        const roots = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
+        unit.order = roots.length;
+        showToast(`✅ واحد «${unit.name}» به عنوان واحد اصلی قرار گرفت`);
+      }
+
+      await savePhonebooksData(phonebooks);
+      closeUnitParentModal();
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+    }
+
+    async function moveUnitOrder(unitId, direction) {
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const target = activePb.units.find(u => u.id === unitId);
+      if (!target) return;
+
+      const parentKey = target.parentId || null;
+      const siblings = activePb.units.filter(u => (u.parentId || null) === parentKey);
+      siblings.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      const idx = siblings.findIndex(u => u.id === unitId);
+      if (idx === -1) return;
+      const targetIdx = idx + direction;
+      if (targetIdx < 0 || targetIdx >= siblings.length) return;
+
+      const temp = siblings[idx];
+      siblings[idx] = siblings[targetIdx];
+      siblings[targetIdx] = temp;
+
+      siblings.forEach((u, i) => u.order = i);
+      await savePhonebooksData(phonebooks);
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
     }
 
     function handleSubUnitDragStart(e, unitId, subUnitId) {
@@ -5409,7 +5973,8 @@
         u.subUnits.splice(toIdx, 0, moved);
         u.subUnits.forEach((s, i) => s.order = i);
         await savePhonebooksData(phonebooks);
-        renderUnitsTreeList(activePb);
+        const searchInput = document.getElementById('fullpageUnitsSearchInput');
+        renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
         if (activePb.id === currentPhonebookId) {
           renderList(getContactsForActivePhonebook());
         }
@@ -5417,7 +5982,33 @@
       draggedSubUnitInfo = null;
     }
 
-    function renderUnitsTreeList(activePb) {
+    async function moveSubUnitOrder(unitId, subUnitId, direction) {
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      if (!activePb || !activePb.units) return;
+      const u = activePb.units.find(item => item.id === unitId);
+      if (!u || !u.subUnits) return;
+
+      u.subUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
+      const idx = u.subUnits.findIndex(s => s.id === subUnitId);
+      if (idx === -1) return;
+      const targetIdx = idx + direction;
+      if (targetIdx < 0 || targetIdx >= u.subUnits.length) return;
+
+      const temp = u.subUnits[idx];
+      u.subUnits[idx] = u.subUnits[targetIdx];
+      u.subUnits[targetIdx] = temp;
+
+      u.subUnits.forEach((s, i) => s.order = i);
+      await savePhonebooksData(phonebooks);
+
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+      if (activePb.id === currentPhonebookId) {
+        renderList(getContactsForActivePhonebook());
+      }
+    }
+
+    function renderUnitsTreeList(activePb, searchQuery = '') {
       const container = document.getElementById('fullpagePbUnitsTreeList') || document.getElementById('pbUnitsTreeList');
       if (!container || !activePb) return;
 
@@ -5432,46 +6023,113 @@
               id: 'unit-' + Date.now() + Math.random().toString(36).substring(2, 6),
               name: uName,
               order: activePb.units.length,
+              parentId: null,
               subUnits: []
             });
           }
         }
       });
 
-      activePb.units.sort((a, b) => (a.order || 0) - (b.order || 0));
+      // Break any cycles or invalid parent references
+      const idSet = new Set(activePb.units.map(u => u.id));
+      activePb.units.forEach(u => {
+        if (u.parentId && (!idSet.has(u.parentId) || isUnitDescendant(u.id, u.parentId, activePb.units))) {
+          u.parentId = null;
+        }
+      });
 
-      if (activePb.units.length === 0) {
-        container.innerHTML = '<div style="font-size: 12.5px; color: var(--text-muted); padding: 8px; text-align: center;">هنوز واحدی برای این دفترتلفن تعریف نشده است.</div>';
+      const q = normalizePersianText(searchQuery.trim());
+      let filteredUnits = activePb.units;
+      if (q) {
+        filteredUnits = activePb.units.filter(u => {
+          if (normalizePersianText(u.name).includes(q)) return true;
+          if (u.subUnits && u.subUnits.some(s => normalizePersianText(s.name).includes(q))) return true;
+          return false;
+        });
+      }
+
+      if (filteredUnits.length === 0) {
+        container.innerHTML = '<div style="font-size: 12.5px; color: var(--text-muted); padding: 12px; text-align: center;">واحدی مطابق با عبارت جستجو یافت نشد.</div>';
         return;
       }
 
-      let html = '';
-      activePb.units.forEach((u, uIdx) => {
-        const isFirst = uIdx === 0;
-        const isLast = uIdx === activePb.units.length - 1;
-        const uColor = getUnitColor(u.name, uIdx);
+      // Build hierarchical rendering list
+      const childrenMap = new Map();
+      activePb.units.forEach(u => {
+        if (u.parentId) {
+          if (!childrenMap.has(u.parentId)) childrenMap.set(u.parentId, []);
+          childrenMap.get(u.parentId).push(u);
+        }
+      });
+
+      childrenMap.forEach(arr => {
+        arr.sort((a, b) => (a.order || 0) - (b.order || 0));
+      });
+
+      const rootUnits = activePb.units.filter(u => !u.parentId);
+      rootUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      let treeHtml = `
+        <div id="unitRootDropZone" class="unit-root-drop-zone"
+             ondragover="handleRootDropOver(event)"
+             ondragleave="handleRootDropLeave(event)"
+             ondrop="handleRootDrop(event)">
+          <span>🌐 رهاسازی در اینجا: تبدیل به واحد اصلی (خارج کردن از زیرمجموعه)</span>
+        </div>
+        <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.6; background: var(--status-bg); padding: 8px 12px; border-radius: 8px; border: 1px dashed var(--border-color); display: flex; align-items: center; gap: 6px;">
+          <span>💡</span>
+          <span>برای تبدیل یک واحد به زیرمجموعه، آن را به وسط واحد هدف بکشید. برای تغییر ترتیب، به لبه بالا یا پایین بکشید. همچنین از دکمه «📁 والد» می‌توانید استفاده کنید.</span>
+        </div>
+      `;
+
+      function renderUnitNode(u, level, parentUnit, isFirst, isLast, hasChildAfter) {
+        if (q && !filteredUnits.some(fu => fu.id === u.id)) {
+          // If searching, check if any of its children match
+          const children = childrenMap.get(u.id) || [];
+          const hasMatchingChild = children.some(c => filteredUnits.some(fu => fu.id === c.id));
+          if (!hasMatchingChild) return '';
+        }
+
+        const isChild = level > 0;
+        const uColor = getUnitColor(u.name);
+        const parentColor = parentUnit ? getUnitColor(parentUnit.name) : '#2196F3';
         const subUnits = u.subUnits || [];
         subUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-        html += `
-          <div class="unit-tree-node"
+        const indentPx = level * 36;
+        const childClass = isChild ? 'is-child-unit' : '';
+        const childAfterClass = hasChildAfter ? 'has-child-after' : '';
+
+        let nodeHtml = `
+          <div class="unit-tree-node ${childClass} ${childAfterClass}"
                id="unit-node-${escapeHtml(u.id)}"
+               style="${isChild ? `margin-right: ${indentPx}px !important; --unit-parent-theme-color: ${parentColor};` : ''}"
                draggable="true"
                ondragstart="handleUnitDragStart(event, '${escapeHtml(u.id)}')"
-               ondragover="handleUnitDragOver(event)"
+               ondragend="handleUnitDragEnd(event)"
+               ondragover="handleUnitDragOver(event, '${escapeHtml(u.id)}')"
                ondragleave="handleUnitDragLeave(event)"
                ondrop="handleUnitDrop(event, '${escapeHtml(u.id)}')">
             <div class="unit-tree-header">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <button type="button" class="drag-handle-btn" title="جابه‌جایی واحد با درگ و دراپ">⠿</button>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="drag-handle-btn" title="جابه‌جایی واحد یا انداختن روی واحد دیگر برای زیرمجموعه شدن">⠿</button>
                 <div class="order-btn-group" style="display: flex; gap: 2px;">
                   <button type="button" class="btn-arrow-order" ${isFirst ? 'disabled' : ''} onclick="moveUnitOrder('${escapeHtml(u.id)}', -1)" title="انتقال واحد به بالا">▲</button>
                   <button type="button" class="btn-arrow-order" ${isLast ? 'disabled' : ''} onclick="moveUnitOrder('${escapeHtml(u.id)}', 1)" title="انتقال واحد به پایین">▼</button>
                 </div>
                 <button type="button" class="btn-unit-color-circle" style="width: 24px; height: 24px; background-color: ${uColor};" title="تغییر رنگ واحد" onclick="openUnitColorPaletteModal('${escapeHtml(u.name)}')">🎨</button>
-                <span style="font-weight: bold; font-size: 13.5px;">${escapeHtml(u.name)}</span>
+                <span style="font-weight: bold; font-size: 13.5px; color: var(--text-color);">${highlightTextMatches(u.name, q)}</span>
+                ${isChild && parentUnit ? `
+                  <span class="nest-badge-indicator" title="واحد والد: ${escapeHtml(parentUnit.name)}">
+                    ↳ زیرمجموعه «${escapeHtml(parentUnit.name)}»
+                  </span>
+                ` : ''}
               </div>
-              <div style="display: flex; gap: 4px;">
+              <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn-icon-small" style="font-size: 11px; padding: 3px 6px;" title="تنظیم یا تغییر واحد والد" onclick="promptChangeUnitParent('${escapeHtml(u.id)}')">📁 والد</button>
+                ${isChild ? `
+                  <button type="button" class="btn-icon-small" style="font-size: 11px; padding: 3px 6px; color: #1976d2;" title="خارج کردن از زیرمجموعه و تبدیل به واحد اصلی" onclick="unNestUnit('${escapeHtml(u.id)}')">⎌ اصلی</button>
+                ` : ''}
                 <button type="button" class="btn-icon-small" style="font-size: 11px; padding: 3px 6px;" onclick="promptRenameUnit('${escapeHtml(u.id)}')">✏️ نام</button>
                 <button type="button" class="btn-icon-small" style="color: #e53935; font-size: 11px; padding: 3px 6px;" onclick="deleteUnitFromPhonebook('${escapeHtml(u.id)}')">🗑️</button>
               </div>
@@ -5510,9 +6168,26 @@
             </div>
           </div>
         `;
+
+        // Render children of this unit
+        const directChildren = childrenMap.get(u.id) || [];
+        directChildren.forEach((child, cIdx) => {
+          const isFirstChild = (cIdx === 0);
+          const isLastChild = (cIdx === directChildren.length - 1);
+          const hasSiblingChildAfter = cIdx < directChildren.length - 1;
+          nodeHtml += renderUnitNode(child, level + 1, u, isFirstChild, isLastChild, hasSiblingChildAfter);
+        });
+
+        return nodeHtml;
+      }
+
+      rootUnits.forEach((ru, rIdx) => {
+        const isFirstRoot = (rIdx === 0);
+        const isLastRoot = (rIdx === rootUnits.length - 1);
+        treeHtml += renderUnitNode(ru, 0, null, isFirstRoot, isLastRoot, false);
       });
 
-      container.innerHTML = html;
+      container.innerHTML = treeHtml;
     }
 
     async function addNewUnitToPhonebook() {
@@ -5854,6 +6529,9 @@
 
       // Remove the old unit / sub-unit from phonebook schema
       if (ctx.type === 'unit') {
+        pb.units.forEach(item => {
+          if (item.parentId === ctx.unitId) item.parentId = null;
+        });
         pb.units = pb.units.filter(u => u.id !== ctx.unitId);
         pb.units.forEach((u, idx) => u.order = idx);
       } else if (ctx.type === 'subunit') {
@@ -5894,6 +6572,9 @@
         const confirmed = await showConfirmModal(`آیا از حذف واحد «${u.name}» اطمینان دارید؟`, 'حذف واحد سازمانی', '🗑️');
         if (!confirmed) return;
 
+        activePb.units.forEach(item => {
+          if (item.parentId === unitId) item.parentId = null;
+        });
         activePb.units = activePb.units.filter(item => item.id !== unitId);
         activePb.units.forEach((item, idx) => item.order = idx);
 
@@ -6893,8 +7574,13 @@
               unitGroups[u].push(c);
             });
 
-            orderedUnits.forEach((unitName, unitIndex) => {
+            const configuredPbUnits = pb.units || [];
+            const displayUnits = buildHierarchicalDisplayUnits(configuredPbUnits, orderedUnits, unitGroups);
+
+            displayUnits.forEach((item, unitIndex) => {
+              const unitName = item.unitName;
               const unitList = unitGroups[unitName];
+              if (!unitList || unitList.length === 0) return;
               const unitColor = getUnitColor(unitName, unitIndex);
               const unitArgb = toArgb(unitColor);
               const softTintArgb = getSoftTintArgb(unitColor, 0.08);
@@ -6902,15 +7588,20 @@
               // Space row
               ws.addRow(['']).height = 12;
 
-              // Unit header banner
-              const unitHeaderRow = ws.addRow([`🏢 واحد: ${unitName} (${unitList.length} نفر)`]);
+              // Unit header banner with hierarchical indication if child
+              const isChild = item.level > 0 && item.parentUnit;
+              const unitBannerTitle = isChild
+                ? `🏢 واحد: ↳ ${unitName} (زیرمجموعه «${item.parentUnit.name}») (${unitList.length} نفر)`
+                : `🏢 واحد: ${unitName} (${unitList.length} نفر)`;
+
+              const unitHeaderRow = ws.addRow([unitBannerTitle]);
               const uRowIdx = unitHeaderRow.number;
               ws.mergeCells(`A${uRowIdx}:${lastColLetter}${uRowIdx}`);
               unitHeaderRow.height = 28;
               const uCell = ws.getCell(`A${uRowIdx}`);
               uCell.font = { name: 'Tahoma', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
               uCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: unitArgb } };
-              uCell.alignment = { horizontal: 'right', vertical: 'middle', indent: 1 };
+              uCell.alignment = { horizontal: 'right', vertical: 'middle', indent: isChild ? 2 : 1 };
 
               // Table header for fields
               const thHeaders = ['ردیف', ...visibleFields.map(f => f.label)];
@@ -8039,20 +8730,30 @@
         groups[u].push(c);
       });
 
-      // Sort units by configured order, then appearance
-      foundUnits.sort((a, b) => {
-        const orderA = unitOrderMap.has(normalizePersianText(a)) ? unitOrderMap.get(normalizePersianText(a)) : 9999;
-        const orderB = unitOrderMap.has(normalizePersianText(b)) ? unitOrderMap.get(normalizePersianText(b)) : 9999;
-        return orderA - orderB;
-      });
+      // Build hierarchical display list
+      const displayUnits = buildHierarchicalDisplayUnits(configuredUnits, foundUnits, groups);
 
       const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
 
-      foundUnits.forEach((unitName) => {
+      displayUnits.forEach((item) => {
+        const unitName = item.unitName;
+        const isChild = item.level > 0 && item.parentUnit;
+
         const groupDiv = document.createElement('div');
         groupDiv.className = 'unit-group';
         groupDiv.id = `unit-group-${unitName}`;
         groupDiv.setAttribute('data-unit-name', unitName);
+
+        if (isChild) {
+          groupDiv.classList.add('is-child-unit');
+          if (item.hasChildAfter) {
+            groupDiv.classList.add('has-child-after');
+          }
+          const indentPx = Math.min(item.level * 36, 120);
+          groupDiv.style.marginRight = `${indentPx}px`;
+          const parentColor = getUnitColor(item.parentUnit.name);
+          groupDiv.style.setProperty('--unit-parent-theme-color', parentColor);
+        }
 
         if (collapsedUnits.has(unitName)) {
           groupDiv.classList.add('is-collapsed');
