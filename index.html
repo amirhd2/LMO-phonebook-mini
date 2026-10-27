@@ -2542,6 +2542,99 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 10px rgba(33, 150, 243, 0.35);
     }
+
+    /* Multi-number numeric fields container & capsule plus button */
+    .multi-number-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+    .multi-number-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      width: 100%;
+    }
+    .multi-number-row .form-input {
+      flex-grow: 1;
+    }
+    .btn-add-number-capsule {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 20px;
+      background: #ebf8ff;
+      color: #1976d2;
+      border: 1.5px solid #90caf9;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+      outline: none;
+      user-select: none;
+      line-height: 1;
+    }
+    .btn-add-number-capsule:hover {
+      background: #2196F3;
+      color: #ffffff;
+      border-color: #1976d2;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(33, 150, 243, 0.35);
+    }
+    [data-theme="dark"] .btn-add-number-capsule {
+      background: #1e3a8a;
+      color: #93c5fd;
+      border-color: #3b82f6;
+    }
+    [data-theme="dark"] .btn-add-number-capsule:hover {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #60a5fa;
+    }
+    .btn-remove-number-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffebee;
+      color: #e53935;
+      border: 1.5px solid #ffcdd2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      padding: 0;
+      line-height: 1;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 1.5px 4px rgba(229, 57, 53, 0.2);
+    }
+    .btn-remove-number-circle:hover {
+      background: #e53935;
+      color: #ffffff;
+      border-color: #b71c1c;
+      transform: scale(1.1);
+      box-shadow: 0 3px 8px rgba(229, 57, 53, 0.4);
+    }
+    [data-theme="dark"] .btn-remove-number-circle {
+      background: #450a0a;
+      color: #fca5a5;
+      border-color: #7f1d1d;
+    }
+    [data-theme="dark"] .btn-remove-number-circle:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #ef4444;
+    }
     .subunit-add-btn-oval svg, .subunit-add-contact-capsule svg {
       stroke: currentColor;
       flex-shrink: 0;
@@ -3387,19 +3480,19 @@
 
         <!-- Dynamic Fields Container (Populated based on active phonebook's configured fields) -->
         <div id="newContactDynamicFieldsContainer">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="form-group">
-              <label class="form-label" for="newContactInternal">تلفن داخلی:</label>
-              <input type="text" id="newContactInternal" class="form-input" placeholder="مثال: 120" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" data-numeric-type="integer" autocomplete="off">
+              <label class="form-label">تلفن داخلی:</label>
+              <div class="multi-number-container" id="container-internal"></div>
             </div>
             <div class="form-group">
-              <label class="form-label" for="newContactVoip">VoIP:</label>
-              <input type="text" id="newContactVoip" class="form-input" placeholder="مثال: 205" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" data-numeric-type="integer" autocomplete="off">
+              <label class="form-label">VoIP:</label>
+              <div class="multi-number-container" id="container-voip"></div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="newContactDirect">تلفن مستقیم:</label>
-            <input type="tel" id="newContactDirect" class="form-input" placeholder="مثال: 021-88888888" inputmode="tel" data-numeric-type="phone" autocomplete="tel">
+          <div class="form-group" style="margin-top: 10px;">
+            <label class="form-label">تلفن مستقیم:</label>
+            <div class="multi-number-container" id="container-direct"></div>
           </div>
           <div id="newContactCustomFields"></div>
         </div>
@@ -4088,9 +4181,9 @@
 
         // Add pattern hint for mobile keyboards to trigger numeric keypad
         if (detectedMode === 'numeric' && !el.getAttribute('pattern') && isInput) {
-          el.setAttribute('pattern', '[0-9۰-۹٠-٩]*');
+          el.setAttribute('pattern', '[0-9۰-۹٠-٩\\- ]*');
         } else if (detectedMode === 'decimal' && !el.getAttribute('pattern') && isInput) {
-          el.setAttribute('pattern', '[0-9۰-۹٠-٩.,٫]*');
+          el.setAttribute('pattern', '[0-9۰-۹٠-٩.,٫\\- ]*');
         }
       },
 
@@ -7016,6 +7109,113 @@
       // Compatibility shim
     }
 
+    // =========================================================================
+    // 🔢 MULTI-NUMBER NUMERIC FIELD MANAGEMENT SYSTEM
+    // =========================================================================
+    function parseMultiNumberValue(rawVal, numericType = 'integer') {
+      if (!rawVal || !String(rawVal).trim()) return [];
+      const str = String(rawVal).trim();
+      if (numericType === 'phone') {
+        const parts = str.split(/ \- |\n|,|٫|،/).map(p => p.trim()).filter(Boolean);
+        return parts.length > 0 ? parts : [str];
+      } else {
+        const parts = str.split(/[\-\n,٫،]/).map(p => p.trim()).filter(Boolean);
+        return parts.length > 0 ? parts : [str];
+      }
+    }
+
+    function addMultiNumberRow(containerId, fieldKey, placeholder, inputMode = 'numeric', initialValue = '') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const rows = container.querySelectorAll('.multi-number-row');
+      const isFirstRow = (rows.length === 0);
+
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'multi-number-row';
+
+      const input = document.createElement('input');
+      input.type = (inputMode === 'tel') ? 'tel' : 'text';
+      input.className = 'form-input multi-number-input';
+      input.placeholder = placeholder || 'شماره جدید...';
+      input.setAttribute('inputmode', inputMode);
+      input.setAttribute('pattern', '[0-9۰-۹٠-٩\\- ]*');
+      input.setAttribute('data-field-key', fieldKey);
+      input.setAttribute('data-numeric-type', inputMode === 'tel' ? 'phone' : 'integer');
+      input.value = initialValue;
+      input.autocomplete = 'off';
+
+      rowDiv.appendChild(input);
+
+      if (isFirstRow) {
+        const addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.className = 'btn-add-number-capsule';
+        addBtn.title = 'افزودن شماره جدید به این فیلد';
+        addBtn.onclick = () => addMultiNumberRow(containerId, fieldKey, placeholder, inputMode, '');
+        addBtn.innerHTML = `<span>➕</span><span style="font-size: 11.5px; font-weight: 600;">جدید</span>`;
+        rowDiv.appendChild(addBtn);
+      } else {
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-remove-number-circle';
+        removeBtn.title = 'حذف این شماره';
+        removeBtn.onclick = () => {
+          rowDiv.remove();
+        };
+        removeBtn.innerHTML = '✕';
+        rowDiv.appendChild(removeBtn);
+      }
+
+      container.appendChild(rowDiv);
+      if (!isFirstRow) {
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function setMultiNumberFieldValues(containerId, fieldKey, placeholder, inputMode = 'numeric', rawVal = '') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      const parts = parseMultiNumberValue(rawVal, inputMode === 'tel' ? 'phone' : 'integer');
+      if (parts.length === 0) {
+        addMultiNumberRow(containerId, fieldKey, placeholder, inputMode, '');
+      } else {
+        parts.forEach(val => {
+          addMultiNumberRow(containerId, fieldKey, placeholder, inputMode, val);
+        });
+      }
+    }
+
+    function getMultiNumberFieldValue(containerId, numericType = 'integer') {
+      const container = document.getElementById(containerId);
+      if (!container) return '';
+      const inputs = Array.from(container.querySelectorAll('.multi-number-input'));
+      const values = [];
+
+      inputs.forEach(inp => {
+        let raw = inp.value.trim();
+        if (!raw) return;
+        raw = NumericInputSystem.normalizeDigits(raw);
+        if (numericType === 'phone') {
+          const norm = NumericInputSystem.normalize(raw, 'phone');
+          if (norm) values.push(norm);
+        } else {
+          const parts = raw.split(/[\n,٫،]/).map(p => p.trim()).filter(Boolean);
+          parts.forEach(p => {
+            const subParts = p.split('-').map(sp => sp.trim()).filter(Boolean);
+            subParts.forEach(sp => {
+              const norm = NumericInputSystem.normalize(sp, 'integer');
+              if (norm) values.push(norm);
+            });
+          });
+        }
+      });
+
+      return values.join(' - ');
+    }
+
     function openAddContactModal() {
       editingContactIdx = -1;
       const modal = document.getElementById('addContactModal');
@@ -7048,7 +7248,10 @@
       }
 
       updateSubUnitsDropdown('');
-      renderAddContactCustomFields(currentPhonebookId);
+      setMultiNumberFieldValues('container-internal', 'تلفن داخلی', 'مثال: 120', 'numeric', '');
+      setMultiNumberFieldValues('container-voip', 'VoIP', 'مثال: 205', 'numeric', '');
+      setMultiNumberFieldValues('container-direct', 'تلفن مستقیم', 'مثال: 021-88888888', 'tel', '');
+      renderAddContactCustomFields(currentPhonebookId, null);
 
       if (modal) {
         lockBodyScroll();
@@ -7145,23 +7348,17 @@
         subSelect.value = subVal;
       }
 
-      // Pre-fill Internal, VoIP, Direct Phone
-      const internalEl = document.getElementById('newContactInternal');
-      const voipEl = document.getElementById('newContactVoip');
-      const directEl = document.getElementById('newContactDirect');
+      // Pre-fill Internal, VoIP, Direct Phone into Multi-Number Containers
+      const internalVal = contact['تلفن داخلی'] || contact['داخلی'] || '';
+      const voipVal = contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '';
+      const directVal = contact['تلفن مستقیم'] || contact['مستقیم'] || '';
 
-      if (internalEl) internalEl.value = contact['تلفن داخلی'] || contact['داخلی'] || '';
-      if (voipEl) voipEl.value = contact['VoIP'] || contact['Voip'] || contact['ویپ'] || '';
-      if (directEl) directEl.value = contact['تلفن مستقیم'] || contact['مستقیم'] || '';
+      setMultiNumberFieldValues('container-internal', 'تلفن داخلی', 'مثال: 120', 'numeric', internalVal);
+      setMultiNumberFieldValues('container-voip', 'VoIP', 'مثال: 205', 'numeric', voipVal);
+      setMultiNumberFieldValues('container-direct', 'تلفن مستقیم', 'مثال: 021-88888888', 'tel', directVal);
 
       // Pre-fill Custom Fields
-      renderAddContactCustomFields(targetPbId);
-      document.querySelectorAll('[data-custom-field]').forEach(cfInput => {
-        const fieldKey = cfInput.getAttribute('data-custom-field');
-        if (fieldKey && contact[fieldKey] !== undefined) {
-          cfInput.value = contact[fieldKey];
-        }
-      });
+      renderAddContactCustomFields(targetPbId, contact);
 
       if (modal) {
         lockBodyScroll();
@@ -7188,7 +7385,7 @@
       const unitInput = document.getElementById('newContactUnitInput');
       if (unitInput) unitInput.value = '';
       updateSubUnitsDropdown('');
-      renderAddContactCustomFields(pbId);
+      renderAddContactCustomFields(pbId, editingContactIdx !== -1 ? contacts[editingContactIdx] : null);
     }
 
     function updateSubUnitsDropdown(unitName) {
@@ -7210,7 +7407,7 @@
       subSelect.innerHTML = optionsHtml;
     }
 
-    function renderAddContactCustomFields(pbId) {
+    function renderAddContactCustomFields(pbId, existingContact = null) {
       const container = document.getElementById('newContactCustomFields');
       if (!container) return;
       const pb = getPhonebookById(pbId);
@@ -7219,24 +7416,30 @@
         return;
       }
       const customFields = pb.fields.filter(f => !f.isFixed && f.visible !== false && f.id !== 'نام و نام خانوادگی' && f.id !== 'تلفن داخلی' && f.id !== 'VoIP' && f.id !== 'تلفن مستقیم');
-      container.innerHTML = customFields.map(cf => {
+
+      container.innerHTML = '';
+      customFields.forEach(cf => {
         const isNumeric = (cf.type === 'phone' || cf.type === 'integer' || cf.type === 'numeric');
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        formGroup.style.marginTop = '10px';
+
         if (isNumeric) {
-          return `
-            <div class="form-group">
-              <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(عددی/تلفن)</span>:</label>
-              <input type="tel" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}" data-custom-type="numeric" inputmode="numeric" pattern="[0-9۰-۹٠-٩]*" autocomplete="off">
-            </div>
+          formGroup.innerHTML = `
+            <label class="form-label">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(عددی/تلفن)</span>:</label>
+            <div class="multi-number-container" id="container-custom-${escapeHtml(cf.id)}"></div>
           `;
+          container.appendChild(formGroup);
+          const rawVal = existingContact ? (existingContact[cf.id] || '') : '';
+          setMultiNumberFieldValues('container-custom-' + cf.id, cf.id, cf.label, cf.type === 'phone' ? 'tel' : 'numeric', rawVal);
         } else {
-          return `
-            <div class="form-group">
-              <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(متنی)</span>:</label>
-              <input type="text" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}" data-custom-type="text" inputmode="text" data-text-input="true" autocomplete="off">
-            </div>
+          formGroup.innerHTML = `
+            <label class="form-label" for="customFieldInput-${escapeHtml(cf.id)}">${escapeHtml(cf.label)} <span style="font-size: 11px; color: var(--text-muted);">(متنی)</span>:</label>
+            <input type="text" id="customFieldInput-${escapeHtml(cf.id)}" class="form-input" placeholder="${escapeHtml(cf.label)}" data-custom-field="${escapeHtml(cf.id)}" data-custom-type="text" inputmode="text" data-text-input="true" autocomplete="off" value="${existingContact ? escapeHtml(existingContact[cf.id] || '') : ''}">
           `;
+          container.appendChild(formGroup);
         }
-      }).join('');
+      });
     }
 
     async function promptAddSubUnitInline() {
@@ -7304,13 +7507,9 @@
       const subSelect = document.getElementById('newContactSubUnitSelect');
       const finalSubUnit = subSelect ? subSelect.value.trim() : '';
 
-      const internalEl = document.getElementById('newContactInternal');
-      const voipEl = document.getElementById('newContactVoip');
-      const directEl = document.getElementById('newContactDirect');
-
-      const internal = internalEl ? NumericInputSystem.normalize(internalEl.value, 'integer') : '';
-      const voip = voipEl ? NumericInputSystem.normalize(voipEl.value, 'integer') : '';
-      const direct = directEl ? NumericInputSystem.normalize(directEl.value, 'phone') : '';
+      const internal = getMultiNumberFieldValue('container-internal', 'integer');
+      const voip = getMultiNumberFieldValue('container-voip', 'integer');
+      const direct = getMultiNumberFieldValue('container-direct', 'phone');
 
       if (!name) {
         showToast('⚠️ لطفاً نام و نام خانوادگی را وارد کنید.');
@@ -7330,20 +7529,21 @@
 
       // Collect custom fields
       const customFieldValues = {};
-      document.querySelectorAll('[data-custom-field]').forEach(cfInput => {
-        const fieldKey = cfInput.getAttribute('data-custom-field');
-        const customType = cfInput.getAttribute('data-custom-type');
-        if (fieldKey) {
-          let val = cfInput.value.trim();
-          if (customType === 'numeric') {
-            val = NumericInputSystem.normalize(val, 'phone');
+      const targetPb = getPhonebookById(targetPbId);
+      if (targetPb && targetPb.fields) {
+        const customFields = targetPb.fields.filter(f => !f.isFixed && f.visible !== false && f.id !== 'نام و نام خانوادگی' && f.id !== 'تلفن داخلی' && f.id !== 'VoIP' && f.id !== 'تلفن مستقیم');
+        customFields.forEach(cf => {
+          const isNumeric = (cf.type === 'phone' || cf.type === 'integer' || cf.type === 'numeric');
+          if (isNumeric) {
+            customFieldValues[cf.id] = getMultiNumberFieldValue('container-custom-' + cf.id, cf.type === 'phone' ? 'phone' : 'integer');
+          } else {
+            const input = document.getElementById('customFieldInput-' + cf.id);
+            customFieldValues[cf.id] = input ? input.value.trim() : '';
           }
-          customFieldValues[fieldKey] = val;
-        }
-      });
+        });
+      }
 
       // Ensure unit and subunit are registered in the target phonebook
-      const targetPb = getPhonebookById(targetPbId);
       if (targetPb) {
         if (!targetPb.units) targetPb.units = [];
         let u = targetPb.units.find(item => normalizePersianText(item.name) === normalizePersianText(finalUnit));
