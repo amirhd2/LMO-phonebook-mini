@@ -830,6 +830,8 @@
     /* Unit Container Body - Cards Nested Inside */
     .unit-container-body {
       padding: 14px;
+      overflow-x: auto;
+      scrollbar-width: thin;
     }
 
     .unit-table {
@@ -841,29 +843,34 @@
       border: 1px solid var(--border-color);
       background-color: var(--card-bg);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      table-layout: auto;
     }
     .unit-table thead {
       background-color: var(--unit-lighter-accent, #2196F3);
     }
     .unit-table th {
-      padding: 11px 10px;
+      padding: 11px 12px;
       color: #ffffff;
       font-size: 14.5px;
       font-weight: bold;
       text-align: center;
       border-bottom: 1px solid rgba(0, 0, 0, 0.08);
       border-left: 1px solid rgba(255, 255, 255, 0.15);
+      white-space: nowrap;
+      box-sizing: border-box;
     }
     .unit-table th:last-child {
       border-left: none;
     }
     .unit-table td {
-      padding: 11px 10px;
+      padding: 11px 12px;
       border: 1px solid var(--border-color);
       text-align: center;
       font-size: 14px;
       color: var(--text-color);
       background-color: var(--card-bg);
+      white-space: nowrap;
+      box-sizing: border-box;
     }
     .no-results { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 10px; color: var(--text-muted); }
 
@@ -1584,6 +1591,7 @@
       font-weight: bold;
       text-align: right;
       flex-grow: 1;
+      white-space: nowrap;
     }
     .btn-pencil-edit {
       width: 26px;
@@ -1860,11 +1868,18 @@
       margin-top: 10px;
       margin-bottom: 6px;
     }
+    .header-pb-row-flex {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
     .header-active-pb-trigger {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 100%;
+      flex: 1;
+      min-width: 0;
       background: var(--status-bg);
       border: 1.5px solid var(--border-color);
       border-radius: 20px;
@@ -1873,6 +1888,59 @@
       color: var(--text-color);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .header-pb-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn-pb-quick-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      line-height: 1;
+    }
+    .btn-pb-quick-action.manage-btn {
+      background: linear-gradient(135deg, #1976d2, #0d47a1);
+      border: 1px solid #0d47a1;
+      box-shadow: 0 2px 6px rgba(13, 71, 161, 0.25);
+    }
+    .btn-pb-quick-action.manage-btn:hover {
+      background: linear-gradient(135deg, #1e88e5, #1565c0);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.4);
+    }
+    .btn-pb-quick-action.add-btn {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      border: 1px solid #1b5e20;
+      box-shadow: 0 2px 6px rgba(46, 125, 50, 0.25);
+    }
+    .btn-pb-quick-action.add-btn:hover {
+      background: linear-gradient(135deg, #388e3c, #2e7d32);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(46, 125, 50, 0.4);
+    }
+    .btn-pb-quick-action:active {
+      transform: scale(0.96);
+    }
+    @media (max-width: 640px) {
+      .btn-pb-quick-action .quick-btn-label {
+        display: none;
+      }
+      .btn-pb-quick-action {
+        padding: 6px 10px;
+      }
     }
     .header-active-pb-trigger:hover {
       background: var(--card-bg);
@@ -2946,7 +3014,52 @@
       border: 1px solid rgba(13, 71, 161, 0.25);
       white-space: nowrap;
     }
-    [data-theme="dark"] .nest-badge-indicator {
+    .mgmt-unit-count-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+      border: 1px solid rgba(33, 150, 243, 0.25);
+      white-space: nowrap;
+    }
+    [data-theme="dark"] .mgmt-unit-count-badge {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.35);
+    }
+
+    .btn-mgmt-unit-toggle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+      border: 1px solid rgba(33, 150, 243, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .btn-mgmt-unit-toggle:hover {
+      background: #2196F3;
+      color: #ffffff;
+      transform: scale(1.1);
+      box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+    }
+    .btn-mgmt-unit-toggle.is-collapsed {
+      background: var(--status-bg);
+      color: var(--text-muted);
+      border-color: var(--border-color);
+    }
+    [data-theme="dark"] .btn-mgmt-unit-toggle {
       background: rgba(59, 130, 246, 0.2);
       color: #93c5fd;
       border-color: rgba(59, 130, 246, 0.4);
@@ -3088,16 +3201,30 @@
       </div>
     </div>
 
-    <!-- Row 2: Dedicated Full-Width Active Phonebook Selector Dropdown -->
+    <!-- Row 2: Active Phonebook Selector Dropdown & Quick Admin Actions -->
     <div class="header-pb-dropdown-anchor" id="headerPbDropdownAnchor">
-      <button type="button" class="header-active-pb-trigger" id="headerActivePbTrigger" onclick="togglePhonebookDropdown(event)" title="انتخاب دفترتلفن یا استان فعال (کلیک برای باز کردن لیست و جستجو)">
-        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
-          <span style="font-size: 15px;">📖</span>
-          <span class="header-pb-title-label" id="headerActivePbTitle">دفتر مرکزی</span>
-          <span class="header-pb-badge" id="headerActivePbBadge">فعال</span>
+      <div class="header-pb-row-flex">
+        <button type="button" class="header-active-pb-trigger" id="headerActivePbTrigger" onclick="togglePhonebookDropdown(event)" title="انتخاب دفترتلفن یا استان فعال (کلیک برای باز کردن لیست و جستجو)">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+            <span style="font-size: 15px;">📖</span>
+            <span class="header-pb-title-label" id="headerActivePbTitle">دفتر مرکزی</span>
+            <span class="header-pb-badge" id="headerActivePbBadge">فعال</span>
+          </div>
+          <span class="header-pb-arrow" id="headerActivePbArrow">▾</span>
+        </button>
+
+        <!-- Quick Admin Action Buttons (Left of Active Phonebook Box) -->
+        <div class="header-pb-quick-actions" id="headerAdminQuickActions" style="display: none;">
+          <button type="button" id="headerQuickManagePbBtn" class="btn-pb-quick-action manage-btn" onclick="openFullpagePhonebookManager()" title="مدیریت ساختار و واحدهای دفترتلفن">
+            <span>⚙️</span>
+            <span class="quick-btn-label">مدیریت ساختار</span>
+          </button>
+          <button type="button" id="headerQuickAddPbBtn" class="btn-pb-quick-action add-btn" onclick="promptCreatePhonebook()" title="افزودن دفترتلفن جدید">
+            <span>➕</span>
+            <span class="quick-btn-label">افزودن دفترتلفن</span>
+          </button>
         </div>
-        <span class="header-pb-arrow" id="headerActivePbArrow">▾</span>
-      </button>
+      </div>
 
       <!-- Header Phonebook Dropdown with Live Search -->
       <div class="header-pb-dropdown" id="headerPbDropdown" style="display: none;" onclick="event.stopPropagation()">
@@ -4618,6 +4745,8 @@
       if (dropdownAddBtn) dropdownAddBtn.style.display = isAdminLoggedIn ? 'flex' : 'none';
       const dropdownManageBtn = document.getElementById('dropdownManagePbBtn');
       if (dropdownManageBtn) dropdownManageBtn.style.display = isAdminLoggedIn ? 'flex' : 'none';
+      const adminQuickActions = document.getElementById('headerAdminQuickActions');
+      if (adminQuickActions) adminQuickActions.style.display = isAdminLoggedIn ? 'flex' : 'none';
       updateActivePhonebookHeader();
       renderPhonebookTabs();
     }
@@ -6207,6 +6336,20 @@
       }
     }
 
+    const collapsedMgmtUnits = new Set();
+
+    function toggleMgmtUnitCollapse(unitId, e) {
+      if (e) e.stopPropagation();
+      if (collapsedMgmtUnits.has(unitId)) {
+        collapsedMgmtUnits.delete(unitId);
+      } else {
+        collapsedMgmtUnits.add(unitId);
+      }
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      const searchInput = document.getElementById('fullpageUnitsSearchInput');
+      renderUnitsTreeList(activePb, searchInput ? searchInput.value : '');
+    }
+
     function renderUnitsTreeList(activePb, searchQuery = '') {
       const container = document.getElementById('fullpagePbUnitsTreeList') || document.getElementById('pbUnitsTreeList');
       if (!container || !activePb) return;
@@ -6268,6 +6411,8 @@
       const rootUnits = activePb.units.filter(u => !u.parentId);
       rootUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
 
+      const pbContacts = contacts.filter(c => (c.phonebookId || 'pb-central') === activePb.id);
+
       let treeHtml = `
         <div id="unitRootDropZone" class="unit-root-drop-zone"
              ondragover="handleRootDropOver(event)"
@@ -6295,6 +6440,22 @@
         const subUnits = u.subUnits || [];
         subUnits.sort((a, b) => (a.order || 0) - (b.order || 0));
 
+        const directChildren = childrenMap.get(u.id) || [];
+        const hasChildren = directChildren.length > 0;
+        const isCollapsed = collapsedMgmtUnits.has(u.id);
+
+        const normU = normalizePersianText(u.name);
+        const unitContactCount = pbContacts.filter(c => normalizePersianText((c['واحد'] || c['بخش'] || '').trim()) === normU).length;
+
+        const collapseToggleHtml = hasChildren ? `
+          <button type="button" 
+                  class="btn-mgmt-unit-toggle ${isCollapsed ? 'is-collapsed' : ''}" 
+                  onclick="toggleMgmtUnitCollapse('${escapeHtml(u.id)}', event)" 
+                  title="${isCollapsed ? 'باز کردن زیرمجموعه‌ها' : 'بستن زیرمجموعه‌ها'}">
+            ${isCollapsed ? '▸' : '▾'}
+          </button>
+        ` : '';
+
         const indentPx = level * 36;
         const childClass = isChild ? 'is-child-unit' : '';
         const childAfterClass = hasChildAfter ? 'has-child-after' : '';
@@ -6320,6 +6481,7 @@
             ${ancestorLinesHtml}
             <div class="unit-tree-header">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                ${collapseToggleHtml}
                 <button type="button" class="drag-handle-btn" title="جابه‌جایی واحد یا انداختن روی واحد دیگر برای زیرمجموعه شدن">⠿</button>
                 <div class="order-btn-group" style="display: flex; gap: 2px;">
                   <button type="button" class="btn-arrow-order" ${isFirst ? 'disabled' : ''} onclick="moveUnitOrder('${escapeHtml(u.id)}', -1)" title="انتقال واحد به بالا">▲</button>
@@ -6327,11 +6489,7 @@
                 </div>
                 <button type="button" class="btn-unit-color-circle" style="width: 24px; height: 24px; background-color: ${uColor};" title="تغییر رنگ واحد" onclick="openUnitColorPaletteModal('${escapeHtml(u.name)}')">🎨</button>
                 <span style="font-weight: bold; font-size: 13.5px; color: var(--text-color);">${highlightTextMatches(u.name, q)}</span>
-                ${isChild && parentUnit ? `
-                  <span class="nest-badge-indicator" title="واحد والد: ${escapeHtml(parentUnit.name)}">
-                    ↳ زیرمجموعه «${escapeHtml(parentUnit.name)}»
-                  </span>
-                ` : ''}
+                <span class="mgmt-unit-count-badge" title="تعداد مخاطبین این واحد">${unitContactCount} نفر</span>
               </div>
               <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
                 <button type="button" class="btn-icon-small" style="font-size: 11px; padding: 3px 6px;" title="تنظیم یا تغییر واحد والد" onclick="promptChangeUnitParent('${escapeHtml(u.id)}')">📁 والد</button>
@@ -6377,22 +6535,23 @@
           </div>
         `;
 
-        // Render children of this unit
-        const directChildren = childrenMap.get(u.id) || [];
-        const nextAncestors = [...activeAncestors];
-        if (hasChildAfter && level > 0) {
-          nextAncestors.push({
-            level: level,
-            color: parentColor
+        // Render children of this unit ONLY if not collapsed
+        if (!isCollapsed && hasChildren) {
+          const nextAncestors = [...activeAncestors];
+          if (hasChildAfter && level > 0) {
+            nextAncestors.push({
+              level: level,
+              color: parentColor
+            });
+          }
+
+          directChildren.forEach((child, cIdx) => {
+            const isFirstChild = (cIdx === 0);
+            const isLastChild = (cIdx === directChildren.length - 1);
+            const hasSiblingChildAfter = cIdx < directChildren.length - 1;
+            nodeHtml += renderUnitNode(child, level + 1, u, isFirstChild, isLastChild, hasSiblingChildAfter, nextAncestors);
           });
         }
-
-        directChildren.forEach((child, cIdx) => {
-          const isFirstChild = (cIdx === 0);
-          const isLastChild = (cIdx === directChildren.length - 1);
-          const hasSiblingChildAfter = cIdx < directChildren.length - 1;
-          nodeHtml += renderUnitNode(child, level + 1, u, isFirstChild, isLastChild, hasSiblingChildAfter, nextAncestors);
-        });
 
         return nodeHtml;
       }
@@ -7848,14 +8007,21 @@
                   { key: 'تلفن مستقیم', label: 'تلفن مستقیم' }
                 ];
 
-            // Build columns definition
+            // Build columns definition dynamically based on max text content length
             const cols = [{ key: 'rowNum', width: 8, header: 'ردیف' }];
             visibleFields.forEach(f => {
-              let w = 20;
-              if (f.key === 'نام و نام خانوادگی') w = 32;
-              else if (f.key === 'تلفن مستقیم') w = 24;
-              else if (f.key === 'تلفن داخلی' || f.key === 'VoIP') w = 18;
-              cols.push({ key: f.key, width: w, header: f.label });
+              const fieldKey = f.id || f.key || f.label;
+              const headerLabel = f.label || fieldKey || '';
+              let maxLen = headerLabel ? headerLabel.trim().length : 0;
+              pbContacts.forEach(contact => {
+                const val = getContactFieldValue(contact, fieldKey);
+                if (val) {
+                  const len = String(val).trim().length;
+                  if (len > maxLen) maxLen = len;
+                }
+              });
+              const calculatedWidth = Math.max(16, maxLen + 6);
+              cols.push({ key: fieldKey, width: calculatedWidth, header: headerLabel });
             });
             ws.columns = cols;
 
@@ -9259,15 +9425,30 @@
             table.style.marginTop = '14px';
           }
 
-          // Build dynamic header columns based on visibleFields
+          // Build dynamic header columns based on visibleFields and actual maximum content lengths
+          const totalFields = visibleFields.length || 1;
+          const basePercent = (100 / totalFields).toFixed(2);
           let thHtml = '';
+
           visibleFields.forEach(f => {
             const fieldKey = f.id || f.key || f.label;
-            let widthStyle = '';
-            if (fieldKey === 'نام و نام خانوادگی') widthStyle = 'style="width: 32%;"';
-            else if (fieldKey === 'تلفن مستقیم') widthStyle = 'style="width: 24%;"';
-            else if (fieldKey === 'تلفن داخلی' || fieldKey === 'VoIP') widthStyle = 'style="width: 22%;"';
-            thHtml += `<th ${widthStyle}>${escapeHtml(f.label || fieldKey)}</th>`;
+            const labelText = f.label || fieldKey || '';
+
+            // Measure maximum character length across header label and all contact cell values for this column
+            let maxCharLen = labelText ? labelText.trim().length : 0;
+            subContacts.forEach(contact => {
+              const val = getContactFieldValue(contact, fieldKey);
+              if (val) {
+                const len = String(val).trim().length;
+                if (len > maxCharLen) maxCharLen = len;
+              }
+            });
+
+            // Calculate minimum width in pixels to fit maximum content without wrapping or text clipping
+            const paddingAndIcons = (fieldKey === 'نام و نام خانوادگی' && isAdminLoggedIn) ? 55 : 32;
+            const calculatedMinPx = Math.max(85, Math.ceil(maxCharLen * 9.5) + paddingAndIcons);
+
+            thHtml += `<th style="width: ${basePercent}%; min-width: ${calculatedMinPx}px;">${escapeHtml(labelText)}</th>`;
           });
           table.innerHTML = `<thead><tr>${thHtml}</tr></thead><tbody></tbody>`;
 
