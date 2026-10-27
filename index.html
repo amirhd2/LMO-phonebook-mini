@@ -2024,8 +2024,8 @@
       padding: 8px 10px;
       border-top: 1px solid var(--border-color);
       background: var(--status-bg);
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 6px;
     }
     .pb-dropdown-action-btn {
@@ -2058,6 +2058,37 @@
       background: #1e3a8a;
       border-color: #3b82f6;
       color: #93c5fd;
+    }
+
+    /* Ancestor vertical stem line continuity across multi-level nested units */
+    .tree-ancestor-line {
+      position: absolute;
+      top: -24px;
+      bottom: -24px;
+      width: 3px;
+      right: calc(-1 * (20px + var(--ancestor-delta, 1) * 38px));
+      background: var(--line-color, #1976d2);
+      pointer-events: none;
+      z-index: 8;
+    }
+    .unit-tree-node .tree-ancestor-line {
+      top: -10px;
+      bottom: -10px;
+      width: 2.5px;
+      z-index: 4;
+    }
+    @media (max-width: 600px) {
+      .tree-ancestor-line {
+        top: -24px;
+        bottom: -24px;
+        width: 2.5px;
+        right: calc(-1 * (15px + var(--ancestor-delta, 1) * 24px)) !important;
+      }
+      .unit-tree-node .tree-ancestor-line {
+        top: -10px;
+        bottom: -10px;
+        right: calc(-1 * (15px + var(--ancestor-delta, 1) * 24px)) !important;
+      }
     }
 
     /* Full-Page Dedicated Phonebook Manager Overlay */
@@ -2757,13 +2788,13 @@
       position: relative;
     }
     .unit-tree-node.is-child-unit {
-      margin-right: 36px !important; /* ~1cm indentation from right */
+      margin-right: calc(var(--indent-level, 1) * 38px) !important; /* ~1cm indentation per nesting level from right */
       position: relative;
       border-right: 3.5px solid var(--unit-parent-theme-color, #1976d2) !important;
     }
     @media (max-width: 600px) {
       .unit-tree-node.is-child-unit {
-        margin-right: 24px !important;
+        margin-right: calc(var(--indent-level, 1) * 24px) !important;
       }
     }
     /* Vertical connecting line from parent down to child in manager */
@@ -2830,7 +2861,7 @@
 
     /* Main Page (صفحه اصلی) Hierarchy & Tree Lines */
     .unit-group.is-child-unit {
-      margin-right: 36px !important; /* ~1cm indentation from right */
+      margin-right: calc(var(--indent-level, 1) * 38px) !important; /* ~1cm indentation per nesting level from right */
       position: relative;
       box-shadow: 0 3px 14px var(--shadow-color);
       border-right: 4px solid var(--unit-parent-theme-color, #1976d2) !important;
@@ -2850,7 +2881,7 @@
     }
     @media (max-width: 600px) {
       .unit-group.is-child-unit {
-        margin-right: 24px !important;
+        margin-right: calc(var(--indent-level, 1) * 24px) !important;
       }
       .unit-group.is-child-unit::before {
         right: -15px !important;
@@ -2987,14 +3018,14 @@
         <div class="pb-dropdown-list" id="pbDropdownList">
           <!-- Rendered dynamically via JS -->
         </div>
-        <div class="pb-dropdown-footer" style="display: flex; gap: 8px; align-items: center; padding: 10px 12px;">
-          <button type="button" id="dropdownManagePbBtn" class="pb-dropdown-action-btn" style="display: none; flex: 1; padding: 9px 10px; border-radius: 8px; border: 1px solid #0d47a1; background: linear-gradient(135deg, #1976d2, #0d47a1); color: #ffffff; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(13, 71, 161, 0.3);" onclick="closePhonebookDropdown(); openFullpagePhonebookManager();">
+        <div class="pb-dropdown-footer">
+          <button type="button" id="dropdownManagePbBtn" class="pb-dropdown-action-btn" style="display: none; width: 100%; padding: 8px 6px; border-radius: 8px; border: 1px solid #0d47a1; background: linear-gradient(135deg, #1976d2, #0d47a1); color: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 6px rgba(13, 71, 161, 0.3);" onclick="closePhonebookDropdown(); openFullpagePhonebookManager();">
             <span>⚙️</span>
-            <span>مدیریت ساختار</span>
+            <span style="white-space: nowrap;">مدیریت ساختار</span>
           </button>
-          <button type="button" id="dropdownAddPbBtn" class="pb-dropdown-action-btn" style="display: none; flex: 1; padding: 9px 10px; border-radius: 8px; border: 1px solid #1b5e20; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #ffffff; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);" onclick="closePhonebookDropdown(); promptCreatePhonebook();">
+          <button type="button" id="dropdownAddPbBtn" class="pb-dropdown-action-btn" style="display: none; width: 100%; padding: 8px 6px; border-radius: 8px; border: 1px solid #1b5e20; background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);" onclick="closePhonebookDropdown(); promptCreatePhonebook();">
             <span>➕</span>
-            <span>افزودن دفترتلفن</span>
+            <span style="white-space: nowrap;">افزودن دفترتلفن</span>
           </button>
         </div>
       </div>
@@ -3821,7 +3852,7 @@
 
   <!-- Unit Parent Change Modal -->
   <div id="unitParentModal" class="modal-overlay" onclick="handleModalOverlayClick(event)">
-    <div class="modal-content" style="max-width: 420px;" onclick="event.stopPropagation()">
+    <div class="modal-content" style="max-width: 440px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 16px;">
           <span>📁</span>
@@ -3831,14 +3862,24 @@
       </div>
       <div style="margin-top: 12px;">
         <p style="font-size: 13.5px; color: var(--text-color); margin-bottom: 12px; line-height: 1.6;">
-          واحد والد این واحد سازمانی را انتخاب کنید. در صورت انتخاب «واحد اصلی»، این واحد در سطح اول قرار می‌گیرد:
+          واحد والد این واحد سازمانی را انتخاب کنید. با تایپ در کادر زیر می‌توانید نام واحد را به راحتی جستجو کنید:
         </p>
-        <div class="form-group">
-          <label class="form-label" for="unitParentModalSelect">واحد والد:</label>
-          <select id="unitParentModalSelect" class="form-input" style="font-weight: 600;"></select>
+
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label class="form-label" for="unitParentModalSearchInput">🔍 جستجوی واحد والد:</label>
+          <div style="position: relative; display: flex; align-items: center;">
+            <input type="text" id="unitParentModalSearchInput" class="form-input" placeholder="تایپ نام واحد برای فیلتر سریع..." oninput="handleUnitParentSearchInput(this.value)" autocomplete="off" style="font-size: 13px; padding-left: 30px;">
+            <button type="button" id="unitParentSearchClearBtn" style="position: absolute; left: 8px; display: none; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; padding: 2px 6px;" onclick="clearUnitParentSearch()" title="پاک کردن جستجو">✕</button>
+          </div>
         </div>
+
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" for="unitParentModalSelect">لیست واحدهای سازمانی مجاز:</label>
+          <select id="unitParentModalSelect" class="form-input" size="7" style="font-weight: 600; height: 180px; overflow-y: auto; scrollbar-width: thin; padding: 4px;" ondblclick="saveUnitParentChange()"></select>
+        </div>
+
         <div class="modal-form-actions">
-          <button type="button" class="btn-circle-action-save" onclick="saveUnitParentChange()" title="ذخیره">
+          <button type="button" class="btn-circle-action-save" onclick="saveUnitParentChange()" title="ذخیره و ثبت والد">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
@@ -4478,6 +4519,8 @@
           `;
         }
       }
+      const pbFooter = document.querySelector('.pb-dropdown-footer');
+      if (pbFooter) pbFooter.style.display = isAdminLoggedIn ? 'grid' : 'none';
       const dropdownAddBtn = document.getElementById('dropdownAddPbBtn');
       if (dropdownAddBtn) dropdownAddBtn.style.display = isAdminLoggedIn ? 'flex' : 'none';
       const dropdownManageBtn = document.getElementById('dropdownManagePbBtn');
@@ -5572,7 +5615,8 @@
           unitName: name,
           level: 0,
           parentUnit: null,
-          hasChildAfter: false
+          hasChildAfter: false,
+          activeAncestors: []
         }));
       }
 
@@ -5607,7 +5651,7 @@
       const processedNormNames = new Set();
       const displayItems = [];
 
-      function traverseUnit(u, level, parentUnit, hasSiblingAfter) {
+      function traverseUnit(u, level, parentUnit, hasSiblingAfter, activeAncestors = []) {
         const norm = normalizePersianText(u.name);
         const isPresent = foundUnits.some(f => normalizePersianText(f) === norm);
         if (isPresent && !processedNormNames.has(norm)) {
@@ -5616,7 +5660,8 @@
             unitName: actualName,
             level: level,
             parentUnit: parentUnit,
-            hasChildAfter: hasSiblingAfter
+            hasChildAfter: hasSiblingAfter,
+            activeAncestors: [...activeAncestors]
           });
           processedNormNames.add(norm);
         }
@@ -5627,14 +5672,22 @@
           return foundUnits.some(f => normalizePersianText(f) === cNorm);
         });
 
+        const nextAncestors = [...activeAncestors];
+        if (hasSiblingAfter && level > 0) {
+          nextAncestors.push({
+            level: level,
+            color: getUnitColor(parentUnit ? parentUnit.name : u.name)
+          });
+        }
+
         activeChildren.forEach((child, idx) => {
           const isSiblingAfter = idx < activeChildren.length - 1;
-          traverseUnit(child, level + 1, u, isSiblingAfter);
+          traverseUnit(child, level + 1, u, isSiblingAfter, nextAncestors);
         });
       }
 
       rootUnits.forEach(ru => {
-        traverseUnit(ru, 0, null, false);
+        traverseUnit(ru, 0, null, false, []);
       });
 
       // Any remaining units from foundUnits that were not matched in configuredUnits
@@ -5645,7 +5698,8 @@
             unitName: fName,
             level: 0,
             parentUnit: null,
-            hasChildAfter: false
+            hasChildAfter: false,
+            activeAncestors: []
           });
           processedNormNames.add(norm);
         }
@@ -5834,6 +5888,7 @@
     }
 
     let currentUnitParentChangeId = null;
+    let currentEligibleParents = [];
 
     function promptChangeUnitParent(unitId) {
       const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
@@ -5842,33 +5897,84 @@
       if (!unit) return;
 
       // Eligible parents: any unit that is NOT unit itself and NOT a descendant
-      const eligibleParents = activePb.units.filter(u => u.id !== unitId && !isUnitDescendant(unitId, u.id, activePb.units));
+      currentEligibleParents = activePb.units.filter(u => u.id !== unitId && !isUnitDescendant(unitId, u.id, activePb.units));
 
       const modal = document.getElementById('unitParentModal');
       const title = document.getElementById('unitParentModalTitle');
-      const select = document.getElementById('unitParentModalSelect');
+      const searchInput = document.getElementById('unitParentModalSearchInput');
+      const clearBtn = document.getElementById('unitParentSearchClearBtn');
 
       if (title) title.textContent = `تنظیم والد برای واحد «${unit.name}»`;
-      if (select) {
-        let html = `<option value="">🌐 (واحد اصلی - بدون والد)</option>`;
-        eligibleParents.forEach(p => {
-          const isSelected = unit.parentId === p.id;
-          html += `<option value="${escapeHtml(p.id)}" ${isSelected ? 'selected' : ''}>🏢 ${escapeHtml(p.name)}</option>`;
-        });
-        select.innerHTML = html;
-      }
+      if (searchInput) searchInput.value = '';
+      if (clearBtn) clearBtn.style.display = 'none';
 
       currentUnitParentChangeId = unitId;
+      renderUnitParentModalOptions('', unit.parentId);
+
       if (modal) {
         lockBodyScroll();
         modal.style.display = 'flex';
+        if (searchInput) {
+          setTimeout(() => searchInput.focus(), 100);
+        }
       }
+    }
+
+    function handleUnitParentSearchInput(val) {
+      const clearBtn = document.getElementById('unitParentSearchClearBtn');
+      if (clearBtn) clearBtn.style.display = val.trim() ? 'block' : 'none';
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      const currentUnit = activePb && activePb.units ? activePb.units.find(u => u.id === currentUnitParentChangeId) : null;
+      const selectedParentId = currentUnit ? currentUnit.parentId : null;
+
+      renderUnitParentModalOptions(val, selectedParentId);
+    }
+
+    function clearUnitParentSearch() {
+      const searchInput = document.getElementById('unitParentModalSearchInput');
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+      }
+      const clearBtn = document.getElementById('unitParentSearchClearBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+
+      const activePb = getPhonebookById(selectedSettingsPhonebookId) || getActivePhonebook();
+      const currentUnit = activePb && activePb.units ? activePb.units.find(u => u.id === currentUnitParentChangeId) : null;
+      const selectedParentId = currentUnit ? currentUnit.parentId : null;
+
+      renderUnitParentModalOptions('', selectedParentId);
+    }
+
+    function renderUnitParentModalOptions(searchQuery = '', activeParentId = null) {
+      const select = document.getElementById('unitParentModalSelect');
+      if (!select) return;
+
+      const q = normalizePersianText(searchQuery.trim());
+      let filtered = currentEligibleParents;
+      if (q) {
+        filtered = currentEligibleParents.filter(p => normalizePersianText(p.name).includes(q));
+      }
+
+      let html = `<option value="" ${!activeParentId ? 'selected' : ''}>🌐 (واحد اصلی - بدون والد)</option>`;
+      if (filtered.length === 0) {
+        html += `<option value="" disabled style="color: var(--text-muted);">واحدی مطابق با عبارت جستجو یافت نشد</option>`;
+      } else {
+        filtered.forEach(p => {
+          const isSelected = activeParentId === p.id;
+          html += `<option value="${escapeHtml(p.id)}" ${isSelected ? 'selected' : ''}>🏢 ${escapeHtml(p.name)}</option>`;
+        });
+      }
+
+      select.innerHTML = html;
     }
 
     function closeUnitParentModal() {
       const modal = document.getElementById('unitParentModal');
       if (modal) modal.style.display = 'none';
       currentUnitParentChangeId = null;
+      currentEligibleParents = [];
       unlockBodyScroll();
     }
 
@@ -6082,7 +6188,7 @@
         </div>
       `;
 
-      function renderUnitNode(u, level, parentUnit, isFirst, isLast, hasChildAfter) {
+      function renderUnitNode(u, level, parentUnit, isFirst, isLast, hasChildAfter, activeAncestors = []) {
         if (q && !filteredUnits.some(fu => fu.id === u.id)) {
           // If searching, check if any of its children match
           const children = childrenMap.get(u.id) || [];
@@ -6100,16 +6206,25 @@
         const childClass = isChild ? 'is-child-unit' : '';
         const childAfterClass = hasChildAfter ? 'has-child-after' : '';
 
+        let ancestorLinesHtml = '';
+        if (activeAncestors && activeAncestors.length > 0) {
+          activeAncestors.forEach(anc => {
+            const delta = level - anc.level;
+            ancestorLinesHtml += `<div class="tree-ancestor-line" style="--ancestor-delta: ${delta}; --line-color: ${anc.color || parentColor};"></div>`;
+          });
+        }
+
         let nodeHtml = `
           <div class="unit-tree-node ${childClass} ${childAfterClass}"
                id="unit-node-${escapeHtml(u.id)}"
-               style="${isChild ? `margin-right: ${indentPx}px !important; --unit-parent-theme-color: ${parentColor};` : ''}"
+               style="${isChild ? `--indent-level: ${level}; --unit-parent-theme-color: ${parentColor};` : ''}"
                draggable="true"
                ondragstart="handleUnitDragStart(event, '${escapeHtml(u.id)}')"
                ondragend="handleUnitDragEnd(event)"
                ondragover="handleUnitDragOver(event, '${escapeHtml(u.id)}')"
                ondragleave="handleUnitDragLeave(event)"
                ondrop="handleUnitDrop(event, '${escapeHtml(u.id)}')">
+            ${ancestorLinesHtml}
             <div class="unit-tree-header">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <button type="button" class="drag-handle-btn" title="جابه‌جایی واحد یا انداختن روی واحد دیگر برای زیرمجموعه شدن">⠿</button>
@@ -6171,11 +6286,19 @@
 
         // Render children of this unit
         const directChildren = childrenMap.get(u.id) || [];
+        const nextAncestors = [...activeAncestors];
+        if (hasChildAfter && level > 0) {
+          nextAncestors.push({
+            level: level,
+            color: parentColor
+          });
+        }
+
         directChildren.forEach((child, cIdx) => {
           const isFirstChild = (cIdx === 0);
           const isLastChild = (cIdx === directChildren.length - 1);
           const hasSiblingChildAfter = cIdx < directChildren.length - 1;
-          nodeHtml += renderUnitNode(child, level + 1, u, isFirstChild, isLastChild, hasSiblingChildAfter);
+          nodeHtml += renderUnitNode(child, level + 1, u, isFirstChild, isLastChild, hasSiblingChildAfter, nextAncestors);
         });
 
         return nodeHtml;
@@ -6184,7 +6307,7 @@
       rootUnits.forEach((ru, rIdx) => {
         const isFirstRoot = (rIdx === 0);
         const isLastRoot = (rIdx === rootUnits.length - 1);
-        treeHtml += renderUnitNode(ru, 0, null, isFirstRoot, isLastRoot, false);
+        treeHtml += renderUnitNode(ru, 0, null, isFirstRoot, isLastRoot, false, []);
       });
 
       container.innerHTML = treeHtml;
@@ -8749,10 +8872,19 @@
           if (item.hasChildAfter) {
             groupDiv.classList.add('has-child-after');
           }
-          const indentPx = Math.min(item.level * 36, 120);
-          groupDiv.style.marginRight = `${indentPx}px`;
+          groupDiv.style.setProperty('--indent-level', item.level);
           const parentColor = getUnitColor(item.parentUnit.name);
           groupDiv.style.setProperty('--unit-parent-theme-color', parentColor);
+        }
+
+        if (item.activeAncestors && item.activeAncestors.length > 0) {
+          item.activeAncestors.forEach(anc => {
+            const ancLine = document.createElement('div');
+            ancLine.className = 'tree-ancestor-line';
+            ancLine.style.setProperty('--ancestor-delta', item.level - anc.level);
+            ancLine.style.setProperty('--line-color', anc.color || 'var(--unit-parent-theme-color, #1976d2)');
+            groupDiv.appendChild(ancLine);
+          });
         }
 
         if (collapsedUnits.has(unitName)) {
