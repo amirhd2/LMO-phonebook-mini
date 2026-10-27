@@ -3031,12 +3031,12 @@
     }
 
     .btn-mgmt-unit-toggle {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: rgba(33, 150, 243, 0.12);
-      color: #1976d2;
-      border: 1px solid rgba(33, 150, 243, 0.3);
+      background: linear-gradient(135deg, #1976d2, #0d47a1);
+      color: #ffffff;
+      border: 1.5px solid #90caf9;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -3047,22 +3047,23 @@
       padding: 0;
       line-height: 1;
       flex-shrink: 0;
+      box-shadow: 0 2px 7px rgba(13, 71, 161, 0.35);
     }
     .btn-mgmt-unit-toggle:hover {
-      background: #2196F3;
-      color: #ffffff;
-      transform: scale(1.1);
-      box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+      background: linear-gradient(135deg, #2196F3, #1565c0);
+      transform: scale(1.14);
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.5);
     }
     .btn-mgmt-unit-toggle.is-collapsed {
-      background: var(--status-bg);
-      color: var(--text-muted);
-      border-color: var(--border-color);
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #ffffff;
+      border-color: #fde047;
+      box-shadow: 0 2px 7px rgba(217, 119, 6, 0.4);
     }
-    [data-theme="dark"] .btn-mgmt-unit-toggle {
-      background: rgba(59, 130, 246, 0.2);
-      color: #93c5fd;
-      border-color: rgba(59, 130, 246, 0.4);
+    .btn-mgmt-unit-toggle.is-collapsed:hover {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      transform: scale(1.14);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.55);
     }
 
     /* Main Page (صفحه اصلی) Hierarchy & Tree Lines */
@@ -6019,8 +6020,10 @@
       if (mode === 'nest') {
         // Dragged unit becomes a child/sub-unit of target unit
         draggedUnit.parentId = targetUnit.id;
-        const siblings = activePb.units.filter(u => u.parentId === targetUnit.id && u.id !== draggedUnit.id);
-        draggedUnit.order = siblings.length;
+        const existingSiblings = activePb.units.filter(u => u.parentId === targetUnit.id && u.id !== draggedUnit.id);
+        existingSiblings.sort((a, b) => (a.order || 0) - (b.order || 0));
+        existingSiblings.forEach((s, idx) => { s.order = idx; });
+        draggedUnit.order = existingSiblings.length;
         showToast(`✅ واحد «${draggedUnit.name}» به عنوان زیرمجموعه «${targetUnit.name}» قرار گرفت`);
       } else {
         // Dragged unit is placed before or after target unit at the same level
@@ -6075,8 +6078,10 @@
       if (!draggedUnit) return;
 
       draggedUnit.parentId = null;
-      const rootUnits = activePb.units.filter(u => !u.parentId);
-      draggedUnit.order = rootUnits.length;
+      const existingRoots = activePb.units.filter(u => !u.parentId && u.id !== draggedUnit.id);
+      existingRoots.sort((a, b) => (a.order || 0) - (b.order || 0));
+      existingRoots.forEach((r, idx) => { r.order = idx; });
+      draggedUnit.order = existingRoots.length;
 
       await savePhonebooksData(phonebooks);
       handleUnitDragEnd();
@@ -6096,8 +6101,10 @@
       if (!unit) return;
 
       unit.parentId = null;
-      const rootUnits = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
-      unit.order = rootUnits.length;
+      const existingRoots = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
+      existingRoots.sort((a, b) => (a.order || 0) - (b.order || 0));
+      existingRoots.forEach((r, idx) => { r.order = idx; });
+      unit.order = existingRoots.length;
 
       await savePhonebooksData(phonebooks);
 
@@ -6218,13 +6225,23 @@
         }
         unit.parentId = targetParentId;
         const parentUnit = activePb.units.find(u => u.id === targetParentId);
-        const siblings = activePb.units.filter(u => u.parentId === targetParentId && u.id !== unit.id);
-        unit.order = siblings.length;
+        
+        // Preserve existing siblings order, re-index cleanly, and append new unit at the end
+        const existingSiblings = activePb.units.filter(u => u.parentId === targetParentId && u.id !== unit.id);
+        existingSiblings.sort((a, b) => (a.order || 0) - (b.order || 0));
+        existingSiblings.forEach((s, idx) => { s.order = idx; });
+        unit.order = existingSiblings.length;
+
         showToast(`✅ واحد «${unit.name}» به عنوان زیرمجموعه «${parentUnit ? parentUnit.name : ''}» تنظیم شد`);
       } else {
         unit.parentId = null;
-        const roots = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
-        unit.order = roots.length;
+
+        // Preserve existing root units order, re-index cleanly, and append new unit at the end
+        const existingRoots = activePb.units.filter(u => !u.parentId && u.id !== unit.id);
+        existingRoots.sort((a, b) => (a.order || 0) - (b.order || 0));
+        existingRoots.forEach((r, idx) => { r.order = idx; });
+        unit.order = existingRoots.length;
+
         showToast(`✅ واحد «${unit.name}» به عنوان واحد اصلی قرار گرفت`);
       }
 
