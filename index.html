@@ -27,7 +27,14 @@
   <script src="xlsx.full.min.js"></script>
   <script src="exceljs.min.js"></script>
 
+  <!-- فونت فارسی وزیرمتن (Vazirmatn) با پشتیبانی کامل از اعداد فارسی و صفر توخالی -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
     :root {
       --bg-color: #f4f6f9;
       --card-bg: #ffffff;
@@ -89,14 +96,42 @@
     }
 
     * { box-sizing: border-box; }
+    body, input, button, select, textarea {
+      font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1;
+      -webkit-font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1;
+      font-variant-numeric: tabular-nums;
+      direction: rtl;
+    }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg-color);
       margin: 0;
       padding: 15px;
-      direction: rtl;
       color: var(--text-color);
       transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* استایل اختصاصی پررنگ و خوانا برای تمامی اعداد با صفر توخالی */
+    .fa-num, .number-text, .unit-contacts-count, .mgmt-unit-count-badge, 
+    .phonebook-tab-badge, .version-badge, .multi-number-input,
+    td, th, .contact-card-val, .contact-field-val, .search-box, .form-input, .subunit-badge-count-pill {
+      font-family: 'Vazirmatn', system-ui, sans-serif !important;
+      font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1 !important;
+      -webkit-font-feature-settings: "ss01" 1, "ss02" 1, "cv01" 1 !important;
+      font-variant-numeric: tabular-nums !important;
+    }
+
+    /* تاکید روی بولد و واضح بودن تمام فیلدها و نشانگرهای عددی */
+    td[data-field="تلفن داخلی"],
+    td[data-field="VoIP"],
+    td[data-field="تلفن مستقیم"],
+    .multi-number-input,
+    .unit-contacts-count,
+    .mgmt-unit-count-badge,
+    .phonebook-tab-badge,
+    .subunit-badge-count-pill {
+      font-weight: 700 !important;
+      letter-spacing: 0.5px;
     }
 
     body.modal-scroll-locked {
@@ -561,7 +596,16 @@
     .unit-container-body {
       padding: 12px;
       background-color: var(--unit-container-bg, transparent);
-      transition: background-color 0.25s ease;
+      max-height: 5000px;
+      opacity: 1;
+      overflow: hidden;
+      transform-origin: top;
+      transform: scaleY(1);
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  background-color 0.25s ease;
     }
 
     .unit-group.is-collapsed {
@@ -571,7 +615,13 @@
     }
 
     .unit-group.is-collapsed .unit-container-body {
-      display: none !important;
+      max-height: 0 !important;
+      opacity: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      overflow: hidden !important;
+      pointer-events: none !important;
+      transform: scaleY(0.96);
     }
 
     .unit-group.is-editing-active {
@@ -2525,39 +2575,73 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
-      border-radius: 20px;
-      background: var(--unit-container-bg, rgba(33, 150, 243, 0.12));
-      color: var(--unit-theme-color, #1976d2);
-      border: 1.5px solid var(--unit-container-border, rgba(33, 150, 243, 0.35));
-      font-size: 13.5px;
-      font-weight: 700;
-      box-shadow: 0 2px 8px var(--shadow-color);
-      transition: all 0.2s ease;
+      padding: 7px 18px;
+      border-radius: 22px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 2px solid var(--unit-container-border, #2196F3);
+      font-size: 14.5px;
+      font-weight: 800;
+      box-shadow: 0 3px 10px var(--shadow-color);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       flex-shrink: 0;
     }
     .subunit-capsule-pill:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px var(--shadow-color);
+      box-shadow: 0 5px 14px var(--shadow-color);
     }
     [data-theme="dark"] .subunit-capsule-pill {
-      color: var(--unit-lighter-accent, #93c5fd);
+      background: #1e293b;
+      color: #f8fafc;
+      border-color: var(--unit-container-border, #3b82f6);
     }
     .subunit-label-prefix {
-      font-size: 12px;
-      opacity: 0.85;
-      font-weight: 500;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: -0.1px;
     }
     .subunit-title-text {
       font-weight: 800;
-      font-size: 13.5px;
-      letter-spacing: -0.2px;
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 15px;
+      color: var(--text-color);
+      letter-spacing: 0.1px;
+      max-width: none;
       white-space: nowrap;
       display: inline-block;
       vertical-align: middle;
+    }
+    [data-theme="dark"] .subunit-title-text {
+      color: #ffffff;
+    }
+
+    /* Sub-unit Pencil Edit Circle Button */
+    .btn-subunit-pencil-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--unit-container-border, #2196F3);
+      color: var(--unit-theme-color, #1976d2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px var(--shadow-color);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .btn-subunit-pencil-circle:hover {
+      background: var(--unit-theme-color, #1976d2);
+      color: #ffffff;
+      border-color: var(--unit-theme-color, #1976d2);
+      transform: scale(1.12);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .btn-subunit-pencil-circle:active {
+      transform: scale(0.95);
     }
     .subunit-divider-line {
       flex-grow: 1;
@@ -4976,6 +5060,16 @@
       renderList(filtered);
     }
 
+    function refreshMainContactList() {
+      const searchInput = document.getElementById('searchInput');
+      const q = searchInput ? searchInput.value.trim() : '';
+      if (q) {
+        filterAndRenderContacts(q);
+      } else {
+        renderList(getContactsForActivePhonebook());
+      }
+    }
+
     function updateActivePhonebookHeader() {
       const activePb = getActivePhonebook();
       const titleEl = document.getElementById('headerActivePbTitle');
@@ -4987,10 +5081,10 @@
       }
       if (badgeEl && activePb) {
         const pbContacts = contacts.filter(c => (c.phonebookId || 'pb-central') === activePb.id);
-        badgeEl.textContent = `${pbContacts.length} نفر`;
+        badgeEl.textContent = `${NumericInputSystem.toPersianDigits(pbContacts.length)} نفر`;
       }
       if (countBadge) {
-        countBadge.textContent = `تعداد کل دفترتلفن‌ها: ${phonebooks.length} مورد`;
+        countBadge.textContent = `تعداد کل دفترتلفن‌ها: ${NumericInputSystem.toPersianDigits(phonebooks.length)} مورد`;
       }
     }
 
@@ -5328,7 +5422,7 @@
         html += `
           <button type="button" class="phonebook-tab-btn ${isActive ? 'is-active' : ''}" onclick="switchPhonebook('${escapeHtml(pb.id)}')">
             <span>📖 ${escapeHtml(pb.name)}</span>
-            <span class="phonebook-tab-badge">${count} نفر</span>
+            <span class="phonebook-tab-badge">${NumericInputSystem.toPersianDigits(count)} نفر</span>
           </button>
         `;
       });
@@ -7775,10 +7869,8 @@
         renderPhonebookTabs();
         if (currentPhonebookId !== targetPbId) {
           switchPhonebook(targetPbId);
-        } else if (activeSearchQ) {
-          filterAndRenderContacts(activeSearchQ);
         } else {
-          renderList(getContactsForActivePhonebook());
+          refreshMainContactList();
         }
         showToast(`✅ اطلاعات مخاطب «${name}» با موفقیت بروزرسانی شد`);
       } else {
@@ -7816,16 +7908,12 @@
         const uploadPrompt = document.getElementById('uploadPrompt');
         if (uploadPrompt) uploadPrompt.style.display = 'none';
 
-        const searchInput = document.getElementById('searchInput');
-        const activeSearchQ = searchInput ? searchInput.value.trim() : '';
         closeAddContactModal();
         renderPhonebookTabs();
         if (currentPhonebookId !== targetPbId) {
           switchPhonebook(targetPbId);
-        } else if (activeSearchQ) {
-          filterAndRenderContacts(activeSearchQ);
         } else {
-          renderList(getContactsForActivePhonebook());
+          refreshMainContactList();
         }
         showToast(`✅ مخاطب «${name}» با موفقیت اضافه شد`);
       }
@@ -7863,7 +7951,7 @@
       if (editingContactIdx !== -1) {
         closeAddContactModal();
       }
-      renderList(getContactsForActivePhonebook());
+      refreshMainContactList();
       showToast(`🗑️ مخاطب «${name}» با موفقیت حذف شد`);
     }
 
@@ -8994,7 +9082,7 @@
       }
       editingUnitOriginalName = unitName;
       editingUnitCurrentColor = currentColor || getUnitColor(unitName);
-      renderList(contacts);
+      refreshMainContactList();
       setTimeout(() => {
         const input = document.getElementById('unitEditTitleInput');
         if (input) {
@@ -9007,7 +9095,7 @@
     function cancelUnitEdit() {
       editingUnitOriginalName = null;
       editingUnitCurrentColor = null;
-      renderList(contacts);
+      refreshMainContactList();
     }
 
     function handleUnitEditKeyDown(e, oldUnitName) {
@@ -9074,7 +9162,46 @@
 
       editingUnitOriginalName = null;
       editingUnitCurrentColor = null;
-      renderList(getContactsForActivePhonebook());
+      refreshMainContactList();
+    }
+
+    async function promptRenameSubUnitFromMainPage(unitName, oldSubUnitName) {
+      if (!isAdminLoggedIn) return;
+
+      const newName = await showPromptModal(`لطفاً عنوان جدید بخش را وارد کنید:`, oldSubUnitName, `ویرایش نام بخش «${oldSubUnitName}»`);
+      if (!newName || !newName.trim()) return;
+      const cleanNewName = newName.trim();
+      if (cleanNewName === oldSubUnitName) return;
+
+      const activePb = getActivePhonebook();
+      if (activePb && activePb.units) {
+        const uObj = activePb.units.find(u => normalizePersianText(u.name) === normalizePersianText(unitName));
+        if (uObj && Array.isArray(uObj.subUnits)) {
+          const suObj = uObj.subUnits.find(s => normalizePersianText(s.name) === normalizePersianText(oldSubUnitName));
+          if (suObj) {
+            suObj.name = cleanNewName;
+          }
+        }
+        await savePhonebooksData(phonebooks);
+      }
+
+      // Update sub-unit name on all matching contacts in contacts list
+      let updatedCount = 0;
+      contacts.forEach(c => {
+        const cPbId = c.phonebookId || 'pb-central';
+        if (cPbId === (activePb ? activePb.id : 'pb-central')) {
+          const cUnit = (c['واحد'] || '').trim();
+          const cSubUnit = (c['بخش'] || '').trim();
+          if (normalizePersianText(cUnit) === normalizePersianText(unitName) && normalizePersianText(cSubUnit) === normalizePersianText(oldSubUnitName)) {
+            c['بخش'] = cleanNewName;
+            updatedCount++;
+          }
+        }
+      });
+
+      await saveData('contacts_data', contacts, currentFileName || 'LMO phonebook.xlsx');
+      refreshMainContactList();
+      showToast(`✅ عنوان بخش با موفقیت به «${cleanNewName}» تغییر یافت (${updatedCount} مخاطب بروزرسانی شد)`);
     }
 
     function openUnitColorPaletteModal(unitName) {
@@ -9175,7 +9302,7 @@
       }
 
       if (activePb && activePb.id === currentPhonebookId) {
-        renderList(getContactsForActivePhonebook());
+        refreshMainContactList();
       }
 
       closeUnitColorModal();
@@ -9184,24 +9311,29 @@
 
     function getContactFieldValue(contact, fieldKey) {
       if (!contact || !fieldKey) return '';
-      let val = contact[fieldKey];
-      if (val !== undefined && val !== null && String(val).trim() !== '') {
-        return String(val).trim();
+      let raw = contact[fieldKey];
+      if (raw === undefined || raw === null || String(raw).trim() === '') {
+        if (fieldKey === 'نام و نام خانوادگی') {
+          raw = `${contact['نام'] || ''} ${contact['نام خانوادگی'] || ''}`.trim();
+        } else if (fieldKey === 'تلفن داخلی') {
+          raw = String(contact['داخلی'] || '').trim();
+        } else if (fieldKey === 'VoIP') {
+          raw = String(contact['Voip'] || contact['ویپ'] || '').trim();
+        } else if (fieldKey === 'تلفن مستقیم') {
+          raw = String(contact['مستقیم'] || '').trim();
+        } else {
+          raw = '';
+        }
+      } else {
+        raw = String(raw).trim();
       }
-      // Fallbacks for key aliases
-      if (fieldKey === 'نام و نام خانوادگی') {
-        return `${contact['نام'] || ''} ${contact['نام خانوادگی'] || ''}`.trim();
+
+      if (!raw) return '';
+
+      if (fieldKey === 'تلفن داخلی' || fieldKey === 'VoIP' || fieldKey === 'تلفن مستقیم' || /\d/.test(raw)) {
+        return NumericInputSystem.toPersianDigits(raw);
       }
-      if (fieldKey === 'تلفن داخلی') {
-        return String(contact['داخلی'] || '').trim();
-      }
-      if (fieldKey === 'VoIP') {
-        return String(contact['Voip'] || contact['ویپ'] || '').trim();
-      }
-      if (fieldKey === 'تلفن مستقیم') {
-        return String(contact['مستقیم'] || '').trim();
-      }
-      return '';
+      return raw;
     }
 
     function renderList(list) {
@@ -9353,7 +9485,7 @@
             <div class="unit-header-right">
               <span class="unit-accordion-arrow">▾</span>
               <span class="unit-title-text">${escapeHtml(unitName)}</span>
-              <span class="unit-contacts-count">${groups[unitName].length} نفر</span>
+              <span class="unit-contacts-count">${NumericInputSystem.toPersianDigits(groups[unitName].length)} نفر</span>
             </div>
             <div class="unit-header-actions" onclick="event.stopPropagation()">
               ${pencilHtml}
@@ -9408,30 +9540,57 @@
           if (subUnitName) {
             const subBanner = document.createElement('div');
             subBanner.className = 'subunit-capsule-ribbon';
+
+            let pencilBtnHtml = '';
+            if (isAdminLoggedIn) {
+              pencilBtnHtml = `
+                <button type="button" 
+                        class="btn-subunit-pencil-circle" 
+                        title="ویرایش نام بخش «${escapeHtml(subUnitName)}»" 
+                        onclick="event.stopPropagation(); promptRenameSubUnitFromMainPage('${escapeHtml(unitName)}', '${escapeHtml(subUnitName)}')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                </button>
+              `;
+            }
+
+            let addContactBtnHtml = '';
+            if (isAdminLoggedIn) {
+              addContactBtnHtml = `
+                <button type="button" 
+                        class="subunit-add-btn-oval" 
+                        onclick="event.stopPropagation(); openAddContactModalForUnitAndSubUnit('${escapeHtml(unitName)}', '${escapeHtml(subUnitName)}')" 
+                        title="افزودن مخاطب جدید به بخش ${escapeHtml(subUnitName)}">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              `;
+            }
+
             subBanner.innerHTML = `
-              <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                 <div class="subunit-capsule-pill">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--unit-theme-color, #1976d2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                   </svg>
                   <span class="subunit-label-prefix">بخش:</span>
                   <strong class="subunit-title-text">${escapeHtml(subUnitName)}</strong>
                 </div>
-                ${isAdminLoggedIn ? `
-                  <button type="button" class="subunit-add-btn-oval" onclick="event.stopPropagation(); openAddContactModalForUnitAndSubUnit('${escapeHtml(unitName)}', '${escapeHtml(subUnitName)}')" title="افزودن مخاطب جدید به بخش ${escapeHtml(subUnitName)}">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </button>
-                ` : ''}
+                ${pencilBtnHtml}
               </div>
               <div class="subunit-divider-line"></div>
-              <div class="subunit-badge-count-pill">${subContacts.length} نفر</div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                ${addContactBtnHtml}
+                <div class="subunit-badge-count-pill">${NumericInputSystem.toPersianDigits(subContacts.length)} نفر</div>
+              </div>
             `;
             bodyDiv.appendChild(subBanner);
           }
